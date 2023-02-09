@@ -1,0 +1,222 @@
+﻿@model QandAProject.Models.PublicationViewModel
+@{
+    ViewBag.Title = "View";
+}
+@*Start Modal*@
+
+<!-- Modals -->
+<!--Modal1-->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Alert</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                You must be loged in for downloading any image
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="redirect('@Url.Action("Login", "Account")')">Login Page</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*End Modal*@
+<!--Modal2-->
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Alert</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                You must buy the image before download it
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="redirect('@Url.Action("BuyImage", "Sell", new { pubid = Model.id })')">Buy Page</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*End Modal*@
+<!--Modal3-->
+<div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Alert</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <img src=@Model.headerPath style="max-width:200px; height:auto" />
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Scale</label>
+                        <input type="number" class="form-text" id="width" onchange="widthOnChange('@ViewBag.imgWidth', '@ViewBag.imgHeight')"/>
+                        <input type="number" class="form-text" id="height" onchange="heightOnChange('@ViewBag.imgWidth', '@ViewBag.imgHeight')"/>
+                        <input type="range" class="form-range" min="1" max="100" step="1" id="myRange" onchange="setValue('@ViewBag.imgWidth', '@ViewBag.imgHeight')" value="100">
+                        <label class="form-label" id="rangeValue">100</label>
+                        <a class="btn btn-primary" onclick="downloadImage('@Model.headerPath', @Model.id)" id="downloadLink">
+                            Download
+                        </a>
+                        <script>
+                            document.getElementById('width').value = '@ViewBag.imgWidth'
+                            document.getElementById('height').value = '@ViewBag.imgHeight'
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+@*End Modal*@
+
+<div class="row" style="margin-top:50px">
+    <div class="col">
+        <div style="display:block;">
+            @if (Model.headerPath != null)
+            {
+                <img src=@Model.headerPath style="max-width:500px; height:auto" />
+            }
+        </div>
+    </div>
+    <div class="col">
+
+        <div class="row">
+            <div class="row">
+                <h2>
+                    @Model.Content
+                </h2>
+            </div>
+            <div class="row">
+                <p>
+                    <strong>Categories:</strong> @foreach (var cat in Model.Categories)
+                    {<span>@cat, </span>}
+                </p>
+
+            </div>
+            <div class="row">
+
+
+                <div class="col">
+                    Posted by: <span style="color:darkslategrey">@Model.User</span>
+                </div>
+                <div class="col">
+                    <span style="color:darkslategrey">@Model.DateOfCreated</span>
+                </div>
+
+            </div>
+            @if (!HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Download
+                </button>
+                <a class="btn btn-primary" onclick="downloadImageTry('@Model.id')" id="downloadLink" style="margin-top:50px">
+                    Download Free Try
+                </a>
+
+            }
+            else
+            {
+                if (Model.isBuyed)
+                {
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal3">
+                        Download
+                    </button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+                        Buy
+                    </button>
+                }
+                @*@Html.ActionLink("DownloadFreeTry", "Publication", routeValues: new { path = Model.headerPath }, htmlAttributes: new { @class = "btn btn-primary" }) for later*@
+
+                <a class="btn btn-primary" onclick="downloadImageTry('@Model.id')" id="downloadLink" style="margin-top:50px">
+                    Download Free Try
+                </a>
+                if (HttpContext.Current.User.IsInRole("Admin") || HttpContext.Current.User.IsInRole("SuperAdmin"))
+                {
+                    <div class="row" style="margin-top:20px">
+                        <div class="col">
+                            @if (Model.Status == "Accepted")
+                            {
+                                <button type="button" class="btn-danger" onclick="banPublication(@Model.id)">
+                                    Ban Publication
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn-danger" onclick="unbanPublication(@Model.id)">
+                                    Accept Publication
+                                </button>
+                            }
+                        </div>
+                        <div class="col">
+                            <p id="status">@Model.Status</p>
+                        </div>
+                    </div>
+                }
+            }
+            @*@Html.ActionLink("Download", "Download", new { path = Model.headerPath }, new { @class = "btn btn-primary btn-lg", @style = "max-width:200px; margin-top:30px" })*@
+        </div>
+    </div>
+</div>
+
+
+
+<h3 style="margin-top:30px">Add yor opinion</h3>
+<div style="display:block">
+    <form id="commentForm">
+        <input type="hidden" id="modelId" value=@Model.id />
+        <textarea class="form-control" id="CommentTextArea" rows="3" style="padding-left:5px"></textarea>
+        <input type="submit" class="btn-default" style="margin-top:7px" />
+    </form>
+</div>
+<h3>Comments</h3>
+<div style="display:block" id="commentContainer">
+    @{
+        foreach (var item in Model.Comments)
+        {
+            <div style="" class="comment">
+                <div style="display:block">
+                    <p> Commented by: @item.UserName</p>
+                </div>
+                <div style="display:block">
+                    <p>@item.Content</p>
+                </div>
+            </div>
+        }
+    }
+</div>
+<a onclick="loadComments(@ViewBag.Comments)"> ver mas</a>
+@section Scripts{
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/MyScripts/add_comment.js"></script>
+    <script src="~/MyScripts/download_controller.js"></script>
+    @*<script src="~/Scripts/bootstrap.bundle.min.js"></script>*@
+    <script src="~/MyScripts/ban.js"></script>
+    <script src="~/MyScripts/view_page.js"></script>
+   <script src="~/MyScripts/load_Comments.js"></script>
+}
+<style>
+    .comment {
+        display: block;
+        margin-left: 20px;
+        margin-top: 20px;
+        border: solid 2px black;
+        margin-right: 20px;
+    }
+</style>

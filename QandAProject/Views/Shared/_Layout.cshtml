@@ -1,0 +1,116 @@
+﻿@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <script src="~/MyScripts/searchScript.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+
+</head>
+<body>
+    <script src="~/MyScripts/popper.min.js"></script>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" style="margin-bottom:20px">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/">Application name</a>
+            <div class="navbar-collapse collapse" id="navbarSupportedContent">
+                <ul class="nav navbar-nav mr-auto">
+                    <li class="nav-item"><a href="/Publication/Index" class="nav-link">Publications</a></li>
+                    <li class="nav-item"><a href="/Home/About" class="nav-link">About Us</a></li>
+                </ul>
+
+
+                <ul class="nav navbar-nav navbar-right mr-auto">
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item"><a href="/Account/Register" id="registerLink" class="nav-link">Register</a></li>
+                    }
+                    else
+                    {
+                        <li class="nav-item"><a href="/Publication/Index?personalPage=true" id="registerLink" class="nav-link">My Gallery</a></li>
+                    }
+                </ul>
+
+
+
+                <ul class="nav navbar-nav navbar-right mr-auto">
+                    <li class="nav-item">
+                        <div class="row">
+                            <div class="col" style="padding-left:80px;padding-right:0px">
+                                <input class="form-control mr-sm-2" type="search" id="search" placeholder="Search" aria-label="Search" onchange="update()">
+                                <script>
+                                        function update() {
+                                            let link = '@Url.Action("Index", "Publication")' + "?search=" + document.getElementById("search").value
+                                            document.getElementById("link").href = link;
+                                        }
+                                </script>
+                            </div>
+                            <div class="col" style="padding-left:0px">
+                                @*<button class="btn btn-outline-success my-2 my-sm-0" onclick="searchInput()">Search</button>*@
+                                @Html.ActionLink("SEARCH", "Index", "Publication", htmlAttributes: new { @class = "btn btn-outline-success my-2 my-sm-0", id = "link" })
+                            </div>
+                        </div>
+
+
+                    </li>
+                </ul>
+
+
+
+
+
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item"><a href="/Account/Login" id="loginLink" class="nav-link">Log in</a></li>
+                    }
+                    else
+                    {
+
+                        <li class="nav-item"><img width="30" height="30" class="rounded-circle align-middle" style="margin-right: 5px" src="@Context.Request.Cookies["vals"]["picture"]" /></li>
+
+                        <li class="nav-item dropdown">
+                            <div class="dropdown">
+                                <a class="dropdown-toggle" style="text-decoration: none; color:white; " role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    @User.Identity.Name
+                                </a>
+                                <ul class="dropdown-menu">
+                                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <li><a href="javascript:document.getElementById('logoutForm').submit()" id="loginLink" class="dropdown-item">Log Off</a></li>
+                                    }
+                                    <li><a href="/Account/EditUser" class="dropdown-item">Edit User</a></li>
+                                    <li><a href="/Publication/create" class="dropdown-item">Upload Image</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    }
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+
+    <hr />
+    <footer>
+        <p>&copy; @DateTime.Now.Year - My Wonderful Project</p>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

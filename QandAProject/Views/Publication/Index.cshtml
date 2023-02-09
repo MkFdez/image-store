@@ -1,0 +1,54 @@
+﻿@model QandAProject.Models.PublicationsListViewModel
+
+@{
+    ViewBag.Title = "Index";
+    //Layout = "~/Views/Shared/_LayoutCustom.cshtml";
+}
+<style>
+    .auto-grid {
+        --auto-grid-min-size: 16rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(var(--auto-grid-min-size), 1fr));
+        grid-gap: 1rem;
+    }
+</style>
+<input type="hidden" value=@ViewBag.Search id="Hidden"/>
+<input type="hidden" value="@ViewBag.MyGallery" id="Hidden2"/>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2" style="margin-left:0px">
+            <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 200px;">
+                <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+                    Filter By:
+                </a>
+                @using (Ajax.BeginForm("ChangePage", "Publication", new { search = ViewBag.Search, personalPage = bool.Parse(ViewBag.MyGallery) }, new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "PublicationsList" }))
+                {
+                <ul>
+                    @foreach (var i in ViewBag.Categories)
+                    {
+                        <li>
+                        <input name="AreChecked" type="checkbox" value="@i.Key" />@i.Value <br />
+                       </li>
+                    }
+                </ul>
+                <input type="submit" class="btn-primary" value="Filter">
+                }
+            </div>
+        </div>
+        <div class="col" style="margin-right:20px">
+            <div style="display:block; margin-top:50px" id="PublicationsList">
+
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+@section Scripts{
+
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+
+    <script src="~/MyScripts/render_pb_list.js"></script>
+}

@@ -1,0 +1,4 @@
+﻿<h3> Dear @Model.UserName </h3>
+<p> Thanks for buying the image <strong>@Model.PubName</strong>, it was already added to your gallery </p>
+<a href=\"https://localhost:44307/Publication/View/@Model.PubId\">click</a>
+- My Website

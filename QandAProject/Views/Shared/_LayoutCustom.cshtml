@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark fixed-top bg-dark">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            </button>
+            <a class="navbar-brand" href="/">Application name</a>
+            <div class="navbar-collapse collapse" id="navbarSupportedContent">
+                <ul class="nav navbar-nav mr-auto">
+                    <li class="nav-item"><a href="/Publication/Index" class="nav-link">Publications</a></li>
+                    <li class="nav-item"><a href="/Home/About" class="nav-link">About Us</a></li>
+                </ul>
+
+
+                <ul class="nav navbar-nav navbar-right mr-auto">
+                    <li class="nav-item"><a href="/Account/Signup" id="registerLink" class="nav-link">Sign Up</a></li>
+
+                </ul>
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    @if (Context.Request.Cookies["vals"] == null)
+                    {
+                        <li class="nav-item"><a href="/Account/Login" id="loginLink" class="nav-link">Log in</a></li>
+                    }
+                    else
+                    {
+
+                        <li class="nav-item"><img width="30" height="30" src=@Context.Request.Cookies["vals"]["picture"] /></li>
+                        <li class="nav-item"><a href="/Account/EditUser" style="color:white">@HttpContext.Current.User.Identity.Name</a></li>
+                        <li class="nav-item"><a href="/Account/LogOff" id="loginLink" class="nav-link">Log Off</a></li>
+
+                    }
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+        <div class="row">
+            
+            <div class="col">
+                
+                    @RenderBody()
+               
+            </div>
+            <hr />
+            <footer>
+                <p>&copy; @DateTime.Now.Year - My Wonderful Project</p>
+            </footer>
+        </div>
+    
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

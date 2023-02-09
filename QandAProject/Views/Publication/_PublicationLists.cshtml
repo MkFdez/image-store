@@ -1,0 +1,132 @@
+﻿@model QandAProject.Models.PublicationsListViewModel
+
+@{
+    var link = "";
+    int h = 0;
+    string style;
+}
+<ul class="auto-grid" style="list-style-type: none;">
+    @while (h < Model.Size + 2)
+    {
+
+            for (int f = h; f < h + 3; f++)
+            {
+                if (f < Model.Size)
+                {
+                    link = Url.Action("View", "Publication", new { id = Model.List[f].id });
+
+
+                    if (h + 3 - f != 1)
+                    {
+                        style = "border:solid 2px black; margin-right:5px";
+                    }
+                    else
+                    {
+                        style = "border:solid 2px black; margin-left:5px";
+                    }
+                    if (Model.List[f].Status == "Banned")
+                    {
+                        style += ";background-color:red";
+                    }
+
+                    <li  style='@style'>
+                        <a href=@link>
+                            <div class="row" style="align-content:center">
+                                @if (Model.List[f].headerPath != null)
+                                {
+                                    <img src=@Model.List[f].headerPath alt="image" style="max-width:300px; width:auto; height:auto; max-height:200px;" />
+                                }
+                            </div>
+
+                            <div class="row">
+                                <h3 style="margin-inline-start:auto; margin-right:auto">@string.Join("", Model.List[f].Content.Take(50).ToArray())</h3>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <p>@Model.List[f].User</p>
+                                </div>
+                                <div class="col">
+                                    <p>@Model.List[f].DateOfCreated</p>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+
+
+                }
+                else
+                {
+                    @*for (int k = 0; k < h + 3 - f; k++)
+                    {
+                        <div class="col" style=" margin-left: 5px"></div>
+                    }*@
+                    break;
+                }
+            }
+
+        
+        h += 3;
+    }
+</ul>
+@{ @*Pagging Widget*@
+int count;
+int startNumber;
+startNumber = (int)TempData["ActualPage"];
+
+double decimalDivision = (double)((int)TempData["Count"]) / 9;
+int naturalDivision = (int)TempData["Count"] / 9;
+if (naturalDivision == decimalDivision)
+
+{
+    count = naturalDivision;
+}
+else
+{
+    count = naturalDivision + 1;
+}
+if ((int)TempData["ActualPage"] != 1 && count - startNumber >= 4)
+{
+    startNumber -= 1;
+}
+if (count - startNumber < 4 && (int)TempData["ActualPage"] != 1)
+{
+    int temp = 5 - (count - startNumber);
+    for (int j = 0; j < temp; j++)
+    {
+
+        startNumber -= 1;
+        if (startNumber == 1) { break; }
+
+    }
+}
+for (int i = startNumber; i <= count; i++)
+{
+    if (i == startNumber + 5 && i != count)
+    {
+        <a>...</a>
+    }
+    else if (i <= startNumber + 5 || i == count)
+    {
+        if (i == (int)TempData["ActualPage"])
+        {
+            @Ajax.ActionLink(i.ToString(), "ChangePage", "Publication", new { actualPage = i }, new AjaxOptions
+       {
+           InsertionMode = InsertionMode.Replace,
+           HttpMethod = "GET",
+           UpdateTargetId = "PublicationsList",
+           OnBegin = "setGif",
+       }, new { @style = "color:black; background-color: red; margin-left: 3px" })
+        }
+        else
+        {
+            @Ajax.ActionLink(i.ToString(), "ChangePage", "Publication", new { actualPage = i }, new AjaxOptions
+       {
+           InsertionMode = InsertionMode.Replace,
+           HttpMethod = "GET",
+           UpdateTargetId = "PublicationsList",
+           OnBegin = "setGif",
+       }, new { @style = "color:black; margin-left: 3px" })
+        }
+    }
+}
+}
