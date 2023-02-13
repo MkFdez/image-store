@@ -50,6 +50,15 @@ namespace QandAProject
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
 
+
+            
+        }
+        void Session_Start(object sender, EventArgs e)
+        {
+            //to do
+            
+            string me = User.Identity.Name;
+            //Response.Write("myself:" + myself + "<br>me:" + me);
         }
     }
 }

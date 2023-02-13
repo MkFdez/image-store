@@ -109,13 +109,15 @@ for (int i = startNumber; i <= count; i++)
     {
         if (i == (int)TempData["ActualPage"])
         {
-            @Ajax.ActionLink(i.ToString(), "ChangePage", "Publication", new { actualPage = i }, new AjaxOptions
-       {
-           InsertionMode = InsertionMode.Replace,
-           HttpMethod = "GET",
-           UpdateTargetId = "PublicationsList",
-           OnBegin = "setGif",
-       }, new { @style = "color:black; background-color: red; margin-left: 3px" })
+<div style="border-radius:3px; border:2px solid red; width:min-content; background-color: red; margin-left: 3px">
+    @Ajax.ActionLink(i.ToString(), "ChangePage", "Publication", new { actualPage = i }, new AjaxOptions
+{
+   InsertionMode = InsertionMode.Replace,
+   HttpMethod = "GET",
+   UpdateTargetId = "PublicationsList",
+   OnBegin = "setGif",
+}, new { @style = "color:black; text-decoration:none" })
+</div>
         }
         else
         {
