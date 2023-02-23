@@ -3,53 +3,57 @@
 @{
     var link = "";
     int h = 0;
-    string style;
+    string style ;
 }
 <ul class="auto-grid" style="list-style-type: none;">
     @while (h < Model.Size + 2)
     {
 
-            for (int f = h; f < h + 3; f++)
+        for (int f = h; f < h + 3; f++)
+        {
+            if (f < Model.Size)
             {
-                if (f < Model.Size)
+                link = Url.Action("View", "Publication", new { id = Model.List[f].id });
+
+
+                if (h + 3 - f != 1)
                 {
-                    link = Url.Action("View", "Publication", new { id = Model.List[f].id });
-
-
-                    if (h + 3 - f != 1)
-                    {
-                        style = "border:solid 2px black; margin-right:5px";
-                    }
-                    else
-                    {
-                        style = "border:solid 2px black; margin-left:5px";
-                    }
-                    if (Model.List[f].Status == "Banned")
-                    {
-                        style += ";background-color:red";
-                    }
+                    style = " margin-right:5px; height:70%" ;
+                }
+                else
+                {
+                    style = "margin-left:5px; height:70%";
+                }
+                if (Model.List[f].Status == "Banned")
+                {
+                    style += ";background-color:red";
+                }
 
                     <li  style='@style'>
-                        <a href=@link>
-                            <div class="row" style="align-content:center">
-                                @if (Model.List[f].headerPath != null)
-                                {
-                                    <img src=@Model.List[f].headerPath alt="image" style="max-width:300px; width:auto; height:auto; max-height:200px;" />
-                                }
-                            </div>
-
-                            <div class="row">
-                                <h3 style="margin-inline-start:auto; margin-right:auto">@string.Join("", Model.List[f].Content.Take(50).ToArray())</h3>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <p>@Model.List[f].User</p>
+                        <div style="position: relative; height: 100%" onmouseover="showInfo(this)" onmouseout="hideInfo(this)">
+                            <a href=@link>
+                                <div class="row" style="align-content:center; height: 100%" >
+                                    @if (Model.List[f].headerPath != null)
+                                    {
+                                        <img src=@Model.List[f].headerPath class="image" alt="image" style="height : 100%" />
+                                    }
                                 </div>
-                                <div class="col">
-                                    <p>@Model.List[f].DateOfCreated</p>
+                                <div class="image-info" style="position: absolute; bottom: 0px; display: none; height: 40%; width:100%; background-color: transparent;  background-image: linear-gradient(0deg, black, transparent); justify-content:center">
+                                    <div class="row">
+                                        <h3 style="margin-inline-start:auto; margin-right:auto">@string.Join("", Model.List[f].Content.Take(50).ToArray())</h3>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col">
+                                            <p>@Model.List[f].User</p>
+                                        </div>
+                                        <div class="col">
+                                            <p>@Model.List[f].DateOfCreated</p>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </li>
 
 
@@ -132,3 +136,6 @@ for (int i = startNumber; i <= count; i++)
     }
 }
 }
+@section Scripts{
+  
+    }

@@ -9,6 +9,8 @@ using Autofac;
 using Autofac.Integration.Mvc;
 using QandAProject.Controllers;
 using Dependencies;
+using ApiTest;
+using System.Web.Http;
 
 namespace QandAProject
 {
@@ -17,10 +19,11 @@ namespace QandAProject
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
+            GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
+            
             var builder = new ContainerBuilder();
 
             // Register your MVC controllers. (MvcApplication is the name of

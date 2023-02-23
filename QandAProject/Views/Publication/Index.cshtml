@@ -12,8 +12,8 @@
         grid-gap: 1rem;
     }
 </style>
-<input type="hidden" value=@ViewBag.Search id="Hidden"/>
-<input type="hidden" value="@ViewBag.MyGallery" id="Hidden2"/>
+<input type="hidden" value=@ViewBag.Search id="Hidden" />
+<input type="hidden" value="@ViewBag.MyGallery" id="Hidden2" />
 <div class="container-fluid">
     <div class="row">
         <div class="col-2" style="margin-left:0px">
@@ -23,15 +23,15 @@
                 </a>
                 @using (Ajax.BeginForm("ChangePage", "Publication", new { search = ViewBag.Search, personalPage = bool.Parse(ViewBag.MyGallery) }, new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "PublicationsList" }))
                 {
-                <ul>
-                    @foreach (var i in ViewBag.Categories)
-                    {
-                        <li>
-                        <input name="AreChecked" type="checkbox" value="@i.Key" />@i.Value <br />
-                       </li>
-                    }
-                </ul>
-                <input type="submit" class="btn-primary" value="Filter">
+                    <ul>
+                        @foreach (var i in ViewBag.Categories)
+                        {
+                            <li>
+                                <input name="AreChecked" type="checkbox" value="@i.Key" />@i.Value <br />
+                            </li>
+                        }
+                    </ul>
+                    <input type="submit" class="btn-primary" value="Filter">
                 }
             </div>
         </div>
@@ -49,6 +49,6 @@
 
     <script src="~/Scripts/jquery-3.4.1.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
-
+    <script src="~/MyScripts/effects.js"></script>
     <script src="~/MyScripts/render_pb_list.js"></script>
 }
