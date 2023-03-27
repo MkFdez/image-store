@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 
 
-namespace QandAProject.Models
+namespace DataAccess.Models
 {
     public class PublicationViewModel
     {

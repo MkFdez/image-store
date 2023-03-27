@@ -8,6 +8,7 @@ using DataRepository;
 using Aplications;
 using Autofac;
 using Dependencies;
+using DataAccess.Models;
 using Microsoft.AspNet.Identity;
 
 namespace QandAProject.Controllers

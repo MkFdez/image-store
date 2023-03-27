@@ -11,6 +11,9 @@ using System.IO;
 using MyFilter;
 using MkImages;
 using Microsoft.AspNet.Identity;
+using DataAccess;
+using System.Threading.Tasks;
+using DataAccess.Models;
 
 namespace QandAProject.Controllers
 {
@@ -18,18 +21,13 @@ namespace QandAProject.Controllers
     public class PublicationController : Controller
     {
         // GET: Publication            
-        public ActionResult Index(string search = "", bool personalPage = false)
+        public async Task<ActionResult> Index(string search = "", bool personalPage = false)
         {
             using (var context = new Project1DBEntities())
             {
-                var categories = context.Categories;
-                Dictionary<int, string> values = new Dictionary<int, string>();
-                foreach (var cat in categories)
-                {
-                    values.Add(cat.CategoryId, cat.CategoryName);
-                    
-                }
-                ViewBag.Categories = values;
+                Dictionary<int, string> categories = await EFDataAccess.GetCategories();
+               
+                ViewBag.Categories = categories;
                 ViewBag.Search = search;
                 ViewBag.MyGallery = personalPage.ToString();
             }
@@ -37,67 +35,35 @@ namespace QandAProject.Controllers
         }
 
         // GET: Publication/Details/5
-        public ActionResult View(int id)
+        public async Task<ActionResult> View(int id)
         {
             using(var context = new Project1DBEntities())
             {
-                
-                var temp = context.Publications.FirstOrDefault(x => x.PublicationId == id);
-                var comments = new List<CommentModel>();
-                temp.Comments1.ToList().ForEach(x => comments.Add(new CommentModel()
-                {
-                    DateOfCreated = x.DateOfCreated,
-                    UserName = x.User.UserName,
-                    Content = x.Content,
-
-                }));
-                bool isBuyed = false;
-                if (System.Web.HttpContext.Current.User.Identity.IsAuthenticated )
-                {
-                    int userid = User.Identity.GetUserId<int>();
-                    if (context.Users.FirstOrDefault(x => x.UserId == userid).PurPublication.Any(x => x.PublicationId == id)){
-                        isBuyed = true;
-                    }
-                }
-                string path = Server.MapPath("~" + temp.HeaderPath);
-                string fileName = path.Substring(path.LastIndexOf(@"\") + 1);
-                var publication = new PublicationViewModel()
-                {
-                    id = id,
-                    User = temp.User.UserName,
-                    DateOfCreated = temp.DateOfCreated.ToShortDateString(),
-                    headerPath = temp.HeaderPath,
-                    Content = temp.Content,
-                    Comments = comments.Take(10).ToList(),
-                    Categories = temp.Categories.Select(x => x.CategoryName).ToList(),
-                    Status = temp.Status.Description,
-                    isBuyed = isBuyed,
-                };
+                var publication = await EFDataAccess.GetPublication(id);
 
                 ViewBag.Comments = 10;
-                ViewBag.imgWidth = MkImage.GetWidth(Path.Combine(Server.MapPath("~/ImageVault/" + temp.Guid + "/"), fileName));
-                ViewBag.imgHeight = MkImage.GetHeight(Path.Combine(Server.MapPath("~/ImageVault/" + temp.Guid + "/"), fileName));
+                ViewBag.imgWidth = MkImage.GetWidth(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid + "/"), publication.Filename));
+                ViewBag.imgHeight = MkImage.GetHeight(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid + "/"), publication.Filename));
 
-                return View(publication);
+                return View(publication.Publication);
             }
             
         }
         [Authorize]
         
-        public ActionResult Download(string scale, string pubid )
+        public async Task<ActionResult> Download(string scale, string pubid )
         {
             int id = int.Parse(pubid);
             int userid = User.Identity.GetUserId<int>();
             using (var context = new Project1DBEntities())
             {
 
-                if (!context.Users.FirstOrDefault(x => x.UserId == userid).PurPublication.Any(x => x.PublicationId == id))
+                if ( await EFDataAccess.HasPublication(id) == false)
                 {
                     return RedirectToAction("View", "Publication", new { id = id });
                 }
-
-                var p = context.Publications.FirstOrDefault(x => x.PublicationId == id);
-                string fileName = p.HeaderPath.Substring(p.HeaderPath.LastIndexOf("/")+1);
+                var p = await EFDataAccess.GetPublicationToDownload(id);
+                string fileName = p.Path.Substring(p.Path.LastIndexOf("/")+1);
                 string pGuid = p.Guid; 
                 int intScale = int.Parse(scale);
                 string guid = Guid.NewGuid().ToString();
@@ -111,12 +77,12 @@ namespace QandAProject.Controllers
 
         
 
-        public FileResult DownloadFreeTry(string id)
+        public async Task<FileResult> DownloadFreeTry(string id)
         {
             using (var context = new Project1DBEntities())
             {
                 int puid = int.Parse(id);
-                string path = context.Publications.FirstOrDefault(x => x.PublicationId == puid).HeaderPath;
+                string path = await EFDataAccess.GetImagePath(puid);
                 string fileName = path.Substring(path.LastIndexOf(@"/") + 1);
                 path = path.Substring(0, path.LastIndexOf("/LowRes/"));
                 string file = Path.Combine(Directory.GetFiles(Server.MapPath("~" + path + "/FreeTrial/"), fileName));
@@ -129,25 +95,19 @@ namespace QandAProject.Controllers
         }
         // GET: Publication/Create
         [Authorize]
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            using(var context = new Project1DBEntities())
-            {
-                var categories = context.Categories;
-                Dictionary<int, string> values = new Dictionary<int, string>();
-                foreach (var cat in categories)
-                {
-                    values.Add(cat.CategoryId, cat.CategoryName);
-                }
-                ViewBag.Categories = values;
-            }
+          
+            Dictionary<int, string> categories = await EFDataAccess.GetCategories();               
+            ViewBag.Categories = categories;
+          
             return View();
         }
 
         // POST: Publication/Create
         [Authorize]
         [HttpPost]
-        public ActionResult Create(PublicationCreateViewModel model,  FormCollection collection)
+        public async Task<ActionResult> Create(PublicationCreateViewModel model,  FormCollection collection)
         {
             if(ModelState.IsValid)
             {
@@ -165,13 +125,12 @@ namespace QandAProject.Controllers
                         Guid = Guid.NewGuid().ToString(),
                        
                     };
+                    int[] categories = new int[0];
                     if (collection["aAreChecked"] != null)
                     {
-                        var a = Array.ConvertAll(collection["AreChecked"].ToString().Split(','), x => int.Parse(x.ToString())).ToList();
-                        context.Categories.Where(x => a.Contains(x.CategoryId)).ToList().ForEach(y => publication.Categories.Add(y));
+                        categories = Array.ConvertAll(collection["AreChecked"].ToString().Split(','), x => int.Parse(x.ToString()));                       
                     }
-                    context.Publications.Add(publication);
-                    context.SaveChanges();
+                    
                     if (model.Picture != null && model.Picture.ContentLength > 0)
                     {
                         Directory.CreateDirectory(Path.Combine(Server.MapPath("~/uploads"), publication.PublicationId.ToString()));
@@ -186,13 +145,13 @@ namespace QandAProject.Controllers
                         string newpath = split[1];
                         string imagepath = "/uploads/"+ publication.PublicationId.ToString()+"/LowRes/" + newpath;
                         model.Picture.SaveAs(Path.Combine(Server.MapPath("~/ImageVault/"+ publication.Guid + "/"), fileName));
-                        publication.HeaderPath = imagepath;
-                        context.SaveChanges();
+                        publication.HeaderPath = imagepath;                        
                         ImageManager<string> myDelegate = new ImageManager<string>(MkImage.setWatermarkText);
                         myDelegate(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid), fileName), "my website", Path.Combine(Server.MapPath("~/uploads/" + publication.PublicationId.ToString()+"/"+ "FreeTrial/"), fileName));
                         ImageManager<int> myDelegate2 = new ImageManager<int>(MkImage.Resize);
                         myDelegate2(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid), fileName), 50, Path.Combine(Server.MapPath("~/uploads/" + publication.PublicationId.ToString() + "/" + "LowRes/"), fileName));
                     }
+                    await EFDataAccess.AddPublication(publication, categories);
 
                 }
 
@@ -247,7 +206,7 @@ namespace QandAProject.Controllers
         }
 
         
-        public ActionResult ChangePage(int actualPage = 1, FormCollection c = null, string search = "", bool personalPage = false)
+        public async Task<ActionResult> ChangePage(int actualPage = 1, FormCollection c = null, string search = "", bool personalPage = false)
         {
             List<PublicationViewModel> model = new List<PublicationViewModel>();
             using (var context = new Project1DBEntities())
@@ -289,37 +248,18 @@ namespace QandAProject.Controllers
                     predicate1 = predicate1.And(predicate2);
 
                 }
-                if (!personalPage)
+                if (personalPage)
                 {
-                    foreach (var x in context.Publications.Where(predicate1).OrderBy(x => x.PublicationId).Skip((actualPage - 1) * 9).Take(9)) {
-                        model.Add(new PublicationViewModel
-                        {
-                            id = x.PublicationId,
-                            headerPath = x.HeaderPath,
-                            Content = x.Content,
-                            User = x.User.UserName,
-                            DateOfCreated = x.DateOfCreated.ToShortDateString(),
-                            Status = x.Status.Description,
-                        });
-                    }
-                    TempData["Count"] = context.Publications.Count();
-                }
-                else
-                {
+                 
                     
                     int id = User.Identity.GetUserId<int>();
                     System.Linq.Expressions.Expression<Func<Publication, bool>> predicate3 = x => x.OwnerUser.Any(y => y.UserId == id);
                     predicate1 = predicate1.And(predicate3);
-                    context.Publications.Where(predicate1).OrderBy(x => x.PublicationId).Skip((actualPage - 1) * 9).Take(9).ToList().ForEach(x => model.Add(new PublicationViewModel
-                    {
-                        id = x.PublicationId,
-                        headerPath = x.HeaderPath,
-                        Content = x.Content,
-                        User = x.User.UserName,
-                        DateOfCreated = x.DateOfCreated.ToShortDateString(),
-                        Status = x.Status.Description,
-                    }));
+                    
+
                 }
+                model = await EFDataAccess.GetSomePublications(actualPage, predicate1);
+                
             }
             TempData["Count"] = model.Count;
 

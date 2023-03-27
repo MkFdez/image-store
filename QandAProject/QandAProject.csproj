@@ -281,18 +281,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\BuyImageModel.cs" />
-    <Compile Include="Models\CardModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\SearchModel.cs" />
-    <Compile Include="Models\PublicationsListViewModel.cs" />
-    <Compile Include="Models\PublicationCreateViewModel.cs" />
-    <Compile Include="Models\UserEditViewModel.cs" />
-    <Compile Include="Models\UserLoginViewModel.cs" />
-    <Compile Include="Models\PublicationViewModel.cs" />
-    <Compile Include="Models\CommentModel.cs" />
-    <Compile Include="Models\UserCreateViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\MyRoleProvider.cs" />
     <Compile Include="Startup.cs" />
@@ -439,6 +429,10 @@
     <ProjectReference Include="..\CacheUtilities\CacheUtilities.csproj">
       <Project>{4c676d9c-05ea-455d-b8df-e716209fb04c}</Project>
       <Name>CacheUtilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj">
+      <Project>{30d38563-17ca-4a9b-bb6b-ef6871f19c67}</Project>
+      <Name>DataAccess</Name>
     </ProjectReference>
     <ProjectReference Include="..\DataRepository\DataRepository.csproj">
       <Project>{7987d4cc-6818-40e3-9e60-940715d6608b}</Project>
