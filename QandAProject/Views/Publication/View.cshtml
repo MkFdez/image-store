@@ -37,7 +37,10 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="redirect('@Url.Action("BuyImage", "Sell", new { pubid = Model.id })')">Buy Page</button>
+
+                @Html.BeginForm("BuyImage", "Sell", new { pubid = Model.id, image = Model.headerPath, name = Model.Content }, FormMethod.Post){ 
+                <button type="submit" class="btn btn-primary">Buy Page</button>
+                }
             </div>
         </div>
     </div>
