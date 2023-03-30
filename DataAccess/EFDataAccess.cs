@@ -141,8 +141,15 @@ namespace DataAccess
             }
 
         }
-
-        public static async Task<List<PublicationViewModel>> GetSomePublications(int actualPage, Expression<Func<Publication, bool>> predicate)
+        public static async Task<int> PublicationCount(Expression<Func<Publication, bool>> predicate)
+        {
+            using (var context = new Project1DBEntities())
+            {
+                return context.Publications.Where(predicate).Count();
+              
+            }
+        }
+            public static async Task<List<PublicationViewModel>> GetSomePublications(int actualPage, Expression<Func<Publication, bool>> predicate)
         {
             using(var context = new Project1DBEntities())
             {

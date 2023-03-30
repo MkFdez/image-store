@@ -126,7 +126,7 @@ namespace QandAProject.Controllers
                        
                     };
                     int[] categories = new int[0];
-                    if (collection["aAreChecked"] != null)
+                    if (collection["AreChecked"] != null)
                     {
                         categories = Array.ConvertAll(collection["AreChecked"].ToString().Split(','), x => int.Parse(x.ToString()));                       
                     }
@@ -259,9 +259,9 @@ namespace QandAProject.Controllers
 
                 }
                 model = await EFDataAccess.GetSomePublications(actualPage, predicate1);
-                
+                TempData["Count"] = await EFDataAccess.PublicationCount(predicate1);
             }
-            TempData["Count"] = model.Count;
+            
 
             var realList = new PublicationsListViewModel(model);
             ViewBag.Search = search;

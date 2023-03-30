@@ -5,137 +5,110 @@
     int h = 0;
     string style ;
 }
-<ul class="auto-grid" style="list-style-type: none;">
     @while (h < Model.Size + 2)
     {
-
-        for (int f = h; f < h + 3; f++)
-        {
+        <div class="w3-row-padding">
+            @for (int f = h; f < h + 3; f++)
+            {
             if (f < Model.Size)
             {
-                link = Url.Action("View", "Publication", new { id = Model.List[f].id });
+            link = Url.Action("View", "Publication", new { id = Model.List[f].id });
 
 
-                if (h + 3 - f != 1)
-                {
-                    style = " margin-right:5px; height:70%" ;
-                }
-                else
-                {
-                    style = "margin-left:5px; height:70%";
-                }
-                if (Model.List[f].Status == "Banned")
-                {
-                    style += ";background-color:red";
-                }
+            <div class="w3-third w3-container w3-margin-bottom" >
+                <a style="text-decoration:none; margin-left:auto; margin-right:auto" href=@link >
+                    
+                        @if (Model.List[f].headerPath != null)
+                        {
+                            <img src=@Model.List[f].headerPath class="w3-hover-opacity" alt="image" style="width : 100%!important" />
+                        }
+                   
+                    <div class="w3-container w3-white" >
+                        
+                        <p><b>@string.Join("", Model.List[f].Content.Take(50).ToArray())</b></p>
+                        <p>@Model.List[f].User</p>
+                        <p>@Model.List[f].DateOfCreated</p>
+ 
+                    </div>
+                </a>
+            </div>      
+        }
+        }
 
-                    <li  style='@style'>
-                        <div style="position: relative; height: 100%" onmouseover="showInfo(this)" onmouseout="hideInfo(this)">
-                            <a href=@link>
-                                <div class="row" style="align-content:center; height: 100%" >
-                                    @if (Model.List[f].headerPath != null)
-                                    {
-                                        <img src=@Model.List[f].headerPath class="image" alt="image" style="height : 100%" />
-                                    }
-                                </div>
-                                <div class="image-info" style="position: absolute; bottom: 0px; display: none; height: 40%; width:100%; background-color: transparent;  background-image: linear-gradient(0deg, black, transparent); justify-content:center">
-                                    <div class="row">
-                                        <h3 style="margin-inline-start:auto; margin-right:auto">@string.Join("", Model.List[f].Content.Take(50).ToArray())</h3>
-                                    </div>
-                                    <br />
-                                    <div class="row">
-                                        <div class="col">
-                                            <p>@Model.List[f].User</p>
-                                        </div>
-                                        <div class="col">
-                                            <p>@Model.List[f].DateOfCreated</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </li>
-
-
-                }
-                else
-                {
-                    @*for (int k = 0; k < h + 3 - f; k++)
-                    {
-                        <div class="col" style=" margin-left: 5px"></div>
-                    }*@
-                    break;
-                }
-            }
-
-        
+        </div>
         h += 3;
-    }
-</ul>
-@{ @*Pagging Widget*@
-int count;
-int startNumber;
-startNumber = (int)TempData["ActualPage"];
+        }
+<div class="w3-center w3-padding-32">
+    <div class="w3-bar">
+        @{ @*Pagging Widget*@
 
-double decimalDivision = (double)((int)TempData["Count"]) / 9;
-int naturalDivision = (int)TempData["Count"] / 9;
-if (naturalDivision == decimalDivision)
+        int count;
+        int startNumber;
+        startNumber = (int)TempData["ActualPage"];
 
-{
-    count = naturalDivision;
-}
-else
-{
-    count = naturalDivision + 1;
-}
-if ((int)TempData["ActualPage"] != 1 && count - startNumber >= 4)
-{
-    startNumber -= 1;
-}
-if (count - startNumber < 4 && (int)TempData["ActualPage"] != 1)
-{
-    int temp = 5 - (count - startNumber);
-    for (int j = 0; j < temp; j++)
-    {
+        double decimalDivision = (double)((int)TempData["Count"]) / 9;
+        int naturalDivision = (int)TempData["Count"] / 9;
+        if (naturalDivision == decimalDivision)
 
-        startNumber -= 1;
-        if (startNumber == 1) { break; }
-
-    }
-}
-for (int i = startNumber; i <= count; i++)
-{
-    if (i == startNumber + 5 && i != count)
-    {
-        <a>...</a>
-    }
-    else if (i <= startNumber + 5 || i == count)
-    {
-        if (i == (int)TempData["ActualPage"])
         {
-<div style="border-radius:3px; border:2px solid red; width:min-content; background-color: red; margin-left: 3px">
-    @Ajax.ActionLink(i.ToString(), "ChangePage", "Publication", new { actualPage = i }, new AjaxOptions
-{
-   InsertionMode = InsertionMode.Replace,
-   HttpMethod = "GET",
-   UpdateTargetId = "PublicationsList",
-   OnBegin = "setGif",
-}, new { @style = "color:black; text-decoration:none" })
-</div>
+            count = naturalDivision;
         }
         else
         {
-            @Ajax.ActionLink(i.ToString(), "ChangePage", "Publication", new { actualPage = i }, new AjaxOptions
-       {
-           InsertionMode = InsertionMode.Replace,
-           HttpMethod = "GET",
-           UpdateTargetId = "PublicationsList",
-           OnBegin = "setGif",
-       }, new { @style = "color:black; margin-left: 3px" })
+            count = naturalDivision + 1;
         }
-    }
-}
-}
-@section Scripts{
-  
-    }
+        if ((int)TempData["ActualPage"] != 1 && count - startNumber >= 4)
+        {
+            startNumber -= 1;
+        }
+        if (count - startNumber < 4 && (int)TempData["ActualPage"] != 1)
+        {
+            int temp = 5 - (count - startNumber);
+            for (int j = 0; j < temp; j++)
+            {
+
+                startNumber -= 1;
+                if (startNumber == 1) { break; }
+
+            }
+        }
+        for (int i = startNumber; i <= count; i++)
+        {
+            if (i == startNumber + 5 && i != count)
+            {
+                <a>...</a>
+            }
+            else if (i <= startNumber + 5 || i == count)
+            {
+                if (i == (int)TempData["ActualPage"])
+                {
+                    <div class="w3-bar-item w3-black w3-button" >
+                        @Ajax.ActionLink(i.ToString(), "ChangePage", "Publication", new { actualPage = i }, new AjaxOptions
+                    {
+                       InsertionMode = InsertionMode.Replace,
+                       HttpMethod = "GET",
+                       UpdateTargetId = "PublicationsList",
+                       OnBegin = "setGif",
+                    }, new { @style = "color:white; text-decoration:none" })
+                    </div>
+                }
+                else
+                {
+                        <div class="w3-bar-item w3-button w3-hover-black">
+                    @Ajax.ActionLink(i.ToString(), "ChangePage", "Publication", new { actualPage = i }, new AjaxOptions
+               {
+                   InsertionMode = InsertionMode.Replace,
+                   HttpMethod = "GET",
+                   UpdateTargetId = "PublicationsList",
+                   OnBegin = "setGif",
+               }, new { @style = "color:black; margin-left: 3px" })
+                       </div>
+                }
+            }
+        }
+        }
+        </div>
+    </div>
+        @section Scripts{
+
+        }

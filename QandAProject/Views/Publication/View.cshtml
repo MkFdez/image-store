@@ -17,8 +17,8 @@
                 You must be loged in for downloading any image
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="redirect('@Url.Action("Login", "Account")')">Login Page</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius:0px!important">Close</button>
+                <button type="button" class="btn btn-primary" onclick="redirect('@Url.Action("Login", "Account")')" style="border-radius:0px!important">Login Page</button>
             </div>
         </div>
     </div>
@@ -36,10 +36,11 @@
                 You must buy the image before download it
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius:0px!important">Close</button>
 
-                @Html.BeginForm("BuyImage", "Sell", new { pubid = Model.id, image = Model.headerPath, name = Model.Content }, FormMethod.Post){ 
-                <button type="submit" class="btn btn-primary">Buy Page</button>
+                @using (Html.BeginForm("BuyImage", "Sell", new { pubid = Model.id, image = Model.headerPath, name = Model.Content }, FormMethod.Post))
+                        {
+                    <button type = "submit" class="btn btn-primary" style="border-radius:0px!important">Buy Page</button>
                 }
             </div>
         </div>
@@ -52,7 +53,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Alert</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="border-radius:0pxstyle=" border-radius:0px!important""></button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -65,7 +66,7 @@
                         <input type="number" class="form-text" id="height" onchange="heightOnChange('@ViewBag.imgWidth', '@ViewBag.imgHeight')"/>
                         <input type="range" class="form-range" min="1" max="100" step="1" id="myRange" onchange="setValue('@ViewBag.imgWidth', '@ViewBag.imgHeight')" value="100">
                         <label class="form-label" id="rangeValue">100</label>
-                        <a class="btn btn-primary" onclick="downloadImage('@Model.headerPath', @Model.id)" id="downloadLink">
+                        <a class="btn btn-primary" onclick="downloadImage('@Model.headerPath', @Model.id)" id="downloadLink" style="border-radius:0px!important">
                             Download
                         </a>
                         <script>
@@ -122,12 +123,12 @@
             @if (!HttpContext.Current.User.Identity.IsAuthenticated)
             {
             <div class="row">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="max-width: 25%">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="max-width: 25%; border-radius:0px!important">
                     Download
                 </button>
             </div>
             <div class="row">
-                <a class="btn btn-primary" onclick="downloadImageTry('@Model.id')" id="downloadLink" style="margin-top: 25px; max-width: 25%">
+                <a class="btn btn-primary" onclick="downloadImageTry('@Model.id')" id="downloadLink" style="margin-top: 25px; max-width: 25%; border-radius: 0px !important">
                     Download Free Try
                 </a>
             </div>
@@ -137,7 +138,7 @@
                 if (Model.isBuyed)
                 {
                    <div class="row">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal3" style="max-width: 25%">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal3" style="max-width: 25%; border-radius: 0px !important">
                             Download
                         </button>
                    </div>
@@ -145,14 +146,14 @@
                 else
                 {
                     <div class="row">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2" style="max-width: 25%">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2" style="max-width: 25%; border-radius: 0px !important">
                             Buy
                         </button>
                     </div>
                 }
                 @*@Html.ActionLink("DownloadFreeTry", "Publication", routeValues: new { path = Model.headerPath }, htmlAttributes: new { @class = "btn btn-primary" }) for later*@
                     <div class="row">
-                        <a class="btn btn btn-primary" onclick="downloadImageTry('@Model.id')" id="downloadLink" style="margin-top: 25px; max-width: 25%">
+                        <a class="btn btn btn-primary" onclick="downloadImageTry('@Model.id')" id="downloadLink" style="margin-top: 25px; max-width: 25%; border-radius: 0px !important">
                             Download Free Try
                         </a>
                     </div>
@@ -186,12 +187,12 @@
 
 
 
-<h3 style="margin-top:30px">Add yor opinion</h3>
+<h3 style="margin-top:30px">Add your opinion</h3>
 <div style="display:block">
     <form id="commentForm">
         <input type="hidden" id="modelId" value=@Model.id />
         <textarea class="form-control" id="CommentTextArea" rows="3" style="padding-left:5px; max-height:100px"></textarea>
-        <input type="submit" class="btn-default" style="margin-top:7px" />
+        <input type="submit" class="btn btn btn-primary" style="margin-top:7px ; max-width: 25%; border-radius:0px!important" value="Comment"/>
     </form>
 </div>
 <h3>Comments</h3>

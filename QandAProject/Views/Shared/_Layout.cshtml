@@ -10,6 +10,14 @@
     <script src="~/MyScripts/searchScript.js"></script>
     <script src="~/Scripts/jquery-3.4.1.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body, h1, h2, h3, h4, h5, h6 {
+            font-family: "Raleway", sans-serif
+        }
+    </style>
 
 </head>
 <body>
@@ -44,7 +52,7 @@
                     <li class="nav-item">
                         <div class="row">
                             <div class="col" style="padding-left:80px;padding-right:0px">
-                                <input class="form-control mr-sm-2" type="search" id="search" placeholder="Search" aria-label="Search" onchange="update()">
+                                <input class="mr-sm-2" type="search" id="search" placeholder="Search" aria-label="Search" onchange="update()" style="padding:5px">
                                 <script>
                                         function update() {
                                             let link = '@Url.Action("Index", "Publication")' + "?search=" + document.getElementById("search").value
@@ -54,7 +62,7 @@
                             </div>
                             <div class="col" style="padding-left:0px">
                                 @*<button class="btn btn-outline-success my-2 my-sm-0" onclick="searchInput()">Search</button>*@
-                                @Html.ActionLink("SEARCH", "Index", "Publication", htmlAttributes: new { @class = "btn btn-outline-success my-2 my-sm-0", id = "link" })
+                                @Html.ActionLink("SEARCH", "Index", "Publication", htmlAttributes: new { @class = "btn btn-outline-success my-2 my-sm-0", id = "link", style ="border-radius:0px" })
                             </div>
                         </div>
 
