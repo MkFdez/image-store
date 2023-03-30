@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using QandAProject.Models;
 using DataRepository;
+using DataAccess.Models;
 using System.IO;
 using CacheUtilities;
 

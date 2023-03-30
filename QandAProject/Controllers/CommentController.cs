@@ -8,6 +8,7 @@ using DataRepository;
 using System.Text.Json;
 using QandAProject.Models;
 using Microsoft.AspNet.Identity;
+using DataAccess.Models;
 
 namespace QandAProject.Controllers
     
