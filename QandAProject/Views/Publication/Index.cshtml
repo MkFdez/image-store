@@ -1,4 +1,4 @@
-﻿@model QandAProject.Models.PublicationsListViewModel
+﻿@model DataAccess.Models.PublicationsListViewModel
 
 @{
     ViewBag.Title = "Index";
@@ -11,44 +11,69 @@
         grid-template-columns: repeat(auto-fill, minmax(var(--auto-grid-min-size), 1fr));
         grid-gap: 1rem;
     }
+    .filter-bar{
+        display:flex;
+        flex-wrap:wrap;
+        column-gap:10px;
+        background-color:slategrey;
+
+        
+    }
 </style>
+
+<div class="modal fade" id="filtersModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="filterModalLabel">Alert</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="border-radius:0px!important"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div id="filterTypes" class="col-sm-4">
+
+                    </div>
+                    <div id="filters" class="col-sm-8">
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>        
+</div>
+
 <input type="hidden" value=@ViewBag.Search id="Hidden" />
 <input type="hidden" value="@ViewBag.MyGallery" id="Hidden2" />
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-2" style="margin-left:0px">
-            <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 200px;">
+    <div class="row" style="margin-top:50px">
+        <div class="filter-bar" style="margin-left:0px">
+            @using (Ajax.BeginForm("ChangePage", "Publication", new { search = ViewBag.Search, personalPage = bool.Parse(ViewBag.MyGallery) }, new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "PublicationsList" }))
+            {
                 <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-                    Filter By:
+                    Filters:
                 </a>
-                @using (Ajax.BeginForm("ChangePage", "Publication", new { search = ViewBag.Search, personalPage = bool.Parse(ViewBag.MyGallery) }, new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "PublicationsList" }))
-                {
-                    <ul>
-                        @foreach (var i in ViewBag.Categories)
-                        {
-                            <li>
-                                <input name="AreChecked" type="checkbox" value="@i.Key" />@i.Value <br />
-                            </li>
-                        }
-                    </ul>
-                    <input type="submit" class="btn-primary" value="Filter">
-                }
-            </div>
+                <input type="submit" class="btn-primary" value="Filter">
+
+            }
         </div>
-        <div class="col" style="margin-right:20px">
-            <div style="display:block; margin-top:50px" id="PublicationsList">
+                <div class="col" style="margin-right:20px; margin-top:20px">
+                    <div style="display:block" id="PublicationsList">
 
 
 
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
-</div>
+        </div>
 @section Scripts{
 
-    <script src="~/Scripts/jquery-3.4.1.js"></script>
-    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    @*<script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>*@
     <script src="~/MyScripts/effects.js"></script>
     <script src="~/MyScripts/render_pb_list.js"></script>
+    
 }
