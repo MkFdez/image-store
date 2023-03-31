@@ -48,28 +48,23 @@
 
 
 
-                <ul class="nav navbar-nav navbar-right mr-auto">
-                    <li class="nav-item">
+                
                         <div class="row">
-                            <div class="col" style="padding-left:80px;padding-right:0px">
-                                <input class="mr-sm-2" type="search" id="search" placeholder="Search" aria-label="Search" onchange="update()" style="padding:5px">
+                            <div class="d-flex">
+                                <input   type="search" id="search" placeholder="Search" aria-label="Search" onchange="update()" style="padding:5px;border-radius:0px!important">
                                 <script>
                                         function update() {
                                             let link = '@Url.Action("Index", "Publication")' + "?search=" + document.getElementById("search").value
                                             document.getElementById("link").href = link;
                                         }
                                 </script>
-                            </div>
-                            <div class="col" style="padding-left:0px">
-                                @*<button class="btn btn-outline-success my-2 my-sm-0" onclick="searchInput()">Search</button>*@
-                                @Html.ActionLink("SEARCH", "Index", "Publication", htmlAttributes: new { @class = "btn btn-outline-success my-2 my-sm-0", id = "link", style ="border-radius:0px" })
+                           
+                                @Html.ActionLink("SEARCH", "Index", "Publication", htmlAttributes: new { @class = "btn btn-outline-success my-2 my-sm-0", id = "link", style = "border-radius:0px" })
                             </div>
                         </div>
 
 
-                    </li>
-                </ul>
-
+                   
 
 
 
@@ -107,11 +102,18 @@
         </div>
     </nav>
 
-
-    <div class="container body-content">
-        @RenderBody()
-    </div>
-
+    @if (ViewBag.Title == "Publications")
+    {
+        <div class="container body-content">
+            @RenderBody()
+        </div>
+    }
+    else
+    {
+        <div class="container">
+            @RenderBody()
+        </div>
+    }
     <hr />
     <footer>
         <p>&copy; @DateTime.Now.Year - My Wonderful Project</p>

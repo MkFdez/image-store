@@ -30,6 +30,7 @@ namespace QandAProject.Controllers
                 ViewBag.Categories = categories;
                 ViewBag.Search = search;
                 ViewBag.MyGallery = personalPage.ToString();
+                ViewBag.Title = "Publications";
             }
             return View();
         }
