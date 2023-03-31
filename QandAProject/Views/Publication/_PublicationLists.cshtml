@@ -82,27 +82,27 @@
             {
                 if (i == (int)TempData["ActualPage"])
                 {
-                    <div class="w3-bar-item w3-black w3-button" >
+                    
                         @Ajax.ActionLink(i.ToString(), "ChangePage", "Publication", new { actualPage = i }, new AjaxOptions
-                    {
+                   {
                        InsertionMode = InsertionMode.Replace,
                        HttpMethod = "GET",
                        UpdateTargetId = "PublicationsList",
                        OnBegin = "setGif",
-                    }, new { @style = "color:white; text-decoration:none" })
-                    </div>
+                   }, new {@class= "w3-bar-item w3-black w3-button", @style = "color:white; text-decoration:none" })
+                    
                 }
                 else
                 {
-                        <div class="w3-bar-item w3-button w3-hover-black">
+                        
                     @Ajax.ActionLink(i.ToString(), "ChangePage", "Publication", new { actualPage = i }, new AjaxOptions
                {
                    InsertionMode = InsertionMode.Replace,
                    HttpMethod = "GET",
                    UpdateTargetId = "PublicationsList",
                    OnBegin = "setGif",
-               }, new { @style = "color:black; margin-left: 3px" })
-                       </div>
+               }, new { @class = "w3-bar-item w3-button w3-hover-black", @style = "color:black; margin-left: 3px" })
+                       
                 }
             }
         }

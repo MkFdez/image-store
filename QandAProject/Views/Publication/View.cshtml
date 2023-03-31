@@ -86,22 +86,23 @@
 @*End Modal*@
 
 <div class="row" style="margin-top:50px">
-    <div class="col">
-        <div style="display:block;">
+    <div class="row">
+        <h2>
+            @Model.Content
+        </h2>
+    </div>
+    <div class="col-sm-8">
+        
             @if (Model.headerPath != null)
             {
-                <img src=@Model.headerPath style="max-width:500px; height:auto" />
+                <img src=@Model.headerPath style="max-width:500px; width:100%" />
             }
-        </div>
+       
     </div>
-    <div class="col">
+    <div class="col-sm-4">
 
         <div class="row">
-            <div class="row">
-                <h2>
-                    @Model.Content
-                </h2>
-            </div>
+
             <div class="row">
                 <p>
                     <strong>Categories:</strong> @foreach (var cat in Model.Categories)
@@ -122,43 +123,43 @@
             </div>
             @if (!HttpContext.Current.User.Identity.IsAuthenticated)
             {
-            <div class="row">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="max-width: 25%; border-radius:0px!important">
-                    Download
-                </button>
-            </div>
-            <div class="row">
-                <a class="btn btn-primary" onclick="downloadImageTry('@Model.id')" id="downloadLink" style="margin-top: 25px; max-width: 25%; border-radius: 0px !important">
-                    Download Free Try
-                </a>
-            </div>
+                <div class="row">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="width: 40%; min-width: 80px; border-radius: 0px !important; margin-left:11.25px">
+                        Download
+                    </button>
+                </div>
+                <div class="row">
+                    <a class="btn btn-primary" onclick="downloadImageTry('@Model.id')" id="downloadLink" style="margin-top: 25px; width: 40%; min-width: 80px; border-radius: 0px !important ; margin-left:11.25px" >
+                        Download Free Try
+                    </a>
+                </div>
             }
             else
             {
                 if (Model.isBuyed)
                 {
-                   <div class="row">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal3" style="max-width: 25%; border-radius: 0px !important">
+                    <div class="row">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal3" style="width: 40%; min-width: 80px; border-radius: 0px !important; margin-left:11.25px">
                             Download
                         </button>
-                   </div>
+                    </div>
                 }
                 else
                 {
                     <div class="row">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2" style="max-width: 25%; border-radius: 0px !important">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2" style="width: 40%; min-width: 80px; border-radius: 0px !important; margin-left:11.25px">
                             Buy
                         </button>
                     </div>
                 }
                 @*@Html.ActionLink("DownloadFreeTry", "Publication", routeValues: new { path = Model.headerPath }, htmlAttributes: new { @class = "btn btn-primary" }) for later*@
-                    <div class="row">
-                        <a class="btn btn btn-primary" onclick="downloadImageTry('@Model.id')" id="downloadLink" style="margin-top: 25px; max-width: 25%; border-radius: 0px !important">
-                            Download Free Try
-                        </a>
-                    </div>
-                    if (HttpContext.Current.User.IsInRole("Admin") || HttpContext.Current.User.IsInRole("SuperAdmin"))
-                    {
+                <div class="row">
+                    <a class="btn btn btn-primary" onclick="downloadImageTry('@Model.id')" id="downloadLink" style="margin-top: 25px; width: 40%; min-width: 80px; border-radius: 0px !important; margin-left: 11.25px ">
+                        Download Free Try
+                    </a>
+                </div>
+                if (HttpContext.Current.User.IsInRole("Admin") || HttpContext.Current.User.IsInRole("SuperAdmin"))
+                {
                     <div class="row" style="margin-top:20px">
                         <div class="col">
                             @if (Model.Status == "Accepted")
@@ -178,11 +179,11 @@
                             <p id="status">@Model.Status</p>
                         </div>
                     </div>
-                    }
-                    }
-                    @*@Html.ActionLink("Download", "Download", new { path = Model.headerPath }, new { @class = "btn btn-primary btn-lg", @style = "max-width:200px; margin-top:30px" })*@
-                </div>
-            </div>
+                }
+            }
+            @*@Html.ActionLink("Download", "Download", new { path = Model.headerPath }, new { @class = "btn btn-primary btn-lg", @style = "max-width:200px; margin-top:30px" })*@
+        </div>
+    </div>
 </div>
 
 
@@ -192,7 +193,7 @@
     <form id="commentForm">
         <input type="hidden" id="modelId" value=@Model.id />
         <textarea class="form-control" id="CommentTextArea" rows="3" style="padding-left:5px; max-height:100px"></textarea>
-        <input type="submit" class="btn btn btn-primary" style="margin-top:7px ; max-width: 25%; border-radius:0px!important" value="Comment"/>
+        <input type="submit" class="btn btn btn-primary" style="margin-top: 7px; width: 40%; min-width:80px; border-radius: 0px !important" value="Comment"/>
     </form>
 </div>
 <h3>Comments</h3>

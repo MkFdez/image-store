@@ -2,30 +2,101 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+<header class="w3-display-container w3-content w3-wide" style="max-width:1500px; margin-top:30px" id="home">
+    <img class="w3-image" src="~/Content/Assets/principal.jpg" alt="Architecture" width="1500" height="800">
+    <div class="w3-display-middle w3-margin-top w3-center"> 
+        <h1 class="w3-xxlarge w3-text-white"><img src="~/uploads/fakeLogo.png" class="w3-padding w3-opacity-min"/> <span class="w3-hide-small w3-text-light-grey">Image Store</span></h1>
+    </div>
+</header>
+
+<!-- Page content -->
+<div class="w3-content w3-padding" style="max-width:1564px">
+
+    <!-- Project Section -->
+    <div class="w3-container w3-padding-32" id="projects">
+        <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16">Categories</h3>
+    </div>
+
+    <div class="w3-row-padding">
+       
+        <div class="w3-col l3 m6 w3-margin-bottom">
+            <div class="w3-display-container">
+                <div class="w3-display-topleft w3-black w3-padding">Nature</div>
+                <a href="/publication/index?category=0">
+                    <img src="~/Content/Assets/nature.jpg" alt="House" style="width:100%">
+                </a>
+            </div>
+        </div>
+            
+        
+        <div class="w3-col l3 m6 w3-margin-bottom">
+            <div class="w3-display-container">
+                <div class="w3-display-topleft w3-black w3-padding">Technology</div>
+                <a href="/publication/index?category=1">
+                    <img src="~/Content/Assets/tech.jpg" alt="House" style="width:100%">
+                </a>
+            </div>
+        </div>
+        
+        
+        <div class="w3-col l3 m6 w3-margin-bottom">
+            <div class="w3-display-container">
+                <div class="w3-display-topleft w3-black w3-padding">Animals</div>
+                <a href="/publication/index?category=3">
+                    <img src="~/Content/Assets/animal.jpg" alt="House" style="width:100%">
+                </a>
+            </div>
+        </div>
+        
+        
+        <div class="w3-col l3 m6 w3-margin-bottom">
+            <div class="w3-display-container">
+                <div class="w3-display-topleft w3-black w3-padding">People</div>
+                <a href="/publication/index?category=4">
+                    <img src="~/Content/Assets/people.jpg" alt="House" style="width:100%">
+                </a>
+            </div>
+        </div>
+        
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
+  
+
+    <!-- About Section -->
+    <div class="w3-container w3-padding-32" id="about">
+        <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16">About</h3>
         <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
+            We are the smallest Image Store of all times, but it wont't be that way forever. If you are still reading this congrats, you're just wasting your time but i have to fill this byeeeee 
         </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+
+    <div class="w3-row-padding w3-grayscale">
+        <div class="w3-col l3 m6 w3-margin-bottom">
+            <img src="~/Content/Assets/ceo.jpg" alt="Mirko" style="width:100%">
+            <h3>Mirko Fernandez</h3>
+            <p class="w3-opacity">CEO & Founder</p>
+            <p>A.K.A. as the papirriki, there isn't too much to say about this guy</p>
+            <p><a href="mailto:mirkofs29@outlook.com" class="w3-button w3-light-grey w3-block">Contact</a></p>
+        </div>
+        
     </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+
+    <!-- Contact Section -->
+    <div class="w3-container w3-padding-32" id="contact">
+        <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16">Contact</h3>
+        <p>Lets get in touch and tell us your opinion about this amazing webpage.</p>
+        <form action="/action_page.php" target="_blank">
+            <input class="w3-input w3-border" type="text" placeholder="Name" required name="Name">
+            <input class="w3-input w3-section w3-border" type="text" placeholder="Email" required name="Email">
+            <input class="w3-input w3-section w3-border" type="text" placeholder="Subject" required name="Subject">
+            <input class="w3-input w3-section w3-border" type="text" placeholder="Comment" required name="Comment">
+            <button class="w3-button w3-black w3-section" type="submit">
+                <i class="fa fa-paper-plane"></i> SEND MESSAGE
+            </button>
+        </form>
     </div>
+
+   
+
+    <!-- End page content -->
 </div>
