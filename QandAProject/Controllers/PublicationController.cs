@@ -21,7 +21,7 @@ namespace QandAProject.Controllers
     public class PublicationController : Controller
     {
         // GET: Publication            
-        public async Task<ActionResult> Index(string search = "", bool personalPage = false)
+        public async Task<ActionResult> Index(string category = "", string search = "", bool personalPage = false)
         {
             using (var context = new Project1DBEntities())
             {
@@ -31,6 +31,7 @@ namespace QandAProject.Controllers
                 ViewBag.Search = search;
                 ViewBag.MyGallery = personalPage.ToString();
                 ViewBag.Title = "Publications";
+                ViewBag.Category = category; 
             }
             return View();
         }
@@ -207,7 +208,7 @@ namespace QandAProject.Controllers
         }
 
         
-        public async Task<ActionResult> ChangePage(int actualPage = 1, FormCollection c = null, string search = "", bool personalPage = false)
+        public async Task<ActionResult> ChangePage(int actualPage = 1, FormCollection c = null, string search = "", bool personalPage = false, string category = "")
         {
             List<PublicationViewModel> model = new List<PublicationViewModel>();
             using (var context = new Project1DBEntities())
@@ -215,49 +216,52 @@ namespace QandAProject.Controllers
                 System.Linq.Expressions.Expression<Func<Publication, bool>> predicate1;
                 System.Linq.Expressions.Expression<Func<Publication, bool>> predicate2;
                 if (search != "") { predicate2 = x => x.Content.Contains(search); } else { predicate2 = x => true; }
-
-                
-
                 var a = c["AreChecked"] != null ? Array.ConvertAll(c["AreChecked"].ToString().Split(','), x => int.Parse(x.ToString())).ToList() : new List<int>() { };
-
-
-                if (System.Web.HttpContext.Current.User.IsInRole("Standard") || !HttpContext.User.Identity.IsAuthenticated)
+                if (category == "")
                 {
-                   
-                    if (c["AreChecked"] != null)
+                    if (System.Web.HttpContext.Current.User.IsInRole("Standard") || !HttpContext.User.Identity.IsAuthenticated)
                     {
-                        predicate1 = x => x.StatusId == 0 && a.Any(y => x.Categories.Any(z => z.CategoryId == y));
+
+                        if (c["AreChecked"] != null)
+                        {
+                            predicate1 = x => x.StatusId == 0 && a.Any(y => x.Categories.Any(z => z.CategoryId == y));
+
+                        }
+                        else
+                        {
+                            predicate1 = x => x.StatusId == 0;
+                        }
+                        predicate1 = predicate1.And(predicate2);
 
                     }
                     else
                     {
-                        predicate1 = x => x.StatusId == 0;
-                    }
-                    predicate1 = predicate1.And(predicate2);
+                        if (c["AreChecked"] != null)
+                        {
+                            predicate1 = x => a.Any(y => x.Categories.Any(z => z.CategoryId == y));
+                        }
+                        else
+                        {
+                            predicate1 = x => true;
+                        }
+                        predicate1 = predicate1.And(predicate2);
 
+                    }
+                    if (personalPage)
+                    {
+
+
+                        int id = User.Identity.GetUserId<int>();
+                        System.Linq.Expressions.Expression<Func<Publication, bool>> predicate3 = x => x.OwnerUser.Any(y => y.UserId == id);
+                        predicate1 = predicate1.And(predicate3);
+
+
+                    }
                 }
                 else
                 {
-                    if (c["AreChecked"] != null)
-                    {
-                        predicate1 = x => a.Any(y => x.Categories.Any(z => z.CategoryId == y));
-                    }
-                    else
-                    {
-                        predicate1 = x => true;
-                    }
-                    predicate1 = predicate1.And(predicate2);
-
-                }
-                if (personalPage)
-                {
-                 
-                    
-                    int id = User.Identity.GetUserId<int>();
-                    System.Linq.Expressions.Expression<Func<Publication, bool>> predicate3 = x => x.OwnerUser.Any(y => y.UserId == id);
-                    predicate1 = predicate1.And(predicate3);
-                    
-
+                    int catId = int.Parse(category);
+                    predicate1 = x => x.StatusId == 0 && x.Categories.Any(z => z.CategoryId == catId);
                 }
                 model = await EFDataAccess.GetSomePublications(actualPage, predicate1);
                 TempData["Count"] = await EFDataAccess.PublicationCount(predicate1);
@@ -273,4 +277,8 @@ namespace QandAProject.Controllers
 
         
     }
+
+
+
+
 }
