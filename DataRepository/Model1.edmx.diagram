@@ -6,12 +6,12 @@
     <edmx:Diagrams>
       <Diagram DiagramId="73236c5002b14882b4ce00975f531ab6" Name="Diagram1" ZoomLevel="68">
         <EntityTypeShape EntityType="Project1DBModel.Comment" Width="1.5" PointX="6.125" PointY="4.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="Project1DBModel.Publication" Width="1.5" PointX="9.375" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="Project1DBModel.Publication" Width="1.5" PointX="10.25" PointY="2" IsExpanded="true" />
         <EntityTypeShape EntityType="Project1DBModel.sysdiagram" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
         <AssociationConnector Association="Project1DBModel.FK_Comment_Publication" />
         <EntityTypeShape EntityType="Project1DBModel.Category" Width="1.5" PointX="6.75" PointY="0.875" />
         <AssociationConnector Association="Project1DBModel.Category_x_Publication" />
-        <EntityTypeShape EntityType="Project1DBModel.Status" Width="1.5" PointX="10.875" PointY="4" />
+        <EntityTypeShape EntityType="Project1DBModel.Status" Width="1.5" PointX="13.25" PointY="5.875" />
         <AssociationConnector Association="Project1DBModel.FK_Publication_Status" />
         <EntityTypeShape EntityType="Project1DBModel.Role" Width="1.5" PointX="0.75" PointY="9.5" />
         <EntityTypeShape EntityType="Project1DBModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="10.625" />

@@ -29,6 +29,9 @@ namespace DataRepository
         public string HeaderPath { get; set; }
         public int StatusId { get; set; }
         public string Guid { get; set; }
+        public Nullable<decimal> Price { get; set; }
+        public Nullable<decimal> Previous_Price { get; set; }
+        public Nullable<bool> For_Sale { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Comment> Comments1 { get; set; }

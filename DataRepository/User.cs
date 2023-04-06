@@ -24,8 +24,7 @@ namespace DataRepository
             this.PurPublication = new HashSet<Publication>();
             this.Publications = new HashSet<Publication>();
         }
-
-        public static object Identity { get; set; }
+    
         public int UserId { get; set; }
         public string Email { get; set; }
         public bool EmailConfirmed { get; set; }

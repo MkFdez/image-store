@@ -16,5 +16,8 @@ namespace DataAccess.Models
         public List<int> Categories { get; set; }
         [Required]
         public HttpPostedFileBase Picture { get; set; }
+
+        [Required]      
+        public string Price { get; set; }
     }
 }

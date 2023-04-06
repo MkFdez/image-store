@@ -10,9 +10,11 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using QandAProject.Models;
 using DataRepository;
+using DataAccess;
 using DataAccess.Models;
 using System.IO;
 using CacheUtilities;
+using System.Text;
 
 namespace QandAProject.Controllers
 {
@@ -104,11 +106,17 @@ namespace QandAProject.Controllers
                         var userTemp = context.Users.First(x => x.Email == model.Email);
                         int id = userTemp.UserId;
                         
-                        cookie["picture"] = userTemp.ProfilePicture.Image != null ? @"\ProfilePictures\" + userTemp.UserId.ToString() + @"\" + userTemp.ProfilePicture.Image : @"\ProfilePictures\default.png";
+                        cookie["picture"] = userTemp.ProfilePicture.Image != null ? userTemp.ProfilePicture.Image : @"\ProfilePictures\default.png";
+
                         if (model.RememberMe)
                         {
                             cookie.Expires = DateTime.MaxValue;
+                            cookie["exp"] = DateTime.MaxValue.ToString();
                         }
+                        else
+                        {
+                            cookie["exp"] = DateTime.MinValue.ToString();
+                        }               
                         Response.Cookies.Add(cookie);
                     }
 
@@ -455,8 +463,31 @@ namespace QandAProject.Controllers
             return View();
         }
 
-
-        
+        public async Task<ActionResult> Profile()
+        {
+            int userId = User.Identity.GetUserId<int>();
+            return View(await EFDataAccess.GetProfile());
+        }
+        [HttpPost]
+        public async Task<ActionResult> Profile(ProfileViewModel model)
+        {
+            if(model.PostedPicture != null)
+            {
+                string filename = Path.GetFileName(model.PostedPicture.FileName).Replace(" ", "");
+                string guid = Guid.NewGuid().ToString();
+                string folder = Path.Combine(Server.MapPath("~/ProfilePictures"), guid);
+                Directory.CreateDirectory(folder);
+                folder = Path.Combine(folder, filename);
+                model.PostedPicture.SaveAs(folder);
+                await EFDataAccess.UpdateProfilePicture(Path.Combine("/ProfilePictures", guid, filename));
+                var expire = HttpContext.Request.Cookies["vals"]["exp"];             
+                HttpCookie cookie = new HttpCookie("vals");   
+                cookie["picture"] = Path.Combine("/ProfilePictures", guid, filename);
+                cookie.Expires = DateTime.Parse(expire);
+                Response.Cookies.Add(cookie);
+            }
+            return RedirectToAction("Index", "Publication");
+        }
         
         protected override void Dispose(bool disposing)
         {

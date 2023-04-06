@@ -116,7 +116,7 @@ namespace QandAProject.Controllers
                
                 using (var context = new Project1DBEntities())
                 {
-
+                    decimal price = decimal.Parse(model.Price);
                     int userId = User.Identity.GetUserId<int>(); ;
                     Publication publication = new Publication
                     {
@@ -125,6 +125,10 @@ namespace QandAProject.Controllers
                         HeaderPath = "temp",
                         DateOfCreated = DateTime.Now,
                         Guid = Guid.NewGuid().ToString(),
+                        Price = price,
+                        Previous_Price = price,
+                        For_Sale = false
+                        
                        
                     };
                     int[] categories = new int[0];

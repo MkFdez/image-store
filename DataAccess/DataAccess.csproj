@@ -95,7 +95,7 @@
     <Compile Include="Models\PublicationViewModel.cs" />
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Models\UserCreateViewModel.cs" />
-    <Compile Include="Models\UserEditViewModel.cs" />
+    <Compile Include="Models\ProfileViewModel.cs" />
     <Compile Include="Models\UserLoginViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -8,6 +8,8 @@ using System.Web;
 using Microsoft.AspNet.Identity;
 using DataAccess.Models;
 using System.Linq.Expressions;
+using System.Diagnostics;
+using System.Data.Entity.Validation;
 
 namespace DataAccess
 {
@@ -140,6 +142,44 @@ namespace DataAccess
                 context.SaveChanges();
             }
 
+        }
+
+        public static async Task<ProfileViewModel> GetProfile()
+        {
+            using(var context = new Project1DBEntities())
+            {
+                int userId = HttpContext.Current.User.Identity.GetUserId<int>();
+                var temp = context.Users.Select(x => new { x.UserId, x.UserName, Picture = x.ProfilePicture.Image, x.Email }).First(x => x.UserId == userId);
+                return new ProfileViewModel() { Email = temp.Email, ProfilePicture = temp.Picture, UserName = temp.UserName, PostedPicture = null };
+            }
+        }
+
+        public static async Task UpdateProfilePicture(string path)
+        {
+            using(var context = new Project1DBEntities())
+            {
+                try
+                {
+                    int userId = HttpContext.Current.User.Identity.GetUserId<int>();
+                    var user = context.Users.First(x => x.UserId == userId);
+                    user.ProfilePicture.Image = path;
+                    context.SaveChanges();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    foreach (var eve in e.EntityValidationErrors)
+                    {
+                        Debug.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                            eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                        foreach (var ve in eve.ValidationErrors)
+                        {
+                            Debug.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                                ve.PropertyName, ve.ErrorMessage);
+                        }
+                    }
+                    throw;
+                }
+            }
         }
         public static async Task<int> PublicationCount(Expression<Func<Publication, bool>> predicate)
         {

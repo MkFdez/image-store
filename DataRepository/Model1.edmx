@@ -87,7 +87,7 @@
             <PropertyRef Name="ImageID" />
           </Key>
           <Property Name="ImageID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Image" Type="nvarchar" MaxLength="50" />
+          <Property Name="Image" Type="nvarchar" MaxLength="150" />
         </EntityType>
         <EntityType Name="Publication">
           <Key>
@@ -100,6 +100,9 @@
           <Property Name="HeaderPath" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="StatusId" Type="int" Nullable="false" />
           <Property Name="Guid" Type="nvarchar" MaxLength="50" />
+          <Property Name="Price" Type="money" />
+          <Property Name="Previous_Price" Type="money" />
+          <Property Name="For_Sale" Type="bit" />
         </EntityType>
         <EntityType Name="SalesHistory">
           <Key>
@@ -420,6 +423,9 @@
           <Property Name="Guid" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="OwnerUser" Relationship="Project1DBModel.SalesHistory1" FromRole="Publication" ToRole="AspNetUser" />
           <NavigationProperty Name="User" Relationship="Project1DBModel.FK_Publication_AspNetUsers1" FromRole="Publication" ToRole="User" />
+          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Previous_Price" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="For_Sale" Type="Boolean" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -674,7 +680,7 @@
           <Key>
             <PropertyRef Name="ImageID" />
           </Key>
-          <Property Name="Image" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="ImageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="AspNetUsers" Relationship="Project1DBModel.FK_AspNetUsers_ProfilePicture" FromRole="ProfilePicture" ToRole="User" />
         </EntityType>
@@ -722,6 +728,9 @@
           <EntitySetMapping Name="Publications">
             <EntityTypeMapping TypeName="Project1DBModel.Publication">
               <MappingFragment StoreEntitySet="Publication">
+                <ScalarProperty Name="For_Sale" ColumnName="For_Sale" />
+                <ScalarProperty Name="Previous_Price" ColumnName="Previous_Price" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="Guid" ColumnName="Guid" />
                 <ScalarProperty Name="StatusId" ColumnName="StatusId" />
                 <ScalarProperty Name="PublicationId" ColumnName="PublicationId" />
