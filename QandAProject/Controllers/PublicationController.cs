@@ -219,6 +219,7 @@ namespace QandAProject.Controllers
             {
                 System.Linq.Expressions.Expression<Func<Publication, bool>> predicate1;
                 System.Linq.Expressions.Expression<Func<Publication, bool>> predicate2;
+                System.Linq.Expressions.Expression<Func<Publication, bool>> predicate3;
                 if (search != "") { predicate2 = x => x.Content.Contains(search); } else { predicate2 = x => true; }
                 var a = c["AreChecked"] != null ? Array.ConvertAll(c["AreChecked"].ToString().Split(','), x => int.Parse(x.ToString())).ToList() : new List<int>() { };
                 if (category == "")
@@ -256,8 +257,8 @@ namespace QandAProject.Controllers
 
 
                         int id = User.Identity.GetUserId<int>();
-                        System.Linq.Expressions.Expression<Func<Publication, bool>> predicate3 = x => x.OwnerUser.Any(y => y.UserId == id);
-                        predicate1 = predicate1.And(predicate3);
+                        System.Linq.Expressions.Expression<Func<Publication, bool>> predicate4 = x => x.OwnerUser.Any(y => y.UserId == id);
+                        predicate1 = predicate1.And(predicate4);
 
 
                     }
@@ -266,6 +267,30 @@ namespace QandAProject.Controllers
                 {
                     int catId = int.Parse(category);
                     predicate1 = x => x.StatusId == 0 && x.Categories.Any(z => z.CategoryId == catId);
+                }
+                if (c["MinPrice"] != null)
+                {
+                    if (c["MinPrice"] != "" && c["MaxPrice"] != "")
+                    {
+                        int min = int.Parse(c["MinPrice"]);
+                        int max = int.Parse(c["MaxPrice"]);
+                        predicate3 = x => x.Price >= min && x.Price <= max;
+                        predicate1 = predicate1.And(predicate3);
+                    }
+                    else if (c["MinPrice"] != "")
+                    {
+                        int min = int.Parse(c["MinPrice"]);
+                        predicate3 = x => x.Price >= min;
+                        predicate1 = predicate1.And(predicate3);
+
+                    }
+                    else if (c["MaxPrice"] != "")
+                    {
+                        int max = int.Parse(c["MaxPrice"]);
+                        predicate3 = x => x.Price <= max;
+                        predicate1 = predicate1.And(predicate3);
+
+                    }
                 }
                 model = await EFDataAccess.GetSomePublications(actualPage, predicate1);
                 TempData["Count"] = await EFDataAccess.PublicationCount(predicate1);
