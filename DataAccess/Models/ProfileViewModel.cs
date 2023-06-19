@@ -18,6 +18,7 @@ namespace DataAccess.Models
         //[AlreadyInDB(emailOrUser:1, not:true, _edit:true)]
         public string Email { get; set; }
        
+        
        public string ProfilePicture { get; set; }
 
         public HttpPostedFileBase PostedPicture { get; set; }

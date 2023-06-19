@@ -10,8 +10,10 @@ using Autofac;
 using Dependencies;
 using DataAccess.Models;
 using Microsoft.AspNet.Identity;
+using DataAccess;
 using Stripe;
 using Stripe.Checkout;
+using System.Threading.Tasks;
 
 namespace QandAProject.Controllers
 {
@@ -24,8 +26,10 @@ namespace QandAProject.Controllers
             _app = app;
         }
         [HttpPost]
-        public ActionResult BuyImage(int pubId, string image, string name)
+        public async Task<ActionResult> BuyImage(int pubId, string image, string name)
         {
+            var publication = await EFDataAccess.GetPublication(pubId);
+            long price = (long)(publication.Publication.Price * 100);
             image = "https://localhost:44307" + image;
             StripeConfiguration.ApiKey = "sk_test_51Mr0ToLe6PSFHqVPPNKxsAFQFCSPhDLAVRcXklrag36qXfzNfrRyhifFhhaEII0s6CjP2qzUCaEQDq30wx69EyWQ00hL9klgeQ";
             var domain = "https://localhost:44307/sell";
@@ -38,7 +42,7 @@ namespace QandAProject.Controllers
                       PriceData = new SessionLineItemPriceDataOptions
                       {
                     
-                          UnitAmount = 30000,
+                          UnitAmount = price,
                           Currency = "usd",
                           ProductData = new SessionLineItemPriceDataProductDataOptions
                           {
@@ -53,14 +57,14 @@ namespace QandAProject.Controllers
                 },
 
                 Mode = "payment",
-                SuccessUrl = domain + "/success",
+                SuccessUrl = domain + "/success?puid=" + pubId,
                 CancelUrl = domain + "/cancel",
             };
             var service = new SessionService();
             Session session = service.Create(options);
 
             Response.Headers.Add("Location", session.Url);
-            //BuyImageModel model = new BuyImageModel() { UserId = User.Identity.GetUserId<int>(), PublicationId = pubId };
+            //
             return new HttpStatusCodeResult(303);
         }
 
@@ -79,8 +83,7 @@ namespace QandAProject.Controllers
                     context.SaveChanges();
                     BuyEmailModel info = new BuyEmailModel(){ UserEmail = user.Email, UserName = user.UserName, PubId = pub.PublicationId, PubName = pub.Content };
                 
-                    _app.Model = info;
-                    _app.Run();
+                   
                     
                 }
             }
@@ -93,9 +96,20 @@ namespace QandAProject.Controllers
 
         }
         
-        public ActionResult Success()
+        public ActionResult Success(int puid)
         {
-            return View();
+            using (var context = new Project1DBEntities())
+            {
+                int userId = User.Identity.GetUserId<int>();
+                User user = context.Users.FirstOrDefault(x => x.UserId == userId);
+                Publication pub = context.Publications.FirstOrDefault(y => y.PublicationId == puid);
+                BuyEmailModel info = new BuyEmailModel() { UserEmail = user.Email, UserName = user.UserName, PubId = pub.PublicationId, PubName = pub.Content };
+                user.PurPublication.Add(pub);
+                _app.Model = info;
+                _app.Run();
+                context.SaveChanges();
+                return View();
+            }
         }
         public ActionResult Cancel()
         {

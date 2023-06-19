@@ -29,14 +29,15 @@ namespace DataAccess
                 {
                     List<CommentModel> comments = new List<CommentModel>();
 
-                    foreach (var c in context.Comments.Where(x => x.PublicationId == pubId).Select(x => new { x.CommentId, x.Content, x.User.UserName, x.DateOfCreated}).OrderBy(x => x.CommentId).Skip(actual).Take(10))
+                    foreach (var c in context.Comments.Where(x => x.PublicationId == pubId).Select(x => new { x.CommentId, x.Content, x.User.UserName, x.DateOfCreated, Picture = x.User.ProfilePicture.Image}).OrderBy(x => x.CommentId).Skip(actual).Take(10))
                     {
-                        comments.Add(new CommentModel()
-                        {
-                            Content = c.Content,
-                            DateOfCreated = c.DateOfCreated,
-                            UserName = c.UserName,
-                        });
+                    comments.Add(new CommentModel()
+                    {
+                        Content = c.Content,
+                        DaysSinceCreated = (DateTime.Now - c.DateOfCreated).Days,
+                        UserName = c.UserName,
+                        ProfilePicture = c.Picture,
+                    }) ;
                     }
                     return comments;
                 }
@@ -67,10 +68,10 @@ namespace DataAccess
                 var comments = new List<CommentModel>();
                 temp.Comments1.ToList().ForEach(x => comments.Add(new CommentModel()
                 {
-                    DateOfCreated = x.DateOfCreated,
+                    DaysSinceCreated = (DateTime.Now - x.DateOfCreated).Days,
                     UserName = x.User.UserName,
                     Content = x.Content,
-
+                    ProfilePicture = x.User.ProfilePicture.Image,
                 }));
                 bool isBuyed = false;
                 if (System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
@@ -87,13 +88,15 @@ namespace DataAccess
                 {
                     id = id,
                     User = temp.User.UserName,
-                    DateOfCreated = temp.DateOfCreated.ToShortDateString(),
+                    DaysSinceCreated = (DateTime.Now - temp.DateOfCreated).Days,
                     headerPath = temp.HeaderPath,
                     Content = temp.Content,
                     Comments = comments.Take(10).ToList(),
                     Categories = temp.Categories.Select(x => x.CategoryName).ToList(),
                     Status = temp.Status.Description,
                     isBuyed = isBuyed,
+                    ProfilePicture = temp.User.ProfilePicture.Image,
+                    Price = Convert.ToDecimal(String.Format("{0:0.00}", temp.Price)),
                 };
 
                 var toReturn = new ExtendedPublicationVM(publication, temp.Guid, fileName);
@@ -198,13 +201,14 @@ namespace DataAccess
                 new
                 {
                     x.PublicationId,
-                    x.User.UserName,
+                    x.User.UserName,                  
                     Comments = x.Comments1.Select(c => new { c.User.UserName, c.DateOfCreated, c.Content }),
                     x.Content,
                     x.Categories,
                     x.HeaderPath,
                     x.DateOfCreated,
-                    Status = x.Status.Description
+                    Status = x.Status.Description,
+                    x.Price,
                 }).OrderBy(x => x.PublicationId).Skip((actualPage - 1) * 9).Take(9);
                 foreach (var x in publications)
                 {
@@ -214,8 +218,9 @@ namespace DataAccess
                         headerPath = x.HeaderPath,
                         Content = x.Content,
                         User = x.UserName,
-                        DateOfCreated = x.DateOfCreated.ToShortDateString(),
+                        DaysSinceCreated =(DateTime.Now - x.DateOfCreated).Days,
                         Status = x.Status,
+                        Price = Convert.ToDecimal(String.Format("{0:0.00}", x.Price)),
                     });
                 }
                 return result;

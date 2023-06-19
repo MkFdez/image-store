@@ -29,7 +29,7 @@ namespace DataRepository
         public string HeaderPath { get; set; }
         public int StatusId { get; set; }
         public string Guid { get; set; }
-        public Nullable<decimal> Price { get; set; }
+        public decimal Price { get; set; }
         public Nullable<decimal> Previous_Price { get; set; }
         public Nullable<bool> For_Sale { get; set; }
     

@@ -11,7 +11,9 @@ namespace DataAccess.Models
     {
         public int id { get; set; }
         public string User { get; set; }
-        public string DateOfCreated { get; set; }
+        public string ProfilePicture { get; set; }
+        public decimal Price { get; set; }
+        public int DaysSinceCreated { get; set; }
         public string Content { get; set; }
         public string headerPath { get; set; }
         public List<CommentModel> Comments { get; set; }

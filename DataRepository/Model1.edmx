@@ -100,7 +100,7 @@
           <Property Name="HeaderPath" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="StatusId" Type="int" Nullable="false" />
           <Property Name="Guid" Type="nvarchar" MaxLength="50" />
-          <Property Name="Price" Type="money" />
+          <Property Name="Price" Type="money" Nullable="false" />
           <Property Name="Previous_Price" Type="money" />
           <Property Name="For_Sale" Type="bit" />
         </EntityType>
@@ -423,7 +423,7 @@
           <Property Name="Guid" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="OwnerUser" Relationship="Project1DBModel.SalesHistory1" FromRole="Publication" ToRole="AspNetUser" />
           <NavigationProperty Name="User" Relationship="Project1DBModel.FK_Publication_AspNetUsers1" FromRole="Publication" ToRole="User" />
-          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="Previous_Price" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="For_Sale" Type="Boolean" />
         </EntityType>
