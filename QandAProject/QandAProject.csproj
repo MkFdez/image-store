@@ -282,6 +282,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PublicationController.cs" />
+    <Compile Include="Controllers\SalesController.cs" />
     <Compile Include="Controllers\SellController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
@@ -295,12 +296,16 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Assets\ceo.jpg" />
-    <Content Include="Content\Assets\nature.jpg" />
-    <Content Include="Content\Assets\tech.jpg" />
-    <Content Include="Content\Assets\principal.jpg" />
-    <Content Include="Content\Assets\people.jpg" />
     <Content Include="Content\Assets\animal.jpg" />
+    <Content Include="Content\Assets\ceo.jpg" />
+    <Content Include="Content\Assets\demo\chart-area-demo.js" />
+    <Content Include="Content\Assets\demo\chart-bar-demo.js" />
+    <Content Include="Content\Assets\demo\chart-pie-demo.js" />
+    <Content Include="Content\Assets\demo\datatables-demo.js" />
+    <Content Include="Content\Assets\nature.jpg" />
+    <Content Include="Content\Assets\people.jpg" />
+    <Content Include="Content\Assets\principal.jpg" />
+    <Content Include="Content\Assets\tech.jpg" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />
@@ -317,6 +322,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\dashboard-styles.css" />
     <Content Include="Content\MailBodies\CMail.txt" />
     <Content Include="Content\MailBodies\SPMail.txt" />
     <Content Include="Content\MailBodies\WelcomeMail.txt" />
@@ -368,6 +374,7 @@
     <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="MyScripts\popper.min.js.map" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\datatables-simple-demo.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
@@ -381,6 +388,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\dashboard_scripts.js" />
     <Content Include="uploads\fakeLogo.png" />
     <Content Include="uploads\loading.gif" />
     <Content Include="Web.config" />
@@ -427,6 +435,8 @@
     <Content Include="Views\Sell\Success.cshtml" />
     <Content Include="Views\Sell\Cancel.cshtml" />
     <Content Include="Views\Account\Profile.cshtml" />
+    <Content Include="Views\Sales\Dashboard.cshtml" />
+    <Content Include="Views\Sales\Enday.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

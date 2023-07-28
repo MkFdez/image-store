@@ -109,7 +109,7 @@ namespace DataAccess
             using(var context = new Project1DBEntities())
             {
                 int userid = HttpContext.Current.User.Identity.GetUserId<int>();
-                return context.Users.Select(x => new { x.UserId, PurPublications = x.PurPublication.Select(p => p.PublicationId) }).FirstOrDefault(x => x.UserId == userid).PurPublications.Any(x => x == pubId);
+                return context.Users.Select(x => new { x.Id, PurPublications = x.SalesHistories.Select(p => p.PublicationId) }).FirstOrDefault(x => x.Id == userid).PurPublications.Any(x => x == pubId);
             }
         }
 
@@ -152,7 +152,7 @@ namespace DataAccess
             using(var context = new Project1DBEntities())
             {
                 int userId = HttpContext.Current.User.Identity.GetUserId<int>();
-                var temp = context.Users.Select(x => new { x.UserId, x.UserName, Picture = x.ProfilePicture.Image, x.Email }).First(x => x.UserId == userId);
+                var temp = context.Users.Select(x => new { x.Id, x.UserName, Picture = x.ProfilePicture.Image, x.Email }).First(x => x.Id == userId);
                 return new ProfileViewModel() { Email = temp.Email, ProfilePicture = temp.Picture, UserName = temp.UserName, PostedPicture = null };
             }
         }
@@ -164,7 +164,7 @@ namespace DataAccess
                 try
                 {
                     int userId = HttpContext.Current.User.Identity.GetUserId<int>();
-                    var user = context.Users.First(x => x.UserId == userId);
+                    var user = context.Users.First(x => x.Id == userId);
                     user.ProfilePicture.Image = path;
                     context.SaveChanges();
                 }
@@ -192,6 +192,37 @@ namespace DataAccess
               
             }
         }
+        public static void Enday()
+        {
+            using (var context = new Project1DBEntities())
+            {
+                var usersIds = context.Users.Select(x => x.Id);
+                foreach(int id in usersIds)
+                {
+                    var dayBefore = DateTime.Now.AddDays(-1);
+                    decimal amount = context.SalesHistories.Where(x => x.Date.Day == dayBefore.Day && x.Date.Month == dayBefore.Month && x.Date.Year == dayBefore.Year && x.Publication.UserId == id).Select(x => x.Amount).Sum() ?? 0;
+                    context.DailySales.Add(new DailySale()
+                    {
+                        Date = DateTime.Now.AddDays(-1),
+                        TotalAmount = amount,
+                        UserId = id,
+                    });
+                }
+                context.SaveChanges();
+            }
+        }
+        public static async Task<List<ForChartModel>> GetSalesHistory()
+        {
+            int userId = HttpContext.Current.User.Identity.GetUserId<int>();
+            using(var context = new Project1DBEntities())
+            {
+                DateTime efectiveDate = DateTime.Now.AddDays(DateTime.Now.Day * -1);
+                List<ForChartModel> data = context.DailySales.Where(x => x.Date > efectiveDate && x.UserId == userId).Select(x => new ForChartModel(){ Date = x.Date, Price = x.TotalAmount }).ToList();
+                return data;     
+            }
+   
+        }
+       
             public static async Task<List<PublicationViewModel>> GetSomePublications(int actualPage, Expression<Func<Publication, bool>> predicate)
         {
             using(var context = new Project1DBEntities())

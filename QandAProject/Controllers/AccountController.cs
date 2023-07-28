@@ -104,7 +104,7 @@ namespace QandAProject.Controllers
                     {
                         HttpCookie cookie = new HttpCookie("vals");
                         var userTemp = context.Users.First(x => x.Email == model.Email);
-                        int id = userTemp.UserId;
+                        int id = userTemp.Id;
                         
                         cookie["picture"] = userTemp.ProfilePicture.Image != null ? userTemp.ProfilePicture.Image : @"\ProfilePictures\default.png";
 
@@ -391,6 +391,7 @@ namespace QandAProject.Controllers
                         context.SaveChanges();
                         HttpCookie cookie = new HttpCookie("vals");
                         cookie["picture"] = @"\ProfilePictures\default.png";
+                        cookie["exp"] = DateTime.MinValue.ToString();
                         Response.Cookies.Add(cookie);
                     }
                     return RedirectToLocal(returnUrl);

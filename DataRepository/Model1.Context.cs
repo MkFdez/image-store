@@ -27,16 +27,18 @@ namespace DataRepository
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Comment> Comments { get; set; }
-        public virtual DbSet<Publication> Publications { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
-        public virtual DbSet<Category> Categories { get; set; }
-        public virtual DbSet<Status> Status { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<ProfilePicture> ProfilePictures { get; set; }
+        public virtual DbSet<Publication> Publications { get; set; }
+        public virtual DbSet<SalesHistory> SalesHistories { get; set; }
+        public virtual DbSet<Status> Status { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
+        public virtual DbSet<DailySale> DailySales { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

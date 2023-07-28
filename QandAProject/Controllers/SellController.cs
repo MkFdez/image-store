@@ -77,9 +77,22 @@ namespace QandAProject.Controllers
 
                 using (var context = new Project1DBEntities())
                 {
-                    User user = context.Users.FirstOrDefault(x => x.UserId == model.UserId);
+                    User user = context.Users.FirstOrDefault(x => x.Id == model.UserId);
                     Publication pub = context.Publications.FirstOrDefault(y => y.PublicationId == model.PublicationId);
-                    user.PurPublication.Add(pub);
+                    user.SalesHistories.Add(new SalesHistory()
+                    {
+                        AspNetUser = user,
+                        Date = DateTime.Now,
+                        Publication = pub,
+                        Amount = pub.Price
+                    }
+                        );
+                    context.DailySales.Add(new DailySale()
+                    {
+                        AspNetUser = pub.User,
+                        TotalAmount = pub.Price,
+                        Date = DateTime.Now,
+                    });
                     context.SaveChanges();
                     BuyEmailModel info = new BuyEmailModel(){ UserEmail = user.Email, UserName = user.UserName, PubId = pub.PublicationId, PubName = pub.Content };
                 
@@ -101,10 +114,23 @@ namespace QandAProject.Controllers
             using (var context = new Project1DBEntities())
             {
                 int userId = User.Identity.GetUserId<int>();
-                User user = context.Users.FirstOrDefault(x => x.UserId == userId);
+                User user = context.Users.FirstOrDefault(x => x.Id == userId);
                 Publication pub = context.Publications.FirstOrDefault(y => y.PublicationId == puid);
                 BuyEmailModel info = new BuyEmailModel() { UserEmail = user.Email, UserName = user.UserName, PubId = pub.PublicationId, PubName = pub.Content };
-                user.PurPublication.Add(pub);
+                user.SalesHistories.Add(new SalesHistory()
+                {
+                    AspNetUser = user,
+                    Date = DateTime.Now,
+                    Publication = pub,
+                    Amount = pub.Price
+                }
+                         );
+                context.DailySales.Add(new DailySale()
+                {
+                    AspNetUser = pub.User,
+                    TotalAmount = pub.Price,
+                    Date = DateTime.Now,
+                });
                 _app.Model = info;
                 _app.Run();
                 context.SaveChanges();

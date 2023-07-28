@@ -257,7 +257,7 @@ namespace QandAProject.Controllers
 
 
                         int id = User.Identity.GetUserId<int>();
-                        System.Linq.Expressions.Expression<Func<Publication, bool>> predicate4 = x => x.OwnerUser.Any(y => y.UserId == id);
+                        System.Linq.Expressions.Expression<Func<Publication, bool>> predicate4 = x => x.SalesHistories.Any(y => y.UserId == id);
                         predicate1 = predicate1.And(predicate4);
 
 
