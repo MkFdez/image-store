@@ -24,6 +24,7 @@ namespace DataRepository
             this.SalesHistories = new HashSet<SalesHistory>();
             this.AspNetRoles = new HashSet<Role>();
             this.DailySales = new HashSet<DailySale>();
+            this.MonthlySales = new HashSet<MonthlySale>();
         }
     
         public int Id { get; set; }
@@ -55,5 +56,7 @@ namespace DataRepository
         public virtual ICollection<Role> AspNetRoles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DailySale> DailySales { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MonthlySale> MonthlySales { get; set; }
     }
 }

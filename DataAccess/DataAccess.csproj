@@ -89,6 +89,7 @@
     <Compile Include="Models\CardModel.cs" />
     <Compile Include="Models\CommentModel.cs" />
     <Compile Include="Models\ExtendedPublicationVM.cs" />
+    <Compile Include="Models\ForBarChartModel.cs" />
     <Compile Include="Models\ForChartModel.cs" />
     <Compile Include="Models\PublicationCreateViewModel.cs" />
     <Compile Include="Models\PublicationsListViewModel.cs" />

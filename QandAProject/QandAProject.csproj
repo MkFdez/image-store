@@ -437,6 +437,7 @@
     <Content Include="Views\Account\Profile.cshtml" />
     <Content Include="Views\Sales\Dashboard.cshtml" />
     <Content Include="Views\Sales\Enday.cshtml" />
+    <Content Include="Views\Sales\EndMonth.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

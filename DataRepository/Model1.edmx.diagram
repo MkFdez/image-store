@@ -29,6 +29,8 @@
         <AssociationConnector Association="Project1DBModel.AspNetUserRoles" ManuallyRouted="false" />
         <AssociationConnector Association="Project1DBModel.Category_x_Publication" ManuallyRouted="false" />
         <AssociationConnector Association="Project1DBModel.FK_DailySales_AspNetUsers" />
+        <EntityTypeShape EntityType="Project1DBModel.MonthlySale" Width="1.5" PointX="5.25" PointY="13.75" />
+        <AssociationConnector Association="Project1DBModel.FK__MonthlySa__UserI__0880433F" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

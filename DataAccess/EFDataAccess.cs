@@ -197,9 +197,9 @@ namespace DataAccess
             using (var context = new Project1DBEntities())
             {
                 var usersIds = context.Users.Select(x => x.Id);
-                foreach(int id in usersIds)
+                var dayBefore = DateTime.Now.AddDays(-1);
+                foreach (int id in usersIds)
                 {
-                    var dayBefore = DateTime.Now.AddDays(-1);
                     decimal amount = context.SalesHistories.Where(x => x.Date.Day == dayBefore.Day && x.Date.Month == dayBefore.Month && x.Date.Year == dayBefore.Year && x.Publication.UserId == id).Select(x => x.Amount).Sum() ?? 0;
                     context.DailySales.Add(new DailySale()
                     {
@@ -209,6 +209,28 @@ namespace DataAccess
                     });
                 }
                 context.SaveChanges();
+            }
+        }
+        public static void EndMonth()
+        {
+            using(var context = new Project1DBEntities())
+            {
+                var userIds = context.Users.Select(x => x.Id);
+                var date = DateTime.Now.AddMonths(0);            
+                foreach(var id in userIds)
+                {
+                    var amount = context.SalesHistories.Where(x => x.Date.Year == date.Year && x.Date.Month == date.Month && x.UserId == id).Select(x => x.Amount).Sum() ?? 0;
+                    context.MonthlySales.Add(new MonthlySale()
+                    {
+                        UserId = id,
+                        Amount = amount,
+                        Month = date.Month,
+                        Year = date.Year,
+                    });
+
+                }
+                context.SaveChanges();
+
             }
         }
         public static async Task<List<ForChartModel>> GetSalesHistory()
@@ -221,6 +243,21 @@ namespace DataAccess
                 return data;     
             }
    
+        }
+
+        public static async Task<List<ForBarChartModel>> GetMonthlyHistory()
+        {
+            int userId = HttpContext.Current.User.Identity.GetUserId<int>();
+            int year = DateTime.Now.Year;
+            using(var context = new Project1DBEntities())
+            {
+                
+                List<ForBarChartModel> data = context.MonthlySales.Where(x => x.Year == year && x.UserId == userId).Select(x => new ForBarChartModel(){ Month = x.Month, Price = x.Amount }).ToList();
+                return data;
+
+             }
+                
+            
         }
        
             public static async Task<List<PublicationViewModel>> GetSomePublications(int actualPage, Expression<Func<Publication, bool>> predicate)
