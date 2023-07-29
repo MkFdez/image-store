@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <link href="~/Content/dashboard-styles.css" rel="stylesheet" />
     <style>
         body, h1, h2, h3, h4, h5, h6 {
             font-family: "Raleway", sans-serif
@@ -93,7 +95,7 @@
                                         @Html.AntiForgeryToken()
                                         <li><a href="javascript:document.getElementById('logoutForm').submit()" id="loginLink" class="dropdown-item">Log Off</a></li>
                                     }
-                                    <li><a href="/Account/EditUser" class="dropdown-item">Edit User</a></li>
+                                    <li><a href="/Account/Profile" class="dropdown-item">Profile</a></li>
                                     <li><a href="/Publication/create" class="dropdown-item">Upload Image</a></li>
                                 </ul>
                             </div>

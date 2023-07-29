@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using DataRepository;
 using System.Text.Json;
 using QandAProject.Models;
+using DataAccess;
 using Microsoft.AspNet.Identity;
 using DataAccess.Models;
 
@@ -42,7 +43,6 @@ namespace QandAProject.Controllers
             {
                 
                 int userid = User.Identity.GetUserId<int>();
-                
                 Comment comment = new Comment()
                 {
                     UserId = userid,
@@ -55,10 +55,9 @@ namespace QandAProject.Controllers
                 return Json(JsonSerializer.Serialize<CommentModel>(new CommentModel()
                 {
                     UserName = System.Web.HttpContext.Current.User.Identity.Name,
-                    DateOfCreated = comment.DateOfCreated,
-
+                    DaysSinceCreated = (DateTime.Now - comment.DateOfCreated).Days,
                     Content = comment.Content,
-                }));
+                })) ;
             }
             
         }
@@ -74,7 +73,8 @@ namespace QandAProject.Controllers
                     comments.Add(new CommentModel()
                     {
                         Content = c.Content,
-                        DateOfCreated = c.DateOfCreated,
+                        DaysSinceCreated = (DateTime.Now - c.DateOfCreated).Days,
+                        ProfilePicture = c.User.ProfilePicture.Image,
                         UserName = c.User.UserName,
                     });
                 }

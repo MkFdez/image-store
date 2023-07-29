@@ -30,7 +30,7 @@ namespace Validation
                 if (edit)
                 {
                     int userid = int.Parse(HttpContext.Current.Session["userid"].ToString());
-                    inDB = choise == 0 ? container.Users.Any(x => x.UserName == value.ToString() && x.UserId != userid) : container.Users.Any(x => x.Email == value.ToString() && x.UserId != userid);
+                    inDB = choise == 0 ? container.Users.Any(x => x.UserName == value.ToString() && x.Id != userid) : container.Users.Any(x => x.Email == value.ToString() && x.Id != userid);
                 }
                 else
                 {

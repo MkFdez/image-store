@@ -27,7 +27,7 @@
                         
                         <p><b>@string.Join("", Model.List[f].Content.Take(50).ToArray())</b></p>
                         <p>@Model.List[f].User</p>
-                        <p>@Model.List[f].DateOfCreated</p>
+                        <p><b>@(Model.List[f].Price == 0 ? "Free" : "$"+ Model.List[f].Price.ToString())</b></p>
  
                     </div>
                 </a>

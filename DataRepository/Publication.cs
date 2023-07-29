@@ -18,8 +18,8 @@ namespace DataRepository
         public Publication()
         {
             this.Comments1 = new HashSet<Comment>();
+            this.SalesHistories = new HashSet<SalesHistory>();
             this.Categories = new HashSet<Category>();
-            this.OwnerUser = new HashSet<User>();
         }
     
         public int PublicationId { get; set; }
@@ -29,14 +29,18 @@ namespace DataRepository
         public string HeaderPath { get; set; }
         public int StatusId { get; set; }
         public string Guid { get; set; }
+        public decimal Price { get; set; }
+        public Nullable<decimal> Previous_Price { get; set; }
+        public Nullable<bool> For_Sale { get; set; }
+        public int Downloads { get; set; }
     
+        public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Comment> Comments1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Category> Categories { get; set; }
         public virtual Status Status { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User> OwnerUser { get; set; }
-        public virtual User User { get; set; }
+        public virtual ICollection<SalesHistory> SalesHistories { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Category> Categories { get; set; }
     }
 }

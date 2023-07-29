@@ -3,8 +3,7 @@
 $("#commentForm").submit(function (e) {
     e.preventDefault()
     let content = document.getElementById("CommentTextArea").value
-    console.log(content)
-    console.log(document.getElementById("modelId").value)
+  
     $.ajax({
         type: "POST",
         url: "/Comment/Create",
@@ -17,17 +16,26 @@ $("#commentForm").submit(function (e) {
     })
     function complete(result) {
         result = JSON.parse(result)
+        let comment = `<div class="col-md-8" >
+                <div class="media c-mb-30 media-comment">
+                    <div class="media-body u-shadow-v18 g-bg-secondary g-pa-30">
+                            <div class="g-mb-15">
+                                    <div style="display:flex; flex-wrap: wrap; gap: 10px; align-items:center">
+                                        <img class="d-flex g-width-50 g-height-50 rounded-circle g-mt-3 g-mr-15" src="${document.cookie.replace('vals=picture=', "").split("&")[0]}" alt="Image Description">
+                                        <h5 class="h5 g-color-gray-dark-v1 mb-0">   ${result.UserName} </h5>
+                                    </div>
+                                <span class="g-color-gray-dark-v4 g-font-size-12">${result.DaysSinceCreated} days ago</span>
+                            </div>
+
+                        <p>
+                            ${result.Content}
+                        </p>
+                    </div>
+                </div>
+            </div>`
         let container = document.getElementById("commentContainer")
-        let comment = document.createElement("div")
-        comment.className = "comment"
-        let username = document.createElement("div")
-        username.style.display = "block"
-        username.innerHTML = '<p>Commented By: ' + result.UserName + '</p>'
-        comment.appendChild(username)
-        let content = document.createElement("div")
-        content.style.display = "block"
-        content.innerHTML = '<p>' + result.Content + '</p>'
-        comment.appendChild(content)
-        container.appendChild(comment)
+        container.innerHTML = container.innerHTML + comment
+        document.getElementById("CommentTextArea").value = ""
+       
     }
 })

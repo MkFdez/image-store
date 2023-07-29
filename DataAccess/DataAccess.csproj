@@ -89,13 +89,15 @@
     <Compile Include="Models\CardModel.cs" />
     <Compile Include="Models\CommentModel.cs" />
     <Compile Include="Models\ExtendedPublicationVM.cs" />
+    <Compile Include="Models\ForBarChartModel.cs" />
+    <Compile Include="Models\ForChartModel.cs" />
     <Compile Include="Models\PublicationCreateViewModel.cs" />
     <Compile Include="Models\PublicationsListViewModel.cs" />
     <Compile Include="Models\PublicationToDownloadModel.cs" />
     <Compile Include="Models\PublicationViewModel.cs" />
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Models\UserCreateViewModel.cs" />
-    <Compile Include="Models\UserEditViewModel.cs" />
+    <Compile Include="Models\ProfileViewModel.cs" />
     <Compile Include="Models\UserLoginViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

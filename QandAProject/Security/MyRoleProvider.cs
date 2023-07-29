@@ -47,7 +47,7 @@ namespace QandAProject.Security
                     int userid = HttpContext.Current.User.Identity.GetUserId<int>();
                     using (var context = new Project1DBEntities())
                     {
-                        return context.Users.FirstOrDefault(x => x.UserId == userid).AspNetRoles.Select(x => x.Name).ToArray() ;
+                        return context.Users.FirstOrDefault(x => x.Id == userid).AspNetRoles.Select(x => x.Name).ToArray() ;
                     }
                 }
                 catch

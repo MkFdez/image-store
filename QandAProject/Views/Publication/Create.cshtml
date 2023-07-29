@@ -4,61 +4,96 @@
     ViewBag.Title = "Create";
 }
 
-<h2>Create</h2>
+<h2 style="margin-top:40px">Create</h2>
 
 
 @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    
-<div class="form-horizontal">
-    <h4>PublicationCreateViewModel</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Content, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div>
-       
-        <div class="form-group">
-            @Html.TextBoxFor(model => model.Picture, new
-            {
-                @class = "form-control fs-4",
-      type = "file",
-                name = "file",
-                id = "file",
-                accept = "image/*",
-                onchange = "loadFile(event)"
-            })
-            <img id="output" width="200" height="200" />
-            @Html.ValidationMessageFor(model => model.Picture, "", new { @class = "text-danger" })
-            <script>
-                var loadFile = function (event) {
-                    var output = document.getElementById('output');
-                    output.src = URL.createObjectURL(event.target.files[0]);
-                };</script>
-        </div>
-    </div>
-        @foreach (var i in ViewBag.Categories)
-        {
-            <input name="AreChecked" type="checkbox" value="@i.Key" /> @i.Value<br />
-        }
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+
+    <div class="form-horizontal">
+
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group" style="width:min-content;min-width:40%; margin-right:auto; margin-left:auto">
+            @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Content, new { htmlAttributes = new { @class = "form-control", style = "border-radius:0px" } })
+                @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="flex">
+                    <span class="currency">$</span>
+                    @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control currency-input", style = "border-radius:0px; padding-left:20px!important", id = "price", name = "amount", type = "text", maxlength = "15" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-10">
+                <h4>Categories</h4>
+                @foreach (var i in ViewBag.Categories)
+                {
+                    <input name="AreChecked" type="checkbox" value="@i.Key" /> @i.Value<br />
+                }
             </div>
         </div>
+        <!--prueba-->
+        <div class="file-upload">
+            <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">Add Image</button>
+
+            <div class="image-upload-wrap">
+                @*<input class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />*@
+                @Html.TextBoxFor(model => model.Picture, new
+           {
+               @class = "file-upload-input",
+               type = "file",
+               accept = "image/*",
+               onchange = "readURL(this)"
+           })
+                <div class="drag-text">
+                    <h3>Drag and drop a file or select add Image</h3>
+                </div>
+            </div>
+            <div class="file-upload-content">
+                <img class="file-upload-image" src="#" alt="your image" />
+                <div class="image-title-wrap">
+                    <button type="button" onclick="removeUpload()" class="remove-image">Remove <span class="image-title">Uploaded Image</span></button>
+                </div>
+            </div>
+        </div>
+        <!--end prueba-->
+        @*<div>
+
+                <div class="form-group">
+                    @Html.TextBoxFor(model => model.Picture, new
+                    {
+                        @class = "form-control fs-4",
+              type = "file",
+                        name = "file",
+                        id = "file",
+                        accept = "image/*",
+                        onchange = "loadFile(event)"
+                    })
+                    <img id="output" width="200" height="200" />
+                    @Html.ValidationMessageFor(model => model.Picture, "", new { @class = "text-danger" })
+                    <script>
+                        var loadFile = function (event) {
+                            var output = document.getElementById('output');
+                            output.src = URL.createObjectURL(event.target.files[0]);
+                        };</script>
+                </div>
+            </div>*@
+
+        
+                <button  class="btn btn-default" style="margin-top: 20px; padding: 5px 20px 5px 20px">Create</button>
+           
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/MyScripts/image_uploader.js"></script>
+    <script src="~/MyScripts/price_input.js"></script>
 }

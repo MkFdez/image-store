@@ -10,10 +10,11 @@ namespace DataAccess.Models
     {
         public string UserName { get; set; }
 
-        public DateTime DateOfCreated { get; set; }
+        public int DaysSinceCreated { get; set; }
 
         [Required]
         [MaxLength(100, ErrorMessage ="message too long")]
         public string Content { get; set; }
+        public string ProfilePicture { get; set; }
     }
 }
