@@ -10,6 +10,7 @@ container2.appendChild(loadingContainer2)
 $.ajax({
     url: "/Sales/GetMonthySales",
     dataType: "json",
+    data: {year:-1},
     method: "POST",
     success: function (result) {
         generateChart(result)
@@ -17,6 +18,8 @@ $.ajax({
 })
 
 function generateChart(data) {
+    $("#myBarChart").remove()
+    $("#bar-chart").append(`<canvas id="myBarChart" width="100%" height="40"></canvas>`)
     let parsedData = JSON.parse(data)
     Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
     Chart.defaults.global.defaultFontColor = '#292b2c';
@@ -66,3 +69,23 @@ function generateChart(data) {
     let chart2 = document.getElementById("bar-chart")
     chart2.removeChild(document.getElementById("bar-loading"))
 }
+var dp = $("#datepicker").datepicker({
+    format: "yyyy",
+    viewMode: "years",
+    minViewMode: "years",
+    autoclose: true //to close picker once year is selected
+});
+
+dp.on('changeYear', function (e) {
+    container2.appendChild(loadingContainer2)
+    var selectedDate = e.date;
+    $.ajax({
+        url: "/Sales/GetMonthySales",
+        dataType: "json",
+        data: { year: selectedDate.getFullYear()},
+        method: "POST",
+        success: function (result) {
+            generateChart(result)
+        }
+    })
+});

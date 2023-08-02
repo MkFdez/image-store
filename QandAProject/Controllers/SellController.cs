@@ -30,6 +30,10 @@ namespace QandAProject.Controllers
         {
             var publication = await EFDataAccess.GetPublication(pubId);
             long price = (long)(publication.Publication.Price * 100);
+            if(price == 0)
+            {
+                return RedirectToAction("Success", new { puid = pubId });
+            }
             image = "https://localhost:44307" + image;
             StripeConfiguration.ApiKey = "sk_test_51Mr0ToLe6PSFHqVPPNKxsAFQFCSPhDLAVRcXklrag36qXfzNfrRyhifFhhaEII0s6CjP2qzUCaEQDq30wx69EyWQ00hL9klgeQ";
             var domain = "https://localhost:44307/sell";
@@ -116,6 +120,7 @@ namespace QandAProject.Controllers
                 int userId = User.Identity.GetUserId<int>();
                 User user = context.Users.FirstOrDefault(x => x.Id == userId);
                 Publication pub = context.Publications.FirstOrDefault(y => y.PublicationId == puid);
+                pub.Downloads++;
                 BuyEmailModel info = new BuyEmailModel() { UserEmail = user.Email, UserName = user.UserName, PubId = pub.PublicationId, PubName = pub.Content };
                 user.SalesHistories.Add(new SalesHistory()
                 {

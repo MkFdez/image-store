@@ -23,5 +23,6 @@ namespace DataAccess.Models
         public string Status { get; set; }
 
         public bool isBuyed { get; set; }
+        public int Downloads { get; set; }
     }
 }

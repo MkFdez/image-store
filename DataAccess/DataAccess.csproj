@@ -88,6 +88,7 @@
     <Compile Include="Models\BuyImageModel.cs" />
     <Compile Include="Models\CardModel.cs" />
     <Compile Include="Models\CommentModel.cs" />
+    <Compile Include="Models\DataTableModels.cs" />
     <Compile Include="Models\ExtendedPublicationVM.cs" />
     <Compile Include="Models\ForBarChartModel.cs" />
     <Compile Include="Models\ForChartModel.cs" />
