@@ -11,11 +11,14 @@ $.ajax({
     type: "POST",
     url: "/Sales/GetDailySales",
     dataType: "json",
+    data: {month : -1, year: -1},
     success: function (result) {
         renderChart(result)
     }
 })
 function renderChart(data) {
+    $("#myAreaChart").remove()
+    $("#area-chart").append(`<canvas id="myAreaChart" width="100 % " height="40"></canvas>`)
     let parsedData = JSON.parse(data)
     Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
     Chart.defaults.global.defaultFontColor = '#292b2c';
@@ -75,3 +78,24 @@ function renderChart(data) {
     chart.removeChild(document.getElementById("area-loading"))
 
 }
+
+var dpm = $("#datepickermonth").datepicker({
+    format: "mm-yyyy",
+    viewMode: "months",
+    minViewMode: "months",
+    autoclose: true //to close picker once year is selected
+});
+
+dpm.on('changeMonth', function (e) {
+    container.appendChild(loadingContainer)
+    var selectedDate = e.date;
+    $.ajax({
+        type: "POST",
+        url: "/Sales/GetDailySales",
+        dataType: "json",
+        data: { month: selectedDate.getMonth()+1, year: selectedDate.getFullYear() },
+        success: function (result) {
+            renderChart(result)
+        }
+    })
+});

@@ -326,6 +326,7 @@
     <Content Include="Content\MailBodies\CMail.txt" />
     <Content Include="Content\MailBodies\SPMail.txt" />
     <Content Include="Content\MailBodies\WelcomeMail.txt" />
+    <Content Include="Content\yearpicker.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -389,6 +390,7 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\popper.min.js" />
     <Content Include="Scripts\dashboard_scripts.js" />
+    <Content Include="Scripts\yearpicker.js" />
     <Content Include="uploads\fakeLogo.png" />
     <Content Include="uploads\loading.gif" />
     <Content Include="Web.config" />

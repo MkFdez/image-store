@@ -8,6 +8,7 @@ using DataAccess;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 
+
 namespace QandAProject.Controllers
 {
     [Authorize]
@@ -19,20 +20,28 @@ namespace QandAProject.Controllers
         {
             return View();
         }
+
         [HttpPost]
-        public async Task<JsonResult> GetDailySales()
+        public async  Task<JsonResult> GetTransactionsData(Pagination pagination)
+        {
+            var response = await EFDataAccess.GetTransactions(pagination);
+            return Json(response);
+        }
+
+            [HttpPost]
+        public async Task<JsonResult> GetDailySales(int month, int year)
         {
             
-            List<ForChartModel> data = await EFDataAccess.GetSalesHistory();
+            List<ForChartModel> data = await EFDataAccess.GetSalesHistory(month, year);
             IEnumerable<decimal> amountList = data.Select(x => x.Price);
             IEnumerable<string> dateList = data.Select(x => $"{months[x.Date.Month-1]} {x.Date.Day}");
             var json = JsonConvert.SerializeObject(new { values = amountList, dates = dateList });
             return Json(json);
         }
         [HttpPost]
-        public async Task<JsonResult> GetMonthySales()
+        public async Task<JsonResult> GetMonthySales(int year)
         {
-            List<ForBarChartModel> data = await EFDataAccess.GetMonthlyHistory();
+            List<ForBarChartModel> data = await EFDataAccess.GetMonthlyHistory(year);
             IEnumerable<decimal> amountList = data.Select(x => x.Price);
             IEnumerable<string> dateList = data.Select(x => $"{months[x.Month - 1]}");
             var json = JsonConvert.SerializeObject(new { values = amountList, months = dateList });

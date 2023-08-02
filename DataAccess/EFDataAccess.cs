@@ -10,6 +10,7 @@ using DataAccess.Models;
 using System.Linq.Expressions;
 using System.Diagnostics;
 using System.Data.Entity.Validation;
+using Newtonsoft.Json;
 
 namespace DataAccess
 {
@@ -97,6 +98,7 @@ namespace DataAccess
                     isBuyed = isBuyed,
                     ProfilePicture = temp.User.ProfilePicture.Image,
                     Price = Convert.ToDecimal(String.Format("{0:0.00}", temp.Price)),
+                    Downloads = temp.Downloads,
                 };
 
                 var toReturn = new ExtendedPublicationVM(publication, temp.Guid, fileName);
@@ -216,7 +218,7 @@ namespace DataAccess
             using(var context = new Project1DBEntities())
             {
                 var userIds = context.Users.Select(x => x.Id);
-                var date = DateTime.Now.AddMonths(0);            
+                var date = DateTime.Now.AddMonths(-1);            
                 foreach(var id in userIds)
                 {
                     var amount = context.SalesHistories.Where(x => x.Date.Year == date.Year && x.Date.Month == date.Month && x.UserId == id).Select(x => x.Amount).Sum() ?? 0;
@@ -233,22 +235,30 @@ namespace DataAccess
 
             }
         }
-        public static async Task<List<ForChartModel>> GetSalesHistory()
+        public static async Task<List<ForChartModel>> GetSalesHistory(int month, int year)
         {
             int userId = HttpContext.Current.User.Identity.GetUserId<int>();
             using(var context = new Project1DBEntities())
             {
-                DateTime efectiveDate = DateTime.Now.AddDays(DateTime.Now.Day * -1);
-                List<ForChartModel> data = context.DailySales.Where(x => x.Date > efectiveDate && x.UserId == userId).Select(x => new ForChartModel(){ Date = x.Date, Price = x.TotalAmount }).ToList();
+                if (month == -1 || year == -1)
+                {
+                    DateTime efectiveDate = DateTime.Now;
+                    year = efectiveDate.Year;
+                    month = efectiveDate.Month;
+                }
+                List<ForChartModel> data = context.DailySales.Where(x => x.Date.Month == month && x.Date.Year == year && x.UserId == userId).Select(x => new ForChartModel(){ Date = x.Date, Price = x.TotalAmount }).ToList();
                 return data;     
             }
    
         }
 
-        public static async Task<List<ForBarChartModel>> GetMonthlyHistory()
+        public static async Task<List<ForBarChartModel>> GetMonthlyHistory(int year)
         {
             int userId = HttpContext.Current.User.Identity.GetUserId<int>();
-            int year = DateTime.Now.Year;
+            if (year == -1)
+            {
+                year = DateTime.Now.Year;
+            }
             using(var context = new Project1DBEntities())
             {
                 
@@ -292,6 +302,22 @@ namespace DataAccess
                     });
                 }
                 return result;
+            }
+        }
+
+        public static async Task<DTResponse> GetTransactions(Pagination pagination)
+        {
+            using(var context = new Project1DBEntities())
+            {
+                int userid = HttpContext.Current.User.Identity.GetUserId<int>();
+                var data = context.SalesHistories.Where(x => x.UserId == userid).OrderByDescending(x => x.Date).Take(pagination.data.length).Skip(pagination.data.start).Select(x => new {publication=x.Publication.Content, date=x.Date, amount=x.Amount });
+                int count = context.SalesHistories.Count();
+                DTResponse response = new DTResponse();
+                response.data = JsonConvert.SerializeObject(data);
+                response.recordsFiltered = data.Count();
+                response.recordsTotal = count;
+                return response;
+
             }
         }
     }
