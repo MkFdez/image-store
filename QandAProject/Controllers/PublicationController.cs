@@ -5,7 +5,6 @@ using System.Linq.Expressions;
 using System.Web;
 using System.Text.Json;
 using System.Web.Mvc;
-using DataRepository;
 using QandAProject.Models;
 using System.IO;
 using MyFilter;
@@ -13,19 +12,26 @@ using MkImages;
 using Microsoft.AspNet.Identity;
 using DataAccess;
 using System.Threading.Tasks;
-using DataAccess.Models;
+using Models;
+using Services;
 
 namespace QandAProject.Controllers
 {
     delegate void ImageManager<T>(string path, T scaleOrName, string returnPath);
+
     public class PublicationController : Controller
     {
+        public IServicePack ServicePack;
+        public PublicationController(IServicePack servicePack)
+        {
+            ServicePack = servicePack;
+        }
         // GET: Publication            
         public async Task<ActionResult> Index(string category = "", string search = "", bool personalPage = false)
         {
             using (var context = new Project1DBEntities())
             {
-                Dictionary<int, string> categories = await EFDataAccess.GetCategories();
+                Dictionary<int, string> categories = await ServicePack.GetCategories();
                
                 ViewBag.Categories = categories;
                 ViewBag.Search = search;
@@ -41,7 +47,7 @@ namespace QandAProject.Controllers
         {
             using(var context = new Project1DBEntities())
             {
-                var publication = await EFDataAccess.GetPublication(id);
+                var publication = await ServicePack.GetPublication(id);
 
                 ViewBag.Comments = 10;
                 ViewBag.imgWidth = MkImage.GetWidth(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid + "/"), publication.Filename));
@@ -60,11 +66,11 @@ namespace QandAProject.Controllers
             using (var context = new Project1DBEntities())
             {
 
-                if ( await EFDataAccess.HasPublication(id) == false)
+                if ( await ServicePack.HasPublication(id) == false)
                 {
                     return RedirectToAction("View", "Publication", new { id = id });
                 }
-                var p = await EFDataAccess.GetPublicationToDownload(id);
+                var p = await ServicePack.GetPublicationToDownload(id);
                 string fileName = p.Path.Substring(p.Path.LastIndexOf("/")+1);
                 string pGuid = p.Guid; 
                 int intScale = int.Parse(scale);
@@ -84,7 +90,7 @@ namespace QandAProject.Controllers
             using (var context = new Project1DBEntities())
             {
                 int puid = int.Parse(id);
-                string path = await EFDataAccess.GetImagePath(puid);
+                string path = await ServicePack.GetImagePath(puid);
                 string fileName = path.Substring(path.LastIndexOf(@"/") + 1);
                 path = path.Substring(0, path.LastIndexOf("/LowRes/"));
                 string file = Path.Combine(Directory.GetFiles(Server.MapPath("~" + path + "/FreeTrial/"), fileName));
@@ -100,7 +106,7 @@ namespace QandAProject.Controllers
         public async Task<ActionResult> Create()
         {
           
-            Dictionary<int, string> categories = await EFDataAccess.GetCategories();               
+            Dictionary<int, string> categories = await ServicePack.GetCategories();               
             ViewBag.Categories = categories;
           
             return View();
@@ -157,7 +163,7 @@ namespace QandAProject.Controllers
                         ImageManager<int> myDelegate2 = new ImageManager<int>(MkImage.Resize);
                         myDelegate2(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid), fileName), 50, Path.Combine(Server.MapPath("~/uploads/" + publication.PublicationId.ToString() + "/" + "LowRes/"), fileName));
                     }
-                    await EFDataAccess.AddPublication(publication, categories);
+                    await ServicePack.AddPublication(publication, categories);
 
                 }
 
@@ -292,8 +298,8 @@ namespace QandAProject.Controllers
 
                     }
                 }
-                model = await EFDataAccess.GetSomePublications(actualPage, predicate1);
-                TempData["Count"] = await EFDataAccess.PublicationCount(predicate1);
+                model = await ServicePack.GetSomePublications(actualPage, predicate1);
+                TempData["Count"] = await ServicePack.PublicationCount(predicate1);
             }
             
 

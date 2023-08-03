@@ -1,4 +1,4 @@
-﻿@model DataAccess.Models.PublicationViewModel
+﻿@model Models.PublicationViewModel
 @{
     ViewBag.Title = "View";
 }
@@ -122,25 +122,27 @@
 
 
                 <div class="col mb-5">
-                    <div style="display:flex; flex-wrap: wrap; gap: 5px; align-items:center">Posted By:
+                    <div style="display:flex; flex-wrap: wrap; gap: 5px; align-items:center">
+                        Posted By:
                         <img class="d-flex rounded-circle g-mt-3 g-mr-15" src="@(Model.ProfilePicture == null ? "/ProfilePictures/default.png" : Model.ProfilePicture)" alt="Image Description" style="width:30px; height: 30px; margin-right:0px!important">
                         <h5 class="h5 g-color-gray-dark-v1 mb-0">   @Model.User &#8195 <span style="color:darkslategrey">@Model.DaysSinceCreated days ago</span></h5>
                     </div>
                 </div>
-               
+
 
             </div>
-            <h3 class="row" ><b>@(Model.Price == 0 ? "Free" : "$"+Model.Price.ToString())</b></h3>
+            <h3 class="row"><b>@(Model.Price == 0 ? "Free" : "$"+Model.Price.ToString())</b></h3>
             @if (!HttpContext.Current.User.Identity.IsAuthenticated)
             {
+
                 <div class="row">
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="width: 40%; min-width: 80px; border-radius: 0px !important; margin-left:11.25px">
                         Download
                     </button>
                 </div>
                 <div class="row">
-                    <a class="btn btn-primary" onclick="downloadImageTry('@Model.id')" id="downloadLink" style="margin-top: 25px; width: 40%; min-width: 80px; border-radius: 0px !important ; margin-left:11.25px" >
-                        Download Free 
+                    <a class="btn btn-primary" onclick="downloadImageTry('@Model.id')" id="downloadLink" style="margin-top: 25px; width: 40%; min-width: 80px; border-radius: 0px !important ; margin-left:11.25px">
+                        Download Free
                     </a>
                 </div>
             }
@@ -156,43 +158,47 @@
                 }
                 else
                 {
+                    using (Html.BeginForm("BuyImage", "Sell", new { pubid = Model.id, image = Model.headerPath, name = Model.Content }, FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="row">
+                            <button type="submit" class="btn btn-primary"  style="width: 40%; min-width: 80px; border-radius: 0px !important; margin-left:11.25px">
+                                Buy
+                            </button>
+                        </div>
+                        }
+                    }
+                    @*@Html.ActionLink("DownloadFreeTry", "Publication", routeValues: new { path = Model.headerPath }, htmlAttributes: new { @class = "btn btn-primary" }) for later*@
                     <div class="row">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2" style="width: 40%; min-width: 80px; border-radius: 0px !important; margin-left:11.25px">
-                            Buy
-                        </button>
+                        <a class="btn btn btn-primary" onclick="downloadImageTry('@Model.id')" id="downloadLink" style="margin-top: 25px; width: 40%; min-width: 80px; border-radius: 0px !important; margin-left: 11.25px ">
+                            Download Free
+                        </a>
                     </div>
-                }
-                @*@Html.ActionLink("DownloadFreeTry", "Publication", routeValues: new { path = Model.headerPath }, htmlAttributes: new { @class = "btn btn-primary" }) for later*@
-                <div class="row">
-                    <a class="btn btn btn-primary" onclick="downloadImageTry('@Model.id')" id="downloadLink" style="margin-top: 25px; width: 40%; min-width: 80px; border-radius: 0px !important; margin-left: 11.25px ">
-                        Download Free 
-                    </a>
-                </div>
-                if (HttpContext.Current.User.IsInRole("Admin") || HttpContext.Current.User.IsInRole("SuperAdmin"))
-                {
-                    <div class="row" style="margin-top:20px">
-                        <div class="col">
-                            @if (Model.Status == "Accepted")
-                            {
-                                <button type="button" class="btn-danger" onclick="banPublication(@Model.id)">
-                                    Ban Publication
-                                </button>
-                            }
-                            else
-                            {
-                                <button type="button" class="btn-danger" onclick="unbanPublication(@Model.id)">
-                                    Accept Publication
-                                </button>
-                            }
+                    if (HttpContext.Current.User.IsInRole("Admin") || HttpContext.Current.User.IsInRole("SuperAdmin"))
+                    {
+                        <div class="row" style="margin-top:20px">
+                            <div class="col">
+                                @if (Model.Status == "Accepted")
+                                {
+                                    <button type="button" class="btn-danger" onclick="banPublication(@Model.id)">
+                                        Ban Publication
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn-danger" onclick="unbanPublication(@Model.id)">
+                                        Accept Publication
+                                    </button>
+                                }
+                            </div>
+                            <div class="col">
+                                <p id="status">@Model.Status</p>
+                            </div>
                         </div>
-                        <div class="col">
-                            <p id="status">@Model.Status</p>
-                        </div>
-                    </div>
+                    }
                 }
-            }
-            @*@Html.ActionLink("Download", "Download", new { path = Model.headerPath }, new { @class = "btn btn-primary btn-lg", @style = "max-width:200px; margin-top:30px" })*@
-        </div>
+                @*@Html.ActionLink("Download", "Download", new { path = Model.headerPath }, new { @class = "btn btn-primary btn-lg", @style = "max-width:200px; margin-top:30px" })*@
+            </div>
     </div>
 </div>
 

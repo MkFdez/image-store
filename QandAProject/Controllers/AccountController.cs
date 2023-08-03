@@ -9,10 +9,10 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using QandAProject.Models;
-using DataRepository;
 using DataAccess;
-using DataAccess.Models;
+using Models;
 using System.IO;
+using Services;
 using CacheUtilities;
 using System.Text;
 
@@ -23,15 +23,18 @@ namespace QandAProject.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-
-        public AccountController() 
+        public IServicePack ServicePack;
+       
+        public AccountController(IServicePack servicePack) 
         {
+            ServicePack = servicePack;
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IServicePack servicePack)
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            ServicePack = servicePack;
         }
 
         public ApplicationSignInManager SignInManager
@@ -467,7 +470,7 @@ namespace QandAProject.Controllers
         public async Task<ActionResult> Profile()
         {
             int userId = User.Identity.GetUserId<int>();
-            return View(await EFDataAccess.GetProfile());
+            return View(await ServicePack.GetProfile());
         }
         [HttpPost]
         public async Task<ActionResult> Profile(ProfileViewModel model)
@@ -480,7 +483,7 @@ namespace QandAProject.Controllers
                 Directory.CreateDirectory(folder);
                 folder = Path.Combine(folder, filename);
                 model.PostedPicture.SaveAs(folder);
-                await EFDataAccess.UpdateProfilePicture(Path.Combine("/ProfilePictures", guid, filename));
+                await ServicePack.UpdateProfilePicture(Path.Combine("/ProfilePictures", guid, filename));
                 var expire = HttpContext.Request.Cookies["vals"]["exp"];             
                 HttpCookie cookie = new HttpCookie("vals");   
                 cookie["picture"] = Path.Combine("/ProfilePictures", guid, filename);

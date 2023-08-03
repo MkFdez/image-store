@@ -455,6 +455,12 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MyScripts\effects.js" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\diAndTest\ClassLibrary1\Dependencies.csproj">
       <Project>{eaac8f89-d9a9-474e-ae11-19f6d1346e87}</Project>
       <Name>Dependencies</Name>
@@ -464,27 +470,25 @@
       <Name>CacheUtilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\DataAccess\DataAccess.csproj">
-      <Project>{30d38563-17ca-4a9b-bb6b-ef6871f19c67}</Project>
+      <Project>{7987d4cc-6818-40e3-9e60-940715d6608b}</Project>
       <Name>DataAccess</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DataRepository\DataRepository.csproj">
-      <Project>{7987d4cc-6818-40e3-9e60-940715d6608b}</Project>
-      <Name>DataRepository</Name>
+    <ProjectReference Include="..\Models\Models.csproj">
+      <Project>{29feecb6-3935-473b-a062-6d192a799057}</Project>
+      <Name>Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\MyFilter\MyFilter.csproj">
       <Project>{9961efa5-9d39-4a2a-85af-65da50b54fda}</Project>
       <Name>MyFilter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Services\Services.csproj">
+      <Project>{30d38563-17ca-4a9b-bb6b-ef6871f19c67}</Project>
+      <Name>Services</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Validation\Validation.csproj">
       <Project>{c1d2b1a4-b79b-463c-aab7-12c7a124c1a7}</Project>
       <Name>Validation</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="MyScripts\effects.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

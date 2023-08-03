@@ -4,21 +4,26 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using QandAProject.Models;
-using DataRepository;
+using DataAccess;
 using Aplications;
 using Autofac;
 using Dependencies;
-using DataAccess.Models;
+using Models;
 using Microsoft.AspNet.Identity;
-using DataAccess;
 using Stripe;
 using Stripe.Checkout;
 using System.Threading.Tasks;
+using Services;
 
 namespace QandAProject.Controllers
 {
     public class SellController : Controller
     {
+        public IServicePack ServicePack;
+        public SellController(IServicePack servicePack)
+        {
+            ServicePack = servicePack;
+        }
         // GET: Sell
         public IApp _app { get; set; }
         public SellController(IApp app)
@@ -28,7 +33,7 @@ namespace QandAProject.Controllers
         [HttpPost]
         public async Task<ActionResult> BuyImage(int pubId, string image, string name)
         {
-            var publication = await EFDataAccess.GetPublication(pubId);
+            var publication = await ServicePack.GetPublication(pubId);
             long price = (long)(publication.Publication.Price * 100);
             if(price == 0)
             {
