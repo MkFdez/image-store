@@ -1,4 +1,4 @@
-﻿@model DataAccess.Models.ProfileViewModel
+﻿@model Models.ProfileViewModel
 
 @{
     ViewBag.Title = "Profile";
@@ -54,22 +54,13 @@
                                 <p><span>Username</span>: @Model.UserName</p>
                             </div>
                             <div class="bio-row">
-                                <p><span>Email</span>: @Model.UserName</p>
+                                <p><span>Email</span>: @Model.Email</p>
                             </div>
                             <div class="bio-row">
-                                <p><span>Country </span>: Australia</p>
+                                <p><span>Images on Gallery: </span>: @Model.GalleryCount</p>
                             </div>
                             <div class="bio-row">
-                                <p><span>Birthday</span>: 13 July 1983</p>
-                            </div>
-                            <div class="bio-row">
-                                <p><span>Occupation </span>: UI Designer</p>
-                            </div>                           
-                            <div class="bio-row">
-                                <p><span>Mobile </span>: @Model.</p>
-                            </div>
-                            <div class="bio-row">
-                                <p><span>Phone </span>: 88 (02) 123456</p>
+                                <p><span>Images on Sale: </span>: @Model.PostedImages</p>
                             </div>
                         </div>
                     </div>

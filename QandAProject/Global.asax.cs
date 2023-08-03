@@ -11,6 +11,7 @@ using QandAProject.Controllers;
 using Dependencies;
 using ApiTest;
 using System.Web.Http;
+using Services;
 
 namespace QandAProject
 {
@@ -47,6 +48,7 @@ namespace QandAProject
             builder.RegisterType<EmailSender>().As<IEmailSender>().As<EmailSender>();
             builder.RegisterType<NewUserApp>().As<IApp>().As<NewUserApp>();
             builder.RegisterType<BuyApp>().As<IApp>().As<BuyApp>();
+            builder.RegisterType<ServicePack>().As<IServicePack>();
             builder.Register(ctx => new SellController(ctx.Resolve<BuyApp>()));
             //builder.Register(ctx => new AccountController(ctx.Resolve<NewUserApp>()));
             //Set the dependency resolver to be Autofac.

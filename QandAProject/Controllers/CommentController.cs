@@ -4,12 +4,11 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using System.Web.Mvc;
-using DataRepository;
 using System.Text.Json;
 using QandAProject.Models;
 using DataAccess;
 using Microsoft.AspNet.Identity;
-using DataAccess.Models;
+using Models;
 
 namespace QandAProject.Controllers
     

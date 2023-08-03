@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using DataRepository;
+using DataAccess;
 namespace Validation
 {
     public class AlreadyInDB : ValidationAttribute

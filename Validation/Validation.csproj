@@ -87,9 +87,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataRepository\DataRepository.csproj">
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj">
       <Project>{7987d4cc-6818-40e3-9e60-940715d6608b}</Project>
-      <Name>DataRepository</Name>
+      <Name>DataAccess</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
