@@ -1,0 +1,114 @@
+﻿@model Models.PublicationsListViewModel
+
+@{
+    var link = "";
+    int h = 0;
+    string style ;
+}
+    @while (h < Model.Size + 2)
+    {
+        <div class="w3-row-padding">
+            @for (int f = h; f < h + 3; f++)
+            {
+            if (f < Model.Size)
+            {
+            link = Url.Action("View", "Publication", new { id = Model.List[f].id });
+
+
+            <div class="w3-third w3-container w3-margin-bottom" >
+                <a style="text-decoration:none; margin-left:auto; margin-right:auto" href=@link >
+                    
+                        @if (Model.List[f].headerPath != null)
+                        {
+                            <img src=@Model.List[f].headerPath class="w3-hover-opacity" alt="image" style="width : 100%!important" />
+                        }
+                   
+                    <div class="w3-container w3-white" >
+                        
+                        <p style="font-size:20px"><b>@string.Join("", Model.List[f].Content.Take(50).ToArray())</b></p>
+                        <p> by @Model.List[f].User</p>
+                        <p><b>@(Model.List[f].Price == 0 ? "Free" : "$"+ Model.List[f].Price.ToString())</b></p>
+ 
+                    </div>
+                </a>
+            </div>      
+        }
+        }
+
+        </div>
+        h += 3;
+        }
+<div class="w3-center w3-padding-32">
+    <div class="w3-bar">
+        @{ @*Pagging Widget*@
+
+        int count;
+        int startNumber;
+        startNumber = (int)TempData["ActualPage"];
+
+        double decimalDivision = (double)((int)TempData["Count"]) / 9;
+        int naturalDivision = (int)TempData["Count"] / 9;
+        if (naturalDivision == decimalDivision)
+
+        {
+            count = naturalDivision;
+        }
+        else
+        {
+            count = naturalDivision + 1;
+        }
+        if ((int)TempData["ActualPage"] != 1 && count - startNumber >= 4)
+        {
+            startNumber -= 1;
+        }
+        if (count - startNumber < 4 && (int)TempData["ActualPage"] != 1)
+        {
+            int temp = 5 - (count - startNumber);
+            for (int j = 0; j < temp; j++)
+            {
+
+                startNumber -= 1;
+                if (startNumber == 1) { break; }
+
+            }
+        }
+        for (int i = startNumber; i <= count; i++)
+        {
+            if (i == startNumber + 5 && i != count)
+            {
+                <a>...</a>
+            }
+            else if (i <= startNumber + 5 || i == count)
+            {
+                if (i == (int)TempData["ActualPage"])
+                {
+                    
+                        @Ajax.ActionLink(i.ToString(), "ChangePage", "Publication", new { actualPage = i }, new AjaxOptions
+                   {
+                       InsertionMode = InsertionMode.Replace,
+                       HttpMethod = "GET",
+                       UpdateTargetId = "PublicationsList",
+                       OnBegin = "setGif",
+                   }, new {@class= "w3-bar-item w3-black w3-button", @style = "color:white; text-decoration:none" })
+                    
+                }
+                else
+                {
+                        
+                    @Ajax.ActionLink(i.ToString(), "ChangePage", "Publication", new { actualPage = i }, new AjaxOptions
+               {
+                   InsertionMode = InsertionMode.Replace,
+                   HttpMethod = "GET",
+                   UpdateTargetId = "PublicationsList",
+                   OnBegin = "setGif",
+               }, new { @class = "w3-bar-item w3-button w3-hover-black", @style = "color:black; margin-left: 3px" })
+                       
+                }
+            }
+        }
+        }
+        </div>
+    </div>
+        @section Scripts{
+
+        }
