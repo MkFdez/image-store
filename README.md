@@ -31,7 +31,7 @@
 - Microsoft Identity Framework for authentication and authorization
 - Stripe for secure payment processing
 - SQL Server for the database
-- 
+
 ## Authentication 🔒
 -User authentication and authorization are handled through Microsoft Identity, providing a secure and reliable experience for sign-up, login, and account management.
 
