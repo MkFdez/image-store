@@ -1,5 +1,4 @@
 var table;
-console.log("aqui")
 GetAllEmployyesData();
 
 function GetAllEmployyesData() {
@@ -9,7 +8,6 @@ function GetAllEmployyesData() {
     <th>Amount</th>\
     </tr></thead><tbody></tbody></table>';
     $("#tblUpdatePcInfo").html(tablecontent);
-    console.log("aqui 2")
     table = $('#tblPCInfo').dataTable({
         clear: true,
         destroy: true,

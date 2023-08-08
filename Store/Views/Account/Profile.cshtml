@@ -7,7 +7,7 @@
 @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-    <div class="container bootstrap snippets bootdey">
+    <div class="container bootstrap snippets bootdey" style="margin-top:30px">
         <div class="row">
             <div class="profile-nav col-md-3">
                 <div class="panel">
@@ -17,15 +17,15 @@
                         <a href="#">
                             <img src="@(Model.ProfilePicture == null ? "/ProfilePictures/default.png" : Model.ProfilePicture)" id="profile-picture" alt="">
                             @Html.TextBoxFor(model => model.PostedPicture, new
-                               {
+                       {
 
-                                   type = "file",
-                                   accept = "image/*",
-                                   onchange = "loadFile(event)",
-                                   name = "MyFile",
-                                   id = "MyFile",
-                                   style = "position:absolute!important; margin-bottom:10px; margin-right:10px; display:none"
-                               })
+                           type = "file",
+                           accept = "image/*",
+                           onchange = "loadFile(event)",
+                           name = "MyFile",
+                           id = "MyFile",
+                           style = "position:absolute!important; margin-bottom:10px; margin-right:10px; display:none"
+                       })
                             <label class="fa fa-edit" style="position:absolute!important; margin-bottom:10px; margin-right:10px" for="MyFile"></label>
                             <script>
                                 var loadFile = function (event) {
@@ -39,6 +39,7 @@
 
                         <h1>@Model.UserName</h1>
                         <p>@Model.Email</p>
+                        @Html.ActionLink("Seller Dashboard","Dashboard", "Sales",null, new {@class="btn btn-primary", style="border-radius: 10px; border: solid 0px"})
                     </div>
                 </div>
             </div>

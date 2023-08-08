@@ -1,0 +1,35 @@
+﻿@model List<Models.ManagePublicationsModel>
+@{
+    ViewBag.Title = "Manage";
+}
+
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th scope="col">Image</th>
+            <th scope="col">Name</th>
+            <th scope="col">Downloads</th>
+            <th scope="col">Price</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var pub in Model)
+            {
+        <tr>
+            <td><img src="@pub.Image" class="img-thumbnail" /></td>
+            <td>@pub.Name</td>
+            <td>@pub.Downloads</td>
+            <td>$@Convert.ToDecimal(String.Format("{0:0.00}", pub.Price))</td>
+            <td>
+                <select class="form-select">
+                    <option>Delete</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                </select>
+            </td>
+        </tr>
+            }
+    </tbody>
+</table>

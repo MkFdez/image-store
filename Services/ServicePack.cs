@@ -323,5 +323,15 @@ namespace Services
 
             }
         }
+
+        public List<ManagePublicationsModel> GetForManage()
+        {
+            int userid = HttpContext.Current.User.Identity.GetUserId<int>();
+            using(var context = new Project1DBEntities())
+            {
+                var data = context.Publications.Where(x => x.UserId == userid).Select(x => new ManagePublicationsModel() { Downloads = x.Downloads, Id = x.PublicationId, Image = x.HeaderPath, Name = x.Content, Price = x.Price}).ToList();
+                return data;
+            }
+        }
     }
 }

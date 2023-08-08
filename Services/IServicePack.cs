@@ -26,5 +26,7 @@ namespace Services
         Task<bool> HasPublication(int pubId);
         Task<int> PublicationCount(Expression<Func<Publication, bool>> predicate);
         Task UpdateProfilePicture(string path);
+
+        List<ManagePublicationsModel> GetForManage();
     }
 }

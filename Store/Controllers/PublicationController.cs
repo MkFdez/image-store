@@ -310,10 +310,15 @@ namespace Store.Controllers
             return PartialView("~/Views/Publication/_PublicationLists.cshtml", realList);
         }
 
-        
+        public ActionResult Manage()
+        {
+            var model = ServicePack.GetForManage();
+            return View(model);
+        }
+
     }
 
-
+     
 
 
 }

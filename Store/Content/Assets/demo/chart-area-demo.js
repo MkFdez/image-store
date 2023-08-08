@@ -61,7 +61,7 @@ function renderChart(data) {
                 yAxes: [{
                     ticks: {
                         min: 0,
-                        max: Math.ceil(Math.max(...parsedData.values)),
+                        max: Math.max(...parsedData.values)==0?1: Math.ceil(Math.max(...parsedData.values)),
                         maxTicksLimit: 5
                     },
                     gridLines: {
