@@ -1,0 +1,107 @@
+﻿@model Models.ProfileViewModel
+
+@{
+    ViewBag.Title = "Profile";
+}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <div class="container bootstrap snippets bootdey" style="margin-top:30px">
+        <div class="row">
+            <div class="profile-nav col-md-3">
+                <div class="panel">
+                    <div class="user-heading round">
+
+                        @Html.AntiForgeryToken()
+                        <a href="#">
+                            <img src="@(Model.ProfilePicture == null ? "/ProfilePictures/default.png" : Model.ProfilePicture)" id="profile-picture" alt="">
+                            @Html.TextBoxFor(model => model.PostedPicture, new
+                       {
+
+                           type = "file",
+                           accept = "image/*",
+                           onchange = "loadFile(event)",
+                           name = "MyFile",
+                           id = "MyFile",
+                           style = "position:absolute!important; margin-bottom:10px; margin-right:10px; display:none"
+                       })
+                            <label class="fa fa-edit" style="position:absolute!important; margin-bottom:10px; margin-right:10px" for="MyFile"></label>
+                            <script>
+                                var loadFile = function (event) {
+
+                                    var output = document.getElementById('profile-picture');
+
+                                    output.src = URL.createObjectURL(event.target.files[0]);
+                                };</script>
+                            @*<i style="position:absolute!important; margin-bottom:10px; margin-right:10px" class="fa fa-edit"></i>*@
+                        </a>
+
+                        <h1>@Model.UserName</h1>
+                        <p>@Model.Email</p>
+                        @Html.ActionLink("Seller Dashboard","Dashboard", "Sales",null, new {@class="btn btn-primary", style="border-radius: 10px; border: solid 0px"})
+                    </div>
+                </div>
+            </div>
+            <div class="profile-info col-md-9">
+                <div class="panel">
+                    @*<div class="bio-graph-heading">
+                        Aliquam ac magna metus. Nam sed arcu non tellus fringilla fringilla ut vel ispum. Aliquam ac magna metus.
+                    </div>*@
+                    <div class="panel-body bio-graph-info">
+                        <h1>Bio Graph</h1>
+                        <div class="row">
+                            <div class="bio-row">
+                                <p><span>Username</span>: @Model.UserName</p>
+                            </div>
+                            <div class="bio-row">
+                                <p><span>Email</span>: @Model.Email</p>
+                            </div>
+                            <div class="bio-row">
+                                <p><span>Images on Gallery: </span>: @Model.GalleryCount</p>
+                            </div>
+                            <div class="bio-row">
+                                <p><span>Images on Sale: </span>: @Model.PostedImages</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-primary" style="margin-top: 20px; padding: 5px 20px 5px 20px">Save</button>
+    </div>
+}
+    @*<div>
+            <h4>ProfileViewModel</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.UserName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.UserName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Email)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.ProfilePicture)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.ProfilePicture)
+                </dd>
+
+            </dl>
+        </div>
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+            @Html.ActionLink("Back to List", "Index")
+        </p>*@

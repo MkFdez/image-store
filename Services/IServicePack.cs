@@ -23,8 +23,11 @@ namespace Services
         Task<List<ForChartModel>> GetSalesHistory(int month, int year);
         Task<List<PublicationViewModel>> GetSomePublications(int actualPage, Expression<Func<Publication, bool>> predicate);
         Task<DTResponse> GetTransactions(Pagination pagination);
+        Task<DTResponse> GetPublicationsForDatatable(Pagination pagination);
         Task<bool> HasPublication(int pubId);
         Task<int> PublicationCount(Expression<Func<Publication, bool>> predicate);
         Task UpdateProfilePicture(string path);
+
+        List<ManagePublicationsModel> GetForManage();
     }
 }
