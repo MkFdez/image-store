@@ -1,25 +1,28 @@
-function loadTransactionDatatable() {
-    document.getElementById('recent-sales-table-container').innerHTML = `<div class="row" >
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-table me-1"></i>
-                    DataTable Example
-                </div>
-                <div id="tblUpdatePcInfo">
-         </div>
-                </div>
-                    </div >`
-    var table;
-    GetAllEmployyesData();
+﻿function loadPublicationDatatable() {
+    document.getElementById('publications-table-container').innerHTML = `<div class="row">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                DataTable Example
+                            </div>
+                            <div id="tbPublications">
 
-    function GetAllEmployyesData() {
-        var tablecontent = '<table id="tblPCInfo" class="table table-bordered table-striped display nowrap" style="width:100%"><thead><tr>\
+                            </div>
+                        </div>
+                    </div>`
+    var table;
+    GetPublicationData();
+
+    function GetPublicationData() {
+        var tablecontent = '<table id="tblPublicationsInfo" class="table table-bordered table-striped display nowrap" style="width:100%"><thead><tr>\
+    <th>Image</th>\
     <th>Publication</th>\
     <th>Date</th>\
-    <th>Amount</th>\
+    <th>Downloads</th>\
+    <th>Actions</th>\
     </tr></thead><tbody></tbody></table>';
-        $("#tblUpdatePcInfo").html(tablecontent);
-        table = $('#tblPCInfo').dataTable({
+        $("#tbPublications").html(tablecontent);
+        table = $('#tblPublicationsInfo').dataTable({
             clear: true,
             destroy: true,
             searching: false,
@@ -31,7 +34,7 @@ function loadTransactionDatatable() {
                 $(this.api().table().container()).find('input').attr('autocomplete', 'off');
             },
             "ajax": {
-                url: "/Sales/GetTransactionsData",
+                url: "/Sales/Publications",
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
                 data: function (d) {
@@ -51,9 +54,11 @@ function loadTransactionDatatable() {
 
             "columns": [
 
+                { "data": "image", "name": "Image", "searchable": false, "render": function (data, type, row, meta) { return `<img style='height:30px' src='${data}' />` } },
                 { "data": "publication", "name": "Publication", "searchable": false },
                 { "data": "date", "name": "Date", "searchable": false },
-                { "data": "amount", "name": "Amount", "searchable": false },
+                { "data": "downloads", "name": "Downloads", "searchable": false },
+                { "data": "actions", "name": "Actions", "searchable": false },
 
             ]
         });

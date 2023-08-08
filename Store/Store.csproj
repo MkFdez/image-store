@@ -302,6 +302,7 @@
     <Content Include="Content\Assets\demo\chart-bar-demo.js" />
     <Content Include="Content\Assets\demo\chart-pie-demo.js" />
     <Content Include="Content\Assets\demo\datatables-demo.js" />
+    <Content Include="Content\Assets\demo\publication-datatable.js" />
     <Content Include="Content\Assets\nature.jpg" />
     <Content Include="Content\Assets\people.jpg" />
     <Content Include="Content\Assets\principal.jpg" />
@@ -331,6 +332,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="MyScripts\add_comment.js" />
+    <Content Include="MyScripts\container_controller.js" />
     <Content Include="MyScripts\in_db.js" />
     <Content Include="MyScripts\download_controller.js" />
     <Content Include="MyScripts\ban.js" />

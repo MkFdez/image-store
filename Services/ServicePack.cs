@@ -313,11 +313,26 @@ namespace Services
             using (var context = new Project1DBEntities())
             {
                 int userid = HttpContext.Current.User.Identity.GetUserId<int>();
-                var data = context.SalesHistories.Where(x => x.UserId == userid).OrderByDescending(x => x.Date).Take(pagination.data.length).Skip(pagination.data.start).Select(x => new { publication = x.Publication.Content, date = x.Date, amount = x.Amount });
-                int count = context.SalesHistories.Count();
+                var data = context.SalesHistories.Where(x => x.UserId == userid).OrderByDescending(x => x.Date).Skip(pagination.data.start).Take(pagination.data.length).Select(x => new { publication = x.Publication.Content, date = x.Date, amount = x.Amount });
+                int count = context.SalesHistories.Where(x => x.Publication.UserId == userid).Count();
                 DTResponse response = new DTResponse();
                 response.data = JsonConvert.SerializeObject(data);
-                response.recordsFiltered = data.Count();
+                response.recordsFiltered = count;
+                response.recordsTotal = count;
+                return response;
+
+            }
+        }
+        public async Task<DTResponse> GetPublicationsForDatatable(Pagination pagination)
+        {
+            using (var context = new Project1DBEntities())
+            {
+                int userid = HttpContext.Current.User.Identity.GetUserId<int>();
+                var data = context.Publications.Where(x => x.UserId == userid).OrderByDescending(x => x.DateOfCreated).Skip(pagination.data.start).Take(pagination.data.length).Select(x => new { image = x.HeaderPath, publication = x.Content, date = x.DateOfCreated, downloads = x.Downloads, actions = "Delete" });
+                var count = context.Publications.Where(x => x.UserId == userid).Count();
+                DTResponse response = new DTResponse();
+                response.data = JsonConvert.SerializeObject(data);
+                response.recordsFiltered = count;
                 response.recordsTotal = count;
                 return response;
 

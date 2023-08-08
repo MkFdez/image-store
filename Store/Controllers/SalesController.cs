@@ -32,6 +32,12 @@ namespace Store.Controllers
             var response = await ServicePack.GetTransactions(pagination);
             return Json(response);
         }
+        [HttpPost]
+        public async Task<JsonResult> Publications(Pagination pagination)
+        {
+            var response = await ServicePack.GetPublicationsForDatatable(pagination);
+            return Json(response);
+        }
 
             [HttpPost]
         public async Task<JsonResult> GetDailySales(int month, int year)
@@ -52,6 +58,7 @@ namespace Store.Controllers
             var json = JsonConvert.SerializeObject(new { values = amountList, months = dateList });
             return Json(json);
         }
+
         public ActionResult Enday()
         {
             ServicePack.Enday();
