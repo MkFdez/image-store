@@ -54,6 +54,6 @@ We warmly welcome contributions! To suggest improvements or fixes, submit a pull
 This project is licensed under the [MIT License](LICENSE.md).
 
 Contact 📧
-For any questions or suggestions, feel free to contact the project owner:
+For any questions or suggestions, feel free to contact the project owner:[mirkofs29@outlook.com](mailto:mirkofs29@outlook.com)
 
 GitHub: MkFdez
