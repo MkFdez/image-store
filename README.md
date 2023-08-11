@@ -51,7 +51,7 @@ Uploaded images are automatically transformed into thumbnails for optimized load
 We warmly welcome contributions! To suggest improvements or fixes, submit a pull request. For major changes, please discuss first by opening an issue.
 
 ## License 📜
-This project is licensed under the MIT License.
+This project is licensed under the [MIT License](LICENSE.md).
 
 Contact 📧
 For any questions or suggestions, feel free to contact the project owner:
