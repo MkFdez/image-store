@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script src="~/MyScripts/footer.js"></script>
 
     <link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet">
     <style>
@@ -126,10 +127,51 @@
             @RenderBody()
         </div>
     }
-    <hr />
-    <footer>
-        <p>&copy; @DateTime.Now.Year - My Wonderful Project</p>
-    </footer>
+<footer class="bg-dark text-center text-white footer">
+    <!-- Grid container -->
+    <div class="container p-4 pb-0">
+        <!-- Section: Social media -->
+        <section class="mb-4">
+            <!-- Facebook -->
+            <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+                <i class="bi bi-facebook"></i>
+            </a>
+
+            <!-- Twitter -->
+            <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+                <i class="bi bi-twitter"></i>
+            </a>
+
+            <!-- Google -->
+            <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+                <i class="bi bi-google"></i>
+            </a>
+
+            <!-- Instagram -->
+            <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+                <i class="bi bi-instagram"></i>
+            </a>
+
+            <!-- Linkedin -->
+            <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+                <i class="bi bi-linkedin"></i>
+            </a>
+
+            <!-- Github -->
+            <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+                <i class="bi bi-github"></i>
+            </a>
+        </section>
+        <!-- Section: Social media -->
+    </div>
+    <!-- Grid container -->
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2023 Copyright:
+        <a class="text-white" href="https://mdbootstrap.com/">MyWebsite.com</a>
+    </div>
+    <!-- Copyright -->
+</footer>
 
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)

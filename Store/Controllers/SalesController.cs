@@ -45,8 +45,9 @@ namespace Store.Controllers
             
             List<ForChartModel> data = await ServicePack.GetSalesHistory(month, year);
             IEnumerable<decimal> amountList = data.Select(x => x.Price);
+            var total = amountList.Sum();
             IEnumerable<string> dateList = data.Select(x => $"{months[x.Date.Month-1]} {x.Date.Day}");
-            var json = JsonConvert.SerializeObject(new { values = amountList, dates = dateList });
+            var json = JsonConvert.SerializeObject(new { values = amountList, dates = dateList, total=total });
             return Json(json);
         }
         [HttpPost]
@@ -54,8 +55,9 @@ namespace Store.Controllers
         {
             List<ForBarChartModel> data = await ServicePack.GetMonthlyHistory(year);
             IEnumerable<decimal> amountList = data.Select(x => x.Price);
+            var total = amountList.Sum();
             IEnumerable<string> dateList = data.Select(x => $"{months[x.Month - 1]}");
-            var json = JsonConvert.SerializeObject(new { values = amountList, months = dateList });
+            var json = JsonConvert.SerializeObject(new { values = amountList, months = dateList , total=total});
             return Json(json);
         }
 

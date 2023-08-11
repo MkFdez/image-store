@@ -2,7 +2,7 @@ function loadBarChart() {
     document.getElementById('monthly-chart-container').innerHTML = `<div class="row">
         <div class="col-xl-6 col-md-12" >
             <div class="card bg-success text-white mb-4">
-                <div class="card-body">Success Card</div>
+                <div class="card-body">Number of Sales:<span id="MonthlySalesCount"></span></div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" href="#">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -11,7 +11,7 @@ function loadBarChart() {
                         </div >
         <div class="col-xl-6 col-md-12">
             <div class="card bg-danger text-white mb-4">
-                <div class="card-body">Danger Card</div>
+               <div class="card-body">Total Amount:<span id="MonthlySalesAmount"></span></div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" href="#">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -40,6 +40,7 @@ function loadBarChart() {
     loadingContainer2.appendChild(loading2)
     let container2 = document.getElementById("bar-chart")
     container2.appendChild(loadingContainer2)
+    
     $.ajax({
         url: "/Sales/GetMonthySales",
         dataType: "json",
@@ -56,7 +57,8 @@ function loadBarChart() {
         let parsedData = JSON.parse(data)
         Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
         Chart.defaults.global.defaultFontColor = '#292b2c';
-
+        document.getElementById("MonthlySalesCount").innerHTML = "    " + parsedData.values.length
+        document.getElementById("MonthlySalesAmount").innerHTML = "\t$" + parsedData.total
         // Bar Chart Example
         var ctx = document.getElementById("myBarChart");
         var myLineChart = new Chart(ctx, {
