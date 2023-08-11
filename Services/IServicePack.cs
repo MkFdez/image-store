@@ -18,6 +18,7 @@ namespace Services
         Task<string> GetImagePath(int id);
         Task<List<ForBarChartModel>> GetMonthlyHistory(int year);
         Task<ProfileViewModel> GetProfile();
+        Task<ProfileViewModel> GetProfile(int userid);
         Task<ExtendedPublicationVM> GetPublication(int id);
         Task<PublicationToDownloadModel> GetPublicationToDownload(int pubId);
         Task<List<ForChartModel>> GetSalesHistory(int month, int year);
@@ -29,5 +30,7 @@ namespace Services
         Task UpdateProfilePicture(string path);
 
         List<ManagePublicationsModel> GetForManage();
+        void UpdateSocialMedia(SocialMedia social);
+        Task<TemporalViewModel> GetCreatorPubliactions(string username);
     }
 }

@@ -490,6 +490,14 @@ namespace Store.Controllers
                 cookie.Expires = DateTime.Parse(expire);
                 Response.Cookies.Add(cookie);
             }
+            ServicePack.UpdateSocialMedia(new SocialMedia()
+            {
+                Instagram = model.Instagram,
+                Facebook = model.Facebook,
+                Website = model.Website,
+                Twitter = model.Twitter,
+                Pinterest = model.Pinterest,
+            });
             return RedirectToAction("Index", "Publication");
         }
         
@@ -585,6 +593,12 @@ namespace Store.Controllers
               body);
 
             return callbackUrl;
+        }
+
+        public async Task<ActionResult> Index(string username)
+        {
+            var data = await ServicePack.GetCreatorPubliactions(username);
+            return View(data);
         }
     }
 }

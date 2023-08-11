@@ -157,11 +157,39 @@ namespace Services
             using (var context = new Project1DBEntities())
             {
                 int userId = HttpContext.Current.User.Identity.GetUserId<int>();
-                var temp = context.Users.Select(x => new { x.Id, x.UserName, Picture = x.ProfilePicture.Image, x.Email, x.SalesHistories, x.Publications }).First(x => x.Id == userId);
-                return new ProfileViewModel() { Email = temp.Email, ProfilePicture = temp.Picture, UserName = temp.UserName, PostedPicture = null, GalleryCount = temp.SalesHistories.Count(), PostedImages = temp.Publications.Count() };
+                var temp = context.Users.Select(x => new { x.Id, x.UserName, Picture = x.ProfilePicture.Image, x.Email, x.SalesHistories, x.Publications, x.SocialMedia }).First(x => x.Id == userId);
+                return new ProfileViewModel() {
+                    Email = temp.Email,
+                    ProfilePicture = temp.Picture,
+                    UserName = temp.UserName,
+                    PostedPicture = null,                    
+                    Instagram = temp.SocialMedia?.Instagram,
+                    Facebook = temp.SocialMedia?.Facebook,
+                    Website = temp.SocialMedia?.Website,
+                    Twitter = temp.SocialMedia?.Twitter,
+                    Pinterest = temp.SocialMedia?.Pinterest,
+                };
             }
         }
-
+        public async Task<ProfileViewModel> GetProfile(int userid)
+        {
+            using (var context = new Project1DBEntities())
+            {                
+                var temp = context.Users.Select(x => new { x.Id, x.UserName, Picture = x.ProfilePicture.Image, x.Email, x.SalesHistories, x.Publications, x.SocialMedia }).First(x => x.Id == userid);
+                return new ProfileViewModel()
+                {
+                    Email = temp.Email,
+                    ProfilePicture = temp.Picture,
+                    UserName = temp.UserName,
+                    PostedPicture = null,
+                    Instagram = temp.SocialMedia?.Instagram,
+                    Facebook = temp.SocialMedia?.Facebook,
+                    Website = temp.SocialMedia?.Website,
+                    Twitter = temp.SocialMedia?.Twitter,
+                    Pinterest = temp.SocialMedia?.Pinterest,
+                };
+            }
+        }
         public async Task UpdateProfilePicture(string path)
         {
             using (var context = new Project1DBEntities())
@@ -346,6 +374,40 @@ namespace Services
             {
                 var data = context.Publications.Where(x => x.UserId == userid).Select(x => new ManagePublicationsModel() { Downloads = x.Downloads, Id = x.PublicationId, Image = x.HeaderPath, Name = x.Content, Price = x.Price}).ToList();
                 return data;
+            }
+        }
+
+        public async Task<TemporalViewModel> GetCreatorPubliactions(string username)
+        {
+            using(var context = new Project1DBEntities())
+            {
+                var user = context.Users.Select(x => new { x.UserName, x.Id }).FirstOrDefault(x => x.UserName == username);
+                var pub = context.Publications.Where(x => x.User.UserName == username).Select(x => new SimplePublicationViewModel() { PublicationId = x.PublicationId, Image = x.HeaderPath}).ToList();
+                var creator = await  GetProfile(user.Id);
+                return new TemporalViewModel() { Profile = creator, Publications = pub };
+            }
+        }
+
+        public void UpdateSocialMedia(SocialMedia social)
+        {
+            using(var context = new Project1DBEntities())
+            {
+                int userid = HttpContext.Current.User.Identity.GetUserId<int>();
+                social.UserId = userid;
+                var user = context.Users.FirstOrDefault(x => x.Id == userid);
+                if(user.SocialMedia == null)
+                {
+                    user.SocialMedia = social;
+                }
+                else
+                {
+                    user.SocialMedia.Instagram = social.Instagram;
+                    user.SocialMedia.Facebook = social.Facebook;
+                    user.SocialMedia.Pinterest = social.Pinterest;
+                    user.SocialMedia.Twitter = social.Twitter;
+                    user.SocialMedia.Website = social.Website;
+                }
+                context.SaveChanges();
             }
         }
     }

@@ -58,5 +58,6 @@ namespace DataAccess
         public virtual ICollection<DailySale> DailySales { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MonthlySale> MonthlySales { get; set; }
+        public virtual SocialMedia SocialMedia { get; set; }
     }
 }
