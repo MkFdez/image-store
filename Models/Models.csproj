@@ -58,6 +58,8 @@
     <Compile Include="PublicationToDownloadModel.cs" />
     <Compile Include="PublicationViewModel.cs" />
     <Compile Include="SearchModel.cs" />
+    <Compile Include="SimplePublicationViewModel.cs" />
+    <Compile Include="TemporalViewModel.cs" />
     <Compile Include="UserCreateViewModel.cs" />
     <Compile Include="UserLoginViewModel.cs" />
   </ItemGroup>

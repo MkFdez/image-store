@@ -134,6 +134,17 @@
           <Property Name="SaleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Amount" Type="money" />
         </EntityType>
+        <EntityType Name="SocialMedia">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="Website" Type="nvarchar" MaxLength="50" />
+          <Property Name="Instagram" Type="nvarchar" MaxLength="50" />
+          <Property Name="Facebook" Type="nvarchar" MaxLength="50" />
+          <Property Name="Twitter" Type="nvarchar" MaxLength="50" />
+          <Property Name="Pinterest" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="Status">
           <Key>
             <PropertyRef Name="StatusId" />
@@ -339,6 +350,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SocialMedia_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="SocialMedia" Type="Self.SocialMedia" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SocialMedia">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
         <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
@@ -384,6 +407,7 @@
           <EntitySet Name="ProfilePicture" EntityType="Self.ProfilePicture" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Publication" EntityType="Self.Publication" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SalesHistory" EntityType="Self.SalesHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SocialMedia" EntityType="Self.SocialMedia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Status" EntityType="Self.Status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__MonthlySa__UserI__0880433F" Association="Self.FK__MonthlySa__UserI__0880433F">
@@ -446,6 +470,10 @@
             <End Role="Publication" EntitySet="Publication" />
             <End Role="SalesHistory" EntitySet="SalesHistory" />
           </AssociationSet>
+          <AssociationSet Name="FK_SocialMedia_AspNetUsers" Association="Self.FK_SocialMedia_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="SocialMedia" EntitySet="SocialMedia" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -506,6 +534,7 @@
           <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
           <NavigationProperty Name="DailySales" Relationship="Project1DBModel.FK_DailySales_AspNetUsers" FromRole="User" ToRole="DailySale" />
           <NavigationProperty Name="MonthlySales" Relationship="Project1DBModel.FK__MonthlySa__UserI__0880433F" FromRole="User" ToRole="MonthlySale" />
+          <NavigationProperty Name="SocialMedia" Relationship="Project1DBModel.FK_SocialMedia_AspNetUsers" FromRole="User" ToRole="SocialMedia" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -812,6 +841,11 @@
             <End Role="User" EntitySet="Users" />
             <End Role="MonthlySale" EntitySet="MonthlySales" />
           </AssociationSet>
+          <EntitySet Name="SocialMedias" EntityType="Project1DBModel.SocialMedia" />
+          <AssociationSet Name="FK_SocialMedia_AspNetUsers" Association="Project1DBModel.FK_SocialMedia_AspNetUsers">
+            <End Role="User" EntitySet="Users" />
+            <End Role="SocialMedia" EntitySet="SocialMedias" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -855,6 +889,30 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="MonthlySale">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="SocialMedia">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="Website" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Instagram" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Facebook" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Twitter" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Pinterest" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="Project1DBModel.FK_SocialMedia_AspNetUsers" FromRole="SocialMedia" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_SocialMedia_AspNetUsers">
+          <End Type="Project1DBModel.User" Role="User" Multiplicity="1" />
+          <End Type="Project1DBModel.SocialMedia" Role="SocialMedia" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SocialMedia">
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
@@ -1043,6 +1101,18 @@
                 <ScalarProperty Name="Month" ColumnName="Month" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SocialMedias">
+            <EntityTypeMapping TypeName="Project1DBModel.SocialMedia">
+              <MappingFragment StoreEntitySet="SocialMedia">
+                <ScalarProperty Name="Pinterest" ColumnName="Pinterest" />
+                <ScalarProperty Name="Twitter" ColumnName="Twitter" />
+                <ScalarProperty Name="Facebook" ColumnName="Facebook" />
+                <ScalarProperty Name="Instagram" ColumnName="Instagram" />
+                <ScalarProperty Name="Website" ColumnName="Website" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
