@@ -27,22 +27,22 @@
                         <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
                             <li class="nav-item">
                                 <a class="nav-link align-middle px-0" onclick="updateView(0)">
-                                    <i class="bi bi-arrow-up-right"></i> <span class="ms-1 d-none d-sm-inline">Daily Chart</span>
+                                    <i class="bi bi-arrow-up-right text-white"></i> <span class="ms-1 d-none d-sm-inline text-white">Daily Chart</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link align-middle px-0" onclick="updateView(1)">
-                                    <i class="bi bi-bar-chart-fill"></i> <span class="ms-1 d-none d-sm-inline">Monthly Chart</span>
+                                    <i class="bi bi-bar-chart-fill text-white" ></i> <span class="ms-1 d-none d-sm-inline text-white">Monthly Chart</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link align-middle px-0" onclick="updateView(2)">
-                                    <i class="bi bi-table"></i> <span class="ms-1 d-none d-sm-inline">Last Sales</span>
+                                    <i class="bi bi-table text-white"></i> <span class="ms-1 d-none d-sm-inline text-white">Last Sales</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link align-middle px-0" onclick="updateView(3)">
-                                    <i class="bi bi-safe"></i> <span class="ms-1 d-none d-sm-inline">My Publications</span>
+                                    <i class="bi bi-safe text-white"></i> <span class="ms-1 d-none d-sm-inline text-white">My Publications</span>
                                 </a>
                             </li>
 
@@ -51,35 +51,7 @@
                     </div>
                 </div>
 
-                @*----------------------------------------------------------------------------------------------------------------------------------------------------------*@
-                @*
-
-
-            <div id="layoutSidenav_nav">
-                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-
-                    <div class="sb-sidenav-menu">
-
-                        <div class="nav">
-                            <button id="toggleSidebarButton">Toggle Sidebar</button>
-                            <a class="nav-link" onclick="updateView(0)">
-                                Daily Chart
-                            </a>
-                            <a class="nav-link" onclick="updateView(1)">
-                                Monthly Chart
-                            </a>
-                            <a class="nav-link" onclick="updateView(2)">
-                                Last Sales
-                            </a>
-                            <a class="nav-link" onclick="updateView(3)">
-                                My Publications
-                            </a>
-
-                        </div>
-                    </div>
-                </nav>
-            </div>
-                *@
+                @*----------------------------------------------------------------------------------------------------------------------------------------------------------*@                           
             <div class="col">
                 <main>
                     <div class="container-fluid px-4">
@@ -95,7 +67,7 @@
                             <div class="row">
                                 <div class="col-xl-6 col-md-12">
                                     <div class="card bg-primary text-white mb-4">
-                                        <div class="card-body">Primary Card</div>
+                                        <div class="card-body">Number of Sales:<span id="DailySalesCount"></span></div>
                                         <div class="card-footer d-flex align-items-center justify-content-between">
                                             <a class="small text-white stretched-link" href="#">View Details</a>
                                             <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -104,7 +76,7 @@
                                 </div>
                                 <div class="col-xl-6 col-md-12">
                                     <div class="card bg-warning text-white mb-4">
-                                        <div class="card-body">Warning Card</div>
+                                        <div class="card-body">Total Amount:<span id="DailySalesAmount"></span></div>
                                         <div class="card-footer d-flex align-items-center justify-content-between">
                                             <a class="small text-white stretched-link" href="#">View Details</a>
                                             <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -144,21 +116,7 @@
             </div>
                 </div>
             </div>
-           
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid px-4">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2023</div>
-                            <div>
-                                <a href="#">Privacy Policy</a>
-                                &middot;
-                                <a href="#">Terms &amp; Conditions</a>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
-           
-        
+                
         @section Scripts{
             <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
             <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>

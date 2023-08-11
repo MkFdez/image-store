@@ -3,105 +3,168 @@
 @{
     ViewBag.Title = "Profile";
 }
+<style>
+    body {
+        background: #f7f7ff;
+        margin-top: 20px;
+    }
 
-@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-    <div class="container bootstrap snippets bootdey" style="margin-top:30px">
-        <div class="row">
-            <div class="profile-nav col-md-3">
-                <div class="panel">
-                    <div class="user-heading round">
+    .card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 0 solid transparent;
+        border-radius: .25rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 6px 0 rgb(218 218 253 / 65%), 0 2px 6px 0 rgb(206 206 238 / 54%);
+    }
 
-                        @Html.AntiForgeryToken()
-                        <a href="#">
-                            <img src="@(Model.ProfilePicture == null ? "/ProfilePictures/default.png" : Model.ProfilePicture)" id="profile-picture" alt="">
-                            @Html.TextBoxFor(model => model.PostedPicture, new
-                       {
+    .me-2 {
+        margin-right: .5rem !important;
+    }
+</style>
 
-                           type = "file",
-                           accept = "image/*",
-                           onchange = "loadFile(event)",
-                           name = "MyFile",
-                           id = "MyFile",
-                           style = "position:absolute!important; margin-bottom:10px; margin-right:10px; display:none"
-                       })
-                            <label class="fa fa-edit" style="position:absolute!important; margin-bottom:10px; margin-right:10px" for="MyFile"></label>
-                            <script>
-                                var loadFile = function (event) {
+@*-------------------------------------------------------------------------------------------------------------------*@
+<div class="container">
+    <div class="main-body">
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center text-center">
+                                <img src="@(Model.ProfilePicture == null ? "/ProfilePictures/default.png" : Model.ProfilePicture)" class="rounded-circle p-1 bg-primary" height="110" width="110" id="profile-picture" alt="">
+                                @Html.TextBoxFor(model => model.PostedPicture, new
+                           {
 
-                                    var output = document.getElementById('profile-picture');
+                               type = "file",
+                               accept = "image/*",
+                               onchange = "loadFile(event)",
+                               name = "MyFile",
+                               id = "MyFile",
+                               style = "position:absolute!important; margin-bottom:10px; margin-right:10px; display:none"
+                           })                               
+                                <script>
+                                    var loadFile = function (event) {
 
-                                    output.src = URL.createObjectURL(event.target.files[0]);
-                                };</script>
-                            @*<i style="position:absolute!important; margin-bottom:10px; margin-right:10px" class="fa fa-edit"></i>*@
-                        </a>
+                                        var output = document.getElementById('profile-picture');
 
-                        <h1>@Model.UserName</h1>
-                        <p>@Model.Email</p>
-                        @Html.ActionLink("Seller Dashboard","Dashboard", "Sales",null, new {@class="btn btn-primary", style="border-radius: 10px; border: solid 0px"})
+                                        output.src = URL.createObjectURL(event.target.files[0]);
+                                    };</script>
+                                <div class="mt-3">
+                                    <h4>@Model.UserName</h4>
+                                    <label class="btn btn-primary" for="MyFile">Edit Photo</label>
+                                    @Html.ActionLink("Seller Dashboard", "Dashboard", "Sales", null, new { @class = "btn btn-outline-primary" })
+
+                                </div>
+                            </div>                                                      
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="profile-info col-md-9">
-                <div class="panel">
-                    @*<div class="bio-graph-heading">
-                        Aliquam ac magna metus. Nam sed arcu non tellus fringilla fringilla ut vel ispum. Aliquam ac magna metus.
-                    </div>*@
-                    <div class="panel-body bio-graph-info">
-                        <h1>Bio Graph</h1>
-                        <div class="row">
-                            <div class="bio-row">
-                                <p><span>Username</span>: @Model.UserName</p>
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Full Name</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Html.TextBoxFor(x => x.UserName, new { @class = "form-control" })
+                                </div>
                             </div>
-                            <div class="bio-row">
-                                <p><span>Email</span>: @Model.Email</p>
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Email</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+                                </div>
                             </div>
-                            <div class="bio-row">
-                                <p><span>Images on Gallery: </span>: @Model.GalleryCount</p>
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram me-2 icon-inline text-danger"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>Instagram</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Html.TextBoxFor(x => x.Instagram, new { @class = "form-control" })
+                                </div>
                             </div>
-                            <div class="bio-row">
-                                <p><span>Images on Sale: </span>: @Model.PostedImages</p>
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe me-2 icon-inline"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>Website</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Html.TextBoxFor(x => x.Website, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter me-2 icon-inline text-info"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>Twitter</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Html.TextBoxFor(x => x.Twitter, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0"><i class="bi bi-pinterest icon-inline text-danger"  style="font-size:24px!important; margin-right:7.5px"></i>Pinterest</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Html.TextBoxFor(x => x.Pinterest, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook me-2 icon-inline text-primary"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>Facebook</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Html.TextBoxFor(x => x.Facebook, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-9 text-secondary">
+                                    <input type="submit" class="btn btn-primary px-4" value="Save Changes">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="d-flex align-items-center mb-3">Project Status</h5>
+                                    <p>Web Design</p>
+                                    <div class="progress mb-3" style="height: 5px">
+                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <p>Website Markup</p>
+                                    <div class="progress mb-3" style="height: 5px">
+                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <p>One Page</p>
+                                    <div class="progress mb-3" style="height: 5px">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <p>Mobile Template</p>
+                                    <div class="progress mb-3" style="height: 5px">
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <p>Backend API</p>
+                                    <div class="progress" style="height: 5px">
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <button class="btn btn-primary" style="margin-top: 20px; padding: 5px 20px 5px 20px">Save</button>
+        }
     </div>
-}
-    @*<div>
-            <h4>ProfileViewModel</h4>
-            <hr />
-            <dl class="dl-horizontal">
-                <dt>
-                    @Html.DisplayNameFor(model => model.UserName)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.UserName)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.Email)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Email)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.ProfilePicture)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.ProfilePicture)
-                </dd>
-
-            </dl>
-        </div>
-        <p>
-            @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-            @Html.ActionLink("Back to List", "Index")
-        </p>*@
+</div>

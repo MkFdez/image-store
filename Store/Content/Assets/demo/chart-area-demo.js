@@ -25,8 +25,9 @@ function loadAreaChart() {
         let parsedData = JSON.parse(data)
         Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
         Chart.defaults.global.defaultFontColor = '#292b2c';
-        console.log(Math.max(parsedData.values))
-        console.log(parsedData.values)
+        document.getElementById("DailySalesCount").innerHTML = "    "+parsedData.values.length
+        document.getElementById("DailySalesAmount").innerHTML = "    $"+parsedData.total
+
         // Area Chart Example
         var ctx = document.getElementById("myAreaChart");
         var myLineChart = new Chart(ctx, {
