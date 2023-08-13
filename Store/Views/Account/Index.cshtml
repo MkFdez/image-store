@@ -1,4 +1,4 @@
-﻿@model Models.TemporalViewModel
+﻿@model Models.ProfileViewModel
 
 @{
     ViewBag.Title = "Index";
@@ -31,81 +31,82 @@
         margin-right: .5rem !important;
     }
 </style>
-
+@Html.Hidden("username", Model.UserName)
 @*-------------------------------------------------------------------------------------------------------------------*@
-<div class="container">
+<div class="container" >
     <div class="main-body">
         @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
             <div class="row">
-                <div class="col-lg-4">
-                    <div class="card">
+                <div class="col-lg-4"> 
+                    <div class="card" style="position: sticky!important; top: 64.38px; right:0px ">
                         <div class="card-body">
                             <div class="d-flex flex-column align-items-center text-center">
-                                <img src="@(Model.Profile.ProfilePicture == null ? "/ProfilePictures/default.png" : Model.Profile.ProfilePicture)" class="rounded-circle p-1 bg-primary" height="110" width="110" id="profile-picture" alt="">
-                                <div class="mt-3">
-                                    <h4>@Model.Profile.UserName</h4>
-                                    <div class="row mb-3">
-                                        <div class="col-sm-3">
-                                            <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram me-2 icon-inline text-danger"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></h6>
+                                <img src="@(Model.ProfilePicture == null ? "/ProfilePictures/default.png" : Model.ProfilePicture)" class="rounded-circle p-1 bg-primary" height="110" width="110" id="profile-picture" alt="">
+                                <div>
+                                    <h4>@Model.UserName</h4>
+                                    <div class="d-flex flex-column align-items-start">
+                                        <div class="row mb-1">
+                                            <div class="col-sm-3">
+                                                <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram me-2 icon-inline text-danger"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></h6>
+                                            </div>
+                                            <div class="col-sm-9 text-secondary">
+                                                <p>@Model.Instagram</p>
+                                            </div>
                                         </div>
-                                        <div class="col-sm-9 text-secondary">
-                                            <p>@Model.Profile.Instagram</p>
+                                        <div class="row mb-1">
+                                            <div class="col-sm-3">
+                                                <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe me-2 icon-inline"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></h6>
+                                            </div>
+                                            <div class="col-sm-9 text-secondary">
+                                                <p>@Model.Website</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-sm-3">
-                                            <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe me-2 icon-inline"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></h6>
+                                        <div class="row mb-1">
+                                            <div class="col-sm-3">
+                                                <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter me-2 icon-inline text-info"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></h6>
+                                            </div>
+                                            <div class="col-sm-9 text-secondary">
+                                                <p>@Model.Twitter</p>
+                                            </div>
                                         </div>
-                                        <div class="col-sm-9 text-secondary">
-                                            <p>@Model.Profile.Website</p>
+                                        <div class="row mb-1">
+                                            <div class="col-sm-3">
+                                                <h6 class="mb-0"><i class="bi bi-pinterest icon-inline text-danger" style="font-size:24px!important; margin-right:7.5px"></i></h6>
+                                            </div>
+                                            <div class="col-sm-9 text-secondary">
+                                                <p>@Model.Pinterest</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-sm-3">
-                                            <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter me-2 icon-inline text-info"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></h6>
-                                        </div>
-                                        <div class="col-sm-9 text-secondary">
-                                            <p>@Model.Profile.Twitter</p>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-sm-3">
-                                            <h6 class="mb-0"><i class="bi bi-pinterest icon-inline text-danger" style="font-size:24px!important; margin-right:7.5px"></i></h6>
-                                        </div>
-                                        <div class="col-sm-9 text-secondary">
-                                            <p>@Model.Profile.Pinterest</p>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-sm-3">
-                                            <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook me-2 icon-inline text-primary"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></h6>
-                                        </div>
-                                        <div class="col-sm-9 text-secondary">
-                                            <p>@Model.Profile.Facebook</p>
+                                        <div class="row mb-1">
+                                            <div class="col-sm-3">
+                                                <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook me-2 icon-inline text-primary"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></h6>
+                                            </div>
+                                            <div class="col-sm-9 text-secondary">
+                                                <p>@Model.Facebook</p>
+                                            </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-lg-8">
                     <div class="card">
-                        <div class="card-body">
-                            @foreach (var pub in Model.Publications)
-                            {
-                                <div class="row">
-                                    <img src="@pub.Image" />
-                                </div>
-                            }
+                        <div class="card-body" id="image-container">
 
                         </div>
+                        <h4 id="final_image"></h4>
                     </div>
                 </div>
             </div>
         }
     </div>
-    </div>
+</div>
+
+@section Scripts{
+    <script src="~/MyScripts/images_loader.js"></script>
+    }

@@ -171,11 +171,11 @@ namespace Services
                 };
             }
         }
-        public async Task<ProfileViewModel> GetProfile(int userid)
+        public async Task<ProfileViewModel> GetProfile(string username)
         {
             using (var context = new Project1DBEntities())
             {                
-                var temp = context.Users.Select(x => new { x.Id, x.UserName, Picture = x.ProfilePicture.Image, x.Email, x.SalesHistories, x.Publications, x.SocialMedia }).First(x => x.Id == userid);
+                var temp = context.Users.Select(x => new { x.Id, x.UserName, Picture = x.ProfilePicture.Image, x.Email, x.SalesHistories, x.Publications, x.SocialMedia }).First(x => x.UserName == username);
                 return new ProfileViewModel()
                 {
                     Email = temp.Email,
@@ -377,14 +377,25 @@ namespace Services
             }
         }
 
-        public async Task<TemporalViewModel> GetCreatorPubliactions(string username)
+        public async Task<ProfileViewModel> GetCreator(string username)
         {
             using(var context = new Project1DBEntities())
             {
-                var user = context.Users.Select(x => new { x.UserName, x.Id }).FirstOrDefault(x => x.UserName == username);
-                var pub = context.Publications.Where(x => x.User.UserName == username).Select(x => new SimplePublicationViewModel() { PublicationId = x.PublicationId, Image = x.HeaderPath}).ToList();
-                var creator = await  GetProfile(user.Id);
-                return new TemporalViewModel() { Profile = creator, Publications = pub };
+
+                var creator = await  GetProfile(username);
+                return creator;
+            }
+        }
+        public async Task<List<SimplePublicationViewModel>> GetCreatorPubliactions(string username, int count)
+        {
+            using(var context = new Project1DBEntities())
+            {
+                var pubs = context.Users.FirstOrDefault(x => x.UserName == username).Publications
+                    .OrderByDescending(x => x.DateOfCreated)
+                    .Skip(count)
+                    .Take(10)
+                    .Select(x => new SimplePublicationViewModel() { PublicationId = x.PublicationId, Image = x.HeaderPath }).ToList();
+                return pubs;
             }
         }
 

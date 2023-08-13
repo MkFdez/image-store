@@ -15,6 +15,8 @@ using System.IO;
 using Services;
 using CacheUtilities;
 using System.Text;
+using System.Text.Json;
+using System.Collections.Generic;
 
 namespace Store.Controllers
 {
@@ -597,8 +599,14 @@ namespace Store.Controllers
 
         public async Task<ActionResult> Index(string username)
         {
-            var data = await ServicePack.GetCreatorPubliactions(username);
+            var data = await ServicePack.GetCreator(username);
             return View(data);
+        }
+
+        public async Task<ActionResult> CreatorImages(string username, int count)
+        {
+            var data = await ServicePack.GetCreatorPubliactions(username, count);
+            return Json(JsonSerializer.Serialize<List<SimplePublicationViewModel>>(data));
         }
     }
 }
