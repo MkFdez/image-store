@@ -1,9 +1,9 @@
 ﻿function loadPublicationDatatable() {
     document.getElementById('publications-table-container').innerHTML = `<div class="row">
                         <div class="card mb-4">
-                            <div class="card-header">
+                            <div class="card-header text-black">
                                 <i class="fas fa-table me-1"></i>
-                                DataTable Example
+                                Publications
                             </div>
                             <div id="tbPublications">
 

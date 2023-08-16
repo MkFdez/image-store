@@ -25,24 +25,24 @@
                     <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">                     
                         @*TODO: Change icons*@
                         <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                            <li class="nav-item">
+                            <li class="nav-item sidebar-link-active">
                                 <a class="nav-link align-middle px-0" onclick="updateView(0)">
-                                    <i class="bi bi-arrow-up-right text-white"></i> <span class="ms-1 d-none d-sm-inline text-white">Daily Chart</span>
+                                    <i class="bi bi-arrow-up-right"></i> <span class="ms-1 d-none d-sm-inline">Daily Chart</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item sidebar-link">
                                 <a class="nav-link align-middle px-0" onclick="updateView(1)">
-                                    <i class="bi bi-bar-chart-fill text-white" ></i> <span class="ms-1 d-none d-sm-inline text-white">Monthly Chart</span>
+                                    <i class="bi bi-bar-chart-fill" ></i> <span class="ms-1 d-none d-sm-inline">Monthly Chart</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item sidebar-link">
                                 <a class="nav-link align-middle px-0" onclick="updateView(2)">
-                                    <i class="bi bi-table text-white"></i> <span class="ms-1 d-none d-sm-inline text-white">Last Sales</span>
+                                    <i class="bi bi-table"></i> <span class="ms-1 d-none d-sm-inline">Last Sales</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item sidebar-link">
                                 <a class="nav-link align-middle px-0" onclick="updateView(3)">
-                                    <i class="bi bi-safe text-white"></i> <span class="ms-1 d-none d-sm-inline text-white">My Publications</span>
+                                    <i class="bi bi-safe"></i> <span class="ms-1 d-none d-sm-inline">My Publications</span>
                                 </a>
                             </li>
 
@@ -56,12 +56,7 @@
                 <main>
                     <div class="container-fluid px-4">
                         <h1 class="mt-4">Dashboard</h1>
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#sidenavAccordion" aria-expanded="false" aria-controls="sidenavAccordion">
-                            Accordion Item #1
-                        </button>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Dashboard</li>
-                        </ol>
+                        
                         @*Dayly chart*@
                         <div id="daily-chart-container">
                             <div class="row">
@@ -87,7 +82,7 @@
                             <div class="row">
                                 <div class="col-xl-12">
                                     <div class="card mb-4">
-                                        <div class="card-header">
+                                        <div class="card-header text-black">
                                             <i class="fas fa-chart-area me-1"></i>
                                             By Days Chart
                                             <input type="text" class="form-control" name="datepickermonth" id="datepickermonth" style="display:block" />
