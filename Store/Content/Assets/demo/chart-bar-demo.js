@@ -22,7 +22,7 @@ function loadBarChart() {
         <div class="row">
     <div class="col-xl-12">
                 <div class="card mb-4">
-                    <div class="card-header">
+                    <div class="card-header text-black">
                         <i class="fas fa-chart-bar me-1"></i>
                         By Months Chart
                         <input type="text" class="form-control" name="datepicker" id="datepicker" />

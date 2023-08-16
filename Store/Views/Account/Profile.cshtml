@@ -70,7 +70,9 @@
                 <div class="col-lg-8">
                     <div class="card">
                         <div class="card-body">
-                            <div class="row mb-3">
+                            <h4 class="mb-0">User Information</h4>
+                            <hr class="mt-0 mb-4" />
+                            <div class="row mb-3 mt-2">
                                 <div class="col-sm-3">
                                     <h6 class="mb-0">Full Name</h6>
                                 </div>
@@ -86,7 +88,9 @@
                                     @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
                                 </div>
                             </div>
-                            <div class="row mb-3">
+                            <h4 class="mb-0">Social Media</h4>
+                            <hr class="mb-4 mt-0" />
+                            <div class="row mb-3 mt-2">
                                 <div class="col-sm-3">
                                     <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram me-2 icon-inline text-danger"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>Instagram</h6>
                                 </div>
@@ -112,7 +116,7 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-sm-3">
-                                    <h6 class="mb-0"><i class="bi bi-pinterest icon-inline text-danger"  style="font-size:24px!important; margin-right:7.5px"></i>Pinterest</h6>
+                                    <h6 class="mb-0"><i class="bi bi-pinterest icon-inline text-danger" style="font-size:24px!important; margin-right:7.5px"></i>Pinterest</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
                                     @Html.TextBoxFor(x => x.Pinterest, new { @class = "form-control" })

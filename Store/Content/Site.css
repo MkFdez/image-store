@@ -708,3 +708,27 @@ ul.summary-list {
         transform: scale(1) rotate(360deg);
     }
 }
+
+.sidebar-link > a > span, .sidebar-link > a > i::before {
+    color: white;
+}
+
+.sidebar-link-active > a > span, .sidebar-link-active > a > i::before {
+    color: #198754;
+}
+
+.sidebar-link, .sidebar-link-active {
+    cursor: pointer;
+}
+
+    .sidebar-link > a > span,
+    .sidebar-link > a > i::before,
+    .sidebar-link-active > a > span,
+    .sidebar-link-active > a > i::before {
+        transition: transform 0.2s ease-in-out; /* Adding a smooth transition */
+    }
+
+    .sidebar-link:hover,
+    .sidebar-link-active:hover {
+        transform: scale(1.1); /* Increase the size by 10% on hover */
+    }
