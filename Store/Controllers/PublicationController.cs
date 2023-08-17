@@ -201,33 +201,22 @@ namespace Store.Controllers
             System.IO.File.Delete(Path.Combine(Server.MapPath("~/TempData"), scale + fileName));
         }
 
-        // POST: Publication/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
+        
         
         public async Task<ActionResult> ChangePage(int actualPage = 1, FormCollection c = null, string search = "", bool personalPage = false, string category = "")
         {
             List<PublicationViewModel> model = new List<PublicationViewModel>();
             using (var context = new Project1DBEntities())
             {
+                var userId = HttpContext.User.Identity.GetUserId<int>();
                 System.Linq.Expressions.Expression<Func<Publication, bool>> predicate1;
                 System.Linq.Expressions.Expression<Func<Publication, bool>> predicate2;
                 System.Linq.Expressions.Expression<Func<Publication, bool>> predicate3;
+                System.Linq.Expressions.Expression<Func<Publication, bool>> predicate;
+                if (personalPage) { predicate = x => true; } else { predicate = x => x.StatusId == 0; } 
                 if (search != "") { predicate2 = x => x.Content.Contains(search); } else { predicate2 = x => true; }
                 var a = c["AreChecked"] != null ? Array.ConvertAll(c["AreChecked"].ToString().Split(','), x => int.Parse(x.ToString())).ToList() : new List<int>() { };
+                predicate2 = predicate.And(predicate2);
                 if (category == "")
                 {
                     if (System.Web.HttpContext.Current.User.IsInRole("Standard") || !HttpContext.User.Identity.IsAuthenticated)
@@ -316,6 +305,15 @@ namespace Store.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [Authorize]
+        public ActionResult Delete(int pubId)
+        {
+            bool ok = ServicePack.DeletePublication(pubId);
+            if (!ok)
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.Unauthorized);
+            return new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
+        }
     }
 
      

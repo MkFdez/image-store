@@ -732,3 +732,12 @@ ul.summary-list {
     .sidebar-link-active:hover {
         transform: scale(1.1); /* Increase the size by 10% on hover */
     }
+
+.table-button {
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    font-weight: bold;
+}
+    .table-button:hover {
+        transform: scale(1.1);
+    }

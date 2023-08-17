@@ -1,4 +1,5 @@
 ﻿function loadPublicationDatatable() {
+    console.log('here')
     document.getElementById('publications-table-container').innerHTML = `<div class="row">
                         <div class="card mb-4">
                             <div class="card-header text-black">
@@ -56,9 +57,9 @@
 
                 { "data": "image", "name": "Image", "searchable": false, "render": function (data, type, row, meta) { return `<img style='height:30px' src='${data}' />` } },
                 { "data": "publication", "name": "Publication", "searchable": false },
-                { "data": "date", "name": "Date", "searchable": false },
+                { "data": "date", "name": "Date", "searchable": false, "render": function (data, type, row, meta) {return data.slice(0, 10) } },
                 { "data": "downloads", "name": "Downloads", "searchable": false },
-                { "data": "actions", "name": "Actions", "searchable": false },
+                { "data": "actions", "name": "Actions", "searchable": false, "render": function (data, type, row, meta) { return `<center><p class='table-button' onclick='deleteModal(${JSON.stringify(data)})'>Delete</p></center>` } } ,
 
             ]
         });
