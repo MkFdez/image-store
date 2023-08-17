@@ -68,7 +68,11 @@ namespace Services
         {
             using (var context = new Project1DBEntities())
             {
+                var userid = HttpContext.Current.User.Identity.GetUserId<int>();
                 var temp = context.Publications.FirstOrDefault(x => x.PublicationId == id);
+                if (temp.StatusId != 0 && !temp.SalesHistories.Any(x => x.UserId == userid)){
+                    throw new Exception("Publication deleted");
+                }
                 var comments = new List<CommentModel>();
                 temp.Comments1.ToList().ForEach(x => comments.Add(new CommentModel()
                 {
@@ -122,7 +126,12 @@ namespace Services
         {
             using (var context = new Project1DBEntities())
             {
-                var temp = context.Publications.Select(x => new { x.PublicationId, x.Guid, x.HeaderPath }).FirstOrDefault(x => x.PublicationId == pubId);
+                var userid = HttpContext.Current.User.Identity.GetUserId<int>();
+                var temp = context.Publications.Select(x => new { x.PublicationId, x.Guid, x.HeaderPath, x.SalesHistories, x.StatusId }).FirstOrDefault(x => x.PublicationId == pubId);
+                if (temp.StatusId != 0 && !temp.SalesHistories.Any(x => x.UserId == userid))
+                {
+                    throw new Exception("Publication deleted");
+                }
                 var publication = new PublicationToDownloadModel()
                 {
                     Guid = temp.Guid,
@@ -137,8 +146,13 @@ namespace Services
         {
             using (var context = new Project1DBEntities())
             {
-                string path = context.Publications.Select(x => new { x.PublicationId, x.HeaderPath }).FirstOrDefault(x => x.PublicationId == id).HeaderPath;
-                return path;
+                int userid = HttpContext.Current.User.Identity.GetUserId<int>();
+                var temp = context.Publications.Select(x => new { x.PublicationId, x.HeaderPath, x.SalesHistories, x.StatusId }).FirstOrDefault(x => x.PublicationId == id);
+                if (temp.StatusId != 0 && !temp.SalesHistories.Any(x => x.UserId == userid))
+                {
+                    throw new Exception("Publication deleted");
+                }
+                return temp.HeaderPath;
             }
         }
         public async Task AddPublication(Publication publication, int[] categories)
