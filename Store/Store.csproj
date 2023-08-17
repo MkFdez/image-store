@@ -333,6 +333,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="MyScripts\add_comment.js" />
     <Content Include="MyScripts\container_controller.js" />
+    <Content Include="MyScripts\delete_publication.js" />
     <Content Include="MyScripts\footer.js" />
     <Content Include="MyScripts\images_loader.js" />
     <Content Include="MyScripts\in_db.js" />

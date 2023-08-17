@@ -356,8 +356,8 @@ namespace Services
             using (var context = new Project1DBEntities())
             {
                 int userid = HttpContext.Current.User.Identity.GetUserId<int>();
-                var data = context.Publications.Where(x => x.UserId == userid).OrderByDescending(x => x.DateOfCreated).Skip(pagination.data.start).Take(pagination.data.length).Select(x => new { image = x.HeaderPath, publication = x.Content, date = x.DateOfCreated, downloads = x.Downloads, actions = "Delete" });
-                var count = context.Publications.Where(x => x.UserId == userid).Count();
+                var data = context.Publications.Where(x => x.UserId == userid && x.StatusId == 0).OrderByDescending(x => x.DateOfCreated).Skip(pagination.data.start).Take(pagination.data.length).Select(x => new { image = x.HeaderPath, publication = x.Content, date = x.DateOfCreated, downloads = x.Downloads, actions = new { title = x.Content, image = x.HeaderPath, id = x.PublicationId } });
+                var count = context.Publications.Where(x => x.UserId == userid && x.StatusId == 0).Count();
                 DTResponse response = new DTResponse();
                 response.data = JsonConvert.SerializeObject(data);
                 response.recordsFiltered = count;
@@ -419,6 +419,21 @@ namespace Services
                     user.SocialMedia.Website = social.Website;
                 }
                 context.SaveChanges();
+            }
+        }
+        public bool DeletePublication(int pubId)
+        {
+            using(var context = new Project1DBEntities())
+            {
+                int userId = HttpContext.Current.User.Identity.GetUserId<int>();
+                var publication = context.Publications.FirstOrDefault(x => x.PublicationId == pubId);
+                if(publication.UserId != userId)
+                {
+                    return false;
+                }
+                publication.StatusId = 2;
+                context.SaveChanges();
+                return true;
             }
         }
     }

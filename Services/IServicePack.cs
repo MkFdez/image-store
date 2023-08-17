@@ -33,5 +33,6 @@ namespace Services
         void UpdateSocialMedia(SocialMedia social);
         Task<List<SimplePublicationViewModel>> GetCreatorPubliactions(string username, int count);
         Task<ProfileViewModel> GetCreator(string username);
+        bool DeletePublication(int pubId);
     }
 }
