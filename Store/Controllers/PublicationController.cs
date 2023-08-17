@@ -47,13 +47,20 @@ namespace Store.Controllers
         {
             using(var context = new Project1DBEntities())
             {
-                var publication = await ServicePack.GetPublication(id);
+                try
+                {
+                    var publication = await ServicePack.GetPublication(id);
 
-                ViewBag.Comments = 10;
-                ViewBag.imgWidth = MkImage.GetWidth(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid + "/"), publication.Filename));
-                ViewBag.imgHeight = MkImage.GetHeight(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid + "/"), publication.Filename));
+                    ViewBag.Comments = 10;
+                    ViewBag.imgWidth = MkImage.GetWidth(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid + "/"), publication.Filename));
+                    ViewBag.imgHeight = MkImage.GetHeight(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid + "/"), publication.Filename));
 
-                return View(publication.Publication);
+                    return View(publication.Publication);
+                }
+                catch
+                {
+                    return RedirectToAction("Index");
+                }
             }
             
         }
@@ -65,40 +72,53 @@ namespace Store.Controllers
             int userid = User.Identity.GetUserId<int>();
             using (var context = new Project1DBEntities())
             {
-
-                if ( await ServicePack.HasPublication(id) == false)
+                try
                 {
-                    return RedirectToAction("View", "Publication", new { id = id });
+                    if (await ServicePack.HasPublication(id) == false)
+                    {
+                        return RedirectToAction("View", "Publication", new { id = id });
+                    }
+                    var p = await ServicePack.GetPublicationToDownload(id);
+                    string fileName = p.Path.Substring(p.Path.LastIndexOf("/") + 1);
+                    string pGuid = p.Guid;
+                    int intScale = int.Parse(scale);
+                    string guid = Guid.NewGuid().ToString();
+                    string newName = guid + fileName.Substring(fileName.LastIndexOf("."));
+                    ImageManager<int> myDelegate = new ImageManager<int>(MkImage.Resize);
+                    myDelegate(Path.Combine(Server.MapPath("~/ImageVault/" + pGuid + "/"), fileName), intScale, Path.Combine(Server.MapPath("~/TempData"), newName));
+                    byte[] fileBytes = System.IO.File.ReadAllBytes(Path.Combine(Server.MapPath("~/TempData"), newName));
+                    return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, newName);
                 }
-                var p = await ServicePack.GetPublicationToDownload(id);
-                string fileName = p.Path.Substring(p.Path.LastIndexOf("/")+1);
-                string pGuid = p.Guid; 
-                int intScale = int.Parse(scale);
-                string guid = Guid.NewGuid().ToString();
-                string newName = guid + fileName.Substring(fileName.LastIndexOf("."));
-                ImageManager<int> myDelegate = new ImageManager<int>(MkImage.Resize);
-                myDelegate(Path.Combine(Server.MapPath("~/ImageVault/" + pGuid + "/"), fileName), intScale, Path.Combine(Server.MapPath("~/TempData"), newName));
-                byte[] fileBytes = System.IO.File.ReadAllBytes(Path.Combine(Server.MapPath("~/TempData"), newName));
-                return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, newName);
+                catch
+                {
+                    return RedirectToAction("Index");
+                }
             }
         }
 
         
 
-        public async Task<FileResult> DownloadFreeTry(string id)
+        public async Task<ActionResult> DownloadFreeTry(string id)
         {
             using (var context = new Project1DBEntities())
             {
-                int puid = int.Parse(id);
-                string path = await ServicePack.GetImagePath(puid);
-                string fileName = path.Substring(path.LastIndexOf(@"/") + 1);
-                path = path.Substring(0, path.LastIndexOf("/LowRes/"));
-                string file = Path.Combine(Directory.GetFiles(Server.MapPath("~" + path + "/FreeTrial/"), fileName));
-                string guid = Guid.NewGuid().ToString();
-                string newName = guid + fileName.Substring(fileName.LastIndexOf("."));
-               
-                byte[] fileBytes = System.IO.File.ReadAllBytes(file);
-                return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, newName);
+                try
+                {
+                    int puid = int.Parse(id);
+                    string path = await ServicePack.GetImagePath(puid);
+                    string fileName = path.Substring(path.LastIndexOf(@"/") + 1);
+                    path = path.Substring(0, path.LastIndexOf("/LowRes/"));
+                    string file = Path.Combine(Directory.GetFiles(Server.MapPath("~" + path + "/FreeTrial/"), fileName));
+                    string guid = Guid.NewGuid().ToString();
+                    string newName = guid + fileName.Substring(fileName.LastIndexOf("."));
+
+                    byte[] fileBytes = System.IO.File.ReadAllBytes(file);
+                    return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, newName);
+                }
+                catch
+                {
+                    return RedirectToAction("Index");
+                }
             }
         }
         // GET: Publication/Create
