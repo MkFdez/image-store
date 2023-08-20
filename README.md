@@ -33,7 +33,7 @@
 - SQL Server for the database
 
 ## Authentication 🔒
--User authentication and authorization are handled through Microsoft Identity, providing a secure and reliable experience for sign-up, login, and account management.
+User authentication and authorization are handled through Microsoft Identity, providing a secure and reliable experience for sign-up, login, and account management.
 
 ## Payments 💳
 Securely process payments with ease using the Stripe integration. Users can conveniently make purchases using their preferred payment methods.
