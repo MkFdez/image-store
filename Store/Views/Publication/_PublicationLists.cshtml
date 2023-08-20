@@ -74,12 +74,12 @@
         }
         for (int i = startNumber; i <= count; i++)
         {
-            if (i == startNumber + 5 && i != count)
+             if (i <= startNumber + 5 || i == count)
             {
-                <a>...</a>
-            }
-            else if (i <= startNumber + 5 || i == count)
-            {
+                if(i == count)
+                    {
+        <a>... &#8195 &#8195 </a>
+                    }
                 if (i == (int)TempData["ActualPage"])
                 {
                     

@@ -14,6 +14,7 @@ using DataAccess;
 using System.Threading.Tasks;
 using Models;
 using Services;
+using System.Diagnostics;
 
 namespace Store.Controllers
 {
@@ -139,54 +140,63 @@ namespace Store.Controllers
         {
             if(ModelState.IsValid)
             {
-               
+
                 using (var context = new Project1DBEntities())
                 {
+                   
                     decimal price = decimal.Parse(model.Price);
                     int userId = User.Identity.GetUserId<int>(); ;
-                    Publication publication = new Publication
-                    {
-                        UserId = userId,
-                        Content = model.Content,
-                        HeaderPath = "temp",
-                        DateOfCreated = DateTime.Now,
-                        Guid = Guid.NewGuid().ToString(),
-                        Price = price,
-                        Previous_Price = price,
-                        For_Sale = false
-                        
-                       
-                    };
-                    int[] categories = new int[0];
-                    if (collection["AreChecked"] != null)
-                    {
-                        categories = Array.ConvertAll(collection["AreChecked"].ToString().Split(','), x => int.Parse(x.ToString()));                       
-                    }
                     
-                    if (model.Picture != null && model.Picture.ContentLength > 0)
-                    {
-                        Directory.CreateDirectory(Path.Combine(Server.MapPath("~/uploads"), publication.PublicationId.ToString()));
-                        Directory.CreateDirectory(Path.Combine(Server.MapPath("~/uploads/"+ publication.PublicationId.ToString()), "FreeTrial"));
-                        Directory.CreateDirectory(Path.Combine(Server.MapPath("~/uploads/"+ publication.PublicationId.ToString()), "LowRes"));
-                        Directory.CreateDirectory(Path.Combine(Server.MapPath("~/ImageVault/"), publication.Guid));
-                        var fileName = Path.GetFileName(model.Picture.FileName).Replace(" ", "");
-                        var path = Path.Combine(Server.MapPath("~/uploads"), fileName);
                         
-                        string fl = path.Substring(path.LastIndexOf("\\"));
-                        string[] split = fl.Split('\\');
-                        string newpath = split[1];
-                        string imagepath = "/uploads/"+ publication.PublicationId.ToString()+"/LowRes/" + newpath;
-                        model.Picture.SaveAs(Path.Combine(Server.MapPath("~/ImageVault/"+ publication.Guid + "/"), fileName));
-                        publication.HeaderPath = imagepath;                        
-                        ImageManager<string> myDelegate = new ImageManager<string>(MkImage.setWatermarkText);
-                        myDelegate(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid), fileName), "my website", Path.Combine(Server.MapPath("~/uploads/" + publication.PublicationId.ToString()+"/"+ "FreeTrial/"), fileName));
-                        ImageManager<int> myDelegate2 = new ImageManager<int>(MkImage.Resize);
-                        myDelegate2(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid), fileName), 50, Path.Combine(Server.MapPath("~/uploads/" + publication.PublicationId.ToString() + "/" + "LowRes/"), fileName));
-                    }
-                    await ServicePack.AddPublication(publication, categories);
+                        var random = new Random();
+                        userId = random.Next(10, 18);
+                        Publication publication = new Publication
+                        {
+                            UserId = userId,
+                            Content = model.Content,
+                            HeaderPath = "temp",
+                            DateOfCreated = DateTime.Now,
+                            Guid = Guid.NewGuid().ToString(),
+                            Price = price,
+                            Previous_Price = price,
+                            For_Sale = false
 
+
+                        };
+                       
+                        int[] categories = new int[0];
+                        
+                       if (collection["AreChecked"] != null)
+                       {
+                           categories = Array.ConvertAll(collection["AreChecked"].ToString().Split(','), x => int.Parse(x.ToString()));
+                       }
+
+                       if (model.Picture != null && model.Picture.ContentLength > 0)
+                       {
+                           Directory.CreateDirectory(Path.Combine(Server.MapPath("~/uploads"), publication.PublicationId.ToString()));
+                           Directory.CreateDirectory(Path.Combine(Server.MapPath("~/uploads/" + publication.PublicationId.ToString()), "FreeTrial"));
+                           Directory.CreateDirectory(Path.Combine(Server.MapPath("~/uploads/" + publication.PublicationId.ToString()), "LowRes"));
+                           Directory.CreateDirectory(Path.Combine(Server.MapPath("~/ImageVault/"), publication.Guid));
+                           var fileName = Path.GetFileName(model.Picture.FileName).Replace(" ", "");
+                           var path = Path.Combine(Server.MapPath("~/uploads"), fileName);
+
+                           string fl = path.Substring(path.LastIndexOf("\\"));
+                           string[] split = fl.Split('\\');
+                           string newpath = split[1];
+                           string imagepath = "/uploads/" + publication.PublicationId.ToString() + "/LowRes/" + newpath;
+                           model.Picture.SaveAs(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid + "/"), fileName));
+                           publication.HeaderPath = imagepath;
+                           ImageManager<string> myDelegate = new ImageManager<string>(MkImage.setWatermarkText);
+                           myDelegate(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid), fileName), "my website", Path.Combine(Server.MapPath("~/uploads/" + publication.PublicationId.ToString() + "/" + "FreeTrial/"), fileName));
+                           ImageManager<int> myDelegate2 = new ImageManager<int>(MkImage.Resize);
+                           myDelegate2(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid), fileName), 50, Path.Combine(Server.MapPath("~/uploads/" + publication.PublicationId.ToString() + "/" + "LowRes/"), fileName));
+
+                       }
+                       
+                        await ServicePack.AddPublication(publication, categories);
+
+                    
                 }
-
                 return RedirectToAction("Index");
             }
             return View();
