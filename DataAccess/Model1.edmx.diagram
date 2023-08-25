@@ -33,6 +33,8 @@
         <AssociationConnector Association="Project1DBModel.FK__MonthlySa__UserI__0880433F" />
         <EntityTypeShape EntityType="Project1DBModel.SocialMedia" Width="1.5" PointX="5.25" PointY="16.75" />
         <AssociationConnector Association="Project1DBModel.FK_SocialMedia_AspNetUsers" />
+        <EntityTypeShape EntityType="Project1DBModel.Collection" Width="1.5" PointX="8.375" PointY="9.875" />
+        <AssociationConnector Association="Project1DBModel.FK_Publication_Collections" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

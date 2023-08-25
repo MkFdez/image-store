@@ -10,5 +10,6 @@ namespace Models
     {
         public int PublicationId { get; set; }
         public string Image { get; set; }
+        public string  Name { get; set; }
     }
 }

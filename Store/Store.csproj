@@ -278,6 +278,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\CollectionController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -301,8 +302,10 @@
     <Content Include="Content\Assets\demo\chart-area-demo.js" />
     <Content Include="Content\Assets\demo\chart-bar-demo.js" />
     <Content Include="Content\Assets\demo\chart-pie-demo.js" />
+    <Content Include="Content\Assets\demo\collections-datatable.js" />
     <Content Include="Content\Assets\demo\datatables-demo.js" />
     <Content Include="Content\Assets\demo\publication-datatable.js" />
+    <Content Include="Content\Assets\demo\view-collection.js" />
     <Content Include="Content\Assets\nature.jpg" />
     <Content Include="Content\Assets\people.jpg" />
     <Content Include="Content\Assets\principal.jpg" />
@@ -333,6 +336,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="MyScripts\add_comment.js" />
     <Content Include="MyScripts\container_controller.js" />
+    <Content Include="MyScripts\create_collection.js" />
     <Content Include="MyScripts\delete_publication.js" />
     <Content Include="MyScripts\footer.js" />
     <Content Include="MyScripts\images_loader.js" />
@@ -454,6 +458,7 @@
     <Folder Include="ImageVault\" />
     <Folder Include="TempData\" />
     <Folder Include="Views\Admin\" />
+    <Folder Include="Views\Collection\" />
     <Folder Include="Views\Comment\" />
     <Folder Include="Views\User\" />
   </ItemGroup>
