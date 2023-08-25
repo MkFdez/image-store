@@ -33,6 +33,7 @@ namespace DataAccess
         public Nullable<decimal> Previous_Price { get; set; }
         public Nullable<bool> For_Sale { get; set; }
         public int Downloads { get; set; }
+        public Nullable<int> CollectionId { get; set; }
     
         public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -42,5 +43,6 @@ namespace DataAccess
         public virtual ICollection<SalesHistory> SalesHistories { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Category> Categories { get; set; }
+        public virtual Collection Collection { get; set; }
     }
 }

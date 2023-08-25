@@ -72,6 +72,14 @@
           <Property Name="PublicationId" Type="int" Nullable="false" />
           <Property Name="CategoryId" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="Collections">
+          <Key>
+            <PropertyRef Name="CollectionId" />
+          </Key>
+          <Property Name="CollectionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="Comment">
           <Key>
             <PropertyRef Name="CommentId" />
@@ -123,6 +131,7 @@
           <Property Name="Previous_Price" Type="money" />
           <Property Name="For_Sale" Type="bit" />
           <Property Name="Downloads" Type="int" Nullable="false" />
+          <Property Name="CollectionId" Type="int" />
         </EntityType>
         <EntityType Name="SalesHistory">
           <Key>
@@ -314,6 +323,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Publication_Collections">
+          <End Role="Collections" Type="Self.Collections" Multiplicity="0..1" />
+          <End Role="Publication" Type="Self.Publication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Collections">
+              <PropertyRef Name="CollectionId" />
+            </Principal>
+            <Dependent Role="Publication">
+              <PropertyRef Name="CollectionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Publication_Status">
           <End Role="Status" Type="Self.Status" Multiplicity="1" />
           <End Role="Publication" Type="Self.Publication" Multiplicity="*" />
@@ -401,6 +422,7 @@
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category_x_Publication" EntityType="Self.Category_x_Publication" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Collections" EntityType="Self.Collections" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Comment" EntityType="Self.Comment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DailySales" EntityType="Self.DailySales" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MonthlySales" EntityType="Self.MonthlySales" Schema="dbo" store:Type="Tables" />
@@ -456,6 +478,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_Publication_AspNetUsers1" Association="Self.FK_Publication_AspNetUsers1">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Publication" EntitySet="Publication" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Publication_Collections" Association="Self.FK_Publication_Collections">
+            <End Role="Collections" EntitySet="Collections" />
             <End Role="Publication" EntitySet="Publication" />
           </AssociationSet>
           <AssociationSet Name="FK_Publication_Status" Association="Self.FK_Publication_Status">
@@ -584,6 +610,8 @@
           <NavigationProperty Name="Status" Relationship="Self.FK_Publication_Status" FromRole="Publication" ToRole="Status" />
           <NavigationProperty Name="SalesHistories" Relationship="Self.FK_SalesHistory_Publication" FromRole="Publication" ToRole="SalesHistory" />
           <NavigationProperty Name="Categories" Relationship="Self.Category_x_Publication" FromRole="Publication" ToRole="Category" />
+          <Property Name="CollectionId" Type="Int32" />
+          <NavigationProperty Name="Collection" Relationship="Project1DBModel.FK_Publication_Collections" FromRole="Publication" ToRole="Collection" />
         </EntityType>
         <EntityType Name="SalesHistory">
           <Key>
@@ -846,6 +874,11 @@
             <End Role="User" EntitySet="Users" />
             <End Role="SocialMedia" EntitySet="SocialMedias" />
           </AssociationSet>
+          <EntitySet Name="Collections" EntityType="Project1DBModel.Collection" />
+          <AssociationSet Name="FK_Publication_Collections" Association="Project1DBModel.FK_Publication_Collections">
+            <End Role="Collection" EntitySet="Collections" />
+            <End Role="Publication" EntitySet="Publications" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -914,6 +947,27 @@
             </Principal>
             <Dependent Role="SocialMedia">
               <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Collection">
+          <Key>
+            <PropertyRef Name="CollectionId" />
+          </Key>
+          <Property Name="CollectionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Publications" Relationship="Project1DBModel.FK_Publication_Collections" FromRole="Collection" ToRole="Publication" />
+        </EntityType>
+        <Association Name="FK_Publication_Collections">
+          <End Type="Project1DBModel.Collection" Role="Collection" Multiplicity="0..1" />
+          <End Type="Project1DBModel.Publication" Role="Publication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Collection">
+              <PropertyRef Name="CollectionId" />
+            </Principal>
+            <Dependent Role="Publication">
+              <PropertyRef Name="CollectionId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -999,6 +1053,7 @@
           <EntitySetMapping Name="Publications">
             <EntityTypeMapping TypeName="Project1DBModel.Publication">
               <MappingFragment StoreEntitySet="Publication">
+                <ScalarProperty Name="CollectionId" ColumnName="CollectionId" />
                 <ScalarProperty Name="PublicationId" ColumnName="PublicationId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Content" ColumnName="Content" />
@@ -1113,6 +1168,15 @@
                 <ScalarProperty Name="Instagram" ColumnName="Instagram" />
                 <ScalarProperty Name="Website" ColumnName="Website" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Collections">
+            <EntityTypeMapping TypeName="Project1DBModel.Collection">
+              <MappingFragment StoreEntitySet="Collections">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="CollectionId" ColumnName="CollectionId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

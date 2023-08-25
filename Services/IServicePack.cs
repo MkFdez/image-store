@@ -34,5 +34,11 @@ namespace Services
         Task<List<SimplePublicationViewModel>> GetCreatorPubliactions(string username, int count);
         Task<ProfileViewModel> GetCreator(string username);
         bool DeletePublication(int pubId);
+        Task CreateCollection(string name);
+        Task<DTResponse> GetCollections(Pagination pagination);
+        Task DeleteCollection(int collectionId);
+        Task MoveToCollection(int collectionid, int publicationid);
+        Task NoCollection(int publicationid);
+        Task<List<SimplePublicationViewModel>> GetCollectionPublication(int collectionid);
     }
 }

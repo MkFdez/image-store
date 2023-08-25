@@ -370,12 +370,23 @@ namespace Services
             using (var context = new Project1DBEntities())
             {
                 int userid = HttpContext.Current.User.Identity.GetUserId<int>();
-                var data = context.Publications.Where(x => x.UserId == userid && x.StatusId == 0).OrderByDescending(x => x.DateOfCreated).Skip(pagination.data.start).Take(pagination.data.length).Select(x => new { image = x.HeaderPath, publication = x.Content, date = x.DateOfCreated, downloads = x.Downloads, actions = new { title = x.Content, image = x.HeaderPath, id = x.PublicationId } });
+                var data = context.Publications.Where(x => x.UserId == userid && x.StatusId == 0).OrderByDescending(x => x.DateOfCreated)
+                    .Skip(pagination.data.start)
+                    .Take(pagination.data.length)
+                    .Select(x => new { image = x.HeaderPath, 
+                        publication = x.Content, 
+                        date = x.DateOfCreated, 
+                        downloads = x.Downloads, 
+                        actions = new { title = x.Content, image = x.HeaderPath, id = x.PublicationId }, 
+                        collection = new {collection = x.Collection.Name, publicationid = x.PublicationId } });
+                var collections = context.Collections.Select(x => new { collectionid = x.CollectionId, collection = x.Name }).ToList();
                 var count = context.Publications.Where(x => x.UserId == userid && x.StatusId == 0).Count();
                 DTResponse response = new DTResponse();
                 response.data = JsonConvert.SerializeObject(data);
                 response.recordsFiltered = count;
                 response.recordsTotal = count;
+                response.collections = JsonConvert.SerializeObject(collections);
+
                 return response;
 
             }
@@ -450,5 +461,85 @@ namespace Services
                 return true;
             }
         }
+
+        public async Task CreateCollection(string name)
+        {
+            using(var context = new Project1DBEntities())
+            {
+                int userid = HttpContext.Current.User.Identity.GetUserId<int>();
+                if (context.Collections.Any(x => x.Name == name && x.UserId == userid))
+                    throw new Exception("there is another collection with the same name");
+                context.Collections.Add(new Collection() { Name = name, UserId = userid });
+                context.SaveChanges();
+            }
+        }
+        public async Task<DTResponse> GetCollections(Pagination pagination)
+        {
+            using(var context = new Project1DBEntities())
+            {              
+                int userid = HttpContext.Current.User.Identity.GetUserId<int>();
+                var data = context.Collections.Where(x => x.UserId == userid).OrderBy(x => x.CollectionId).Skip(pagination.data.start).Take(pagination.data.length).Select(x => new { name = x.Name, count = x.Publications.Count, actions = new { collectionid = x.CollectionId, name = x.Name } });
+                int count = context.Collections.Where(x => x.UserId == userid).Count();
+                DTResponse response = new DTResponse();
+                response.data = JsonConvert.SerializeObject(data);
+                response.recordsFiltered = count;
+                response.recordsTotal = count;
+                return response;
+            }
+        }
+        public async Task DeleteCollection(int collectionId)
+        {
+            using(var context = new Project1DBEntities())
+            {
+                int userid = HttpContext.Current.User.Identity.GetUserId<int>();
+                var collection = context.Collections.First(x => x.CollectionId == collectionId);
+                if (collection.UserId != userid)
+                    throw new Exception("not authorized");
+                foreach(var p in collection.Publications)
+                {
+                    p.Collection = null;
+                }
+                context.SaveChanges();
+                context.Collections.Remove(collection);
+                context.SaveChanges();
+            }
+        }
+
+        public async Task MoveToCollection(int collectionid, int publicationid)
+        {
+            using(var context = new Project1DBEntities())
+            {
+                int userid = HttpContext.Current.User.Identity.GetUserId<int>();
+                var publication = context.Publications.First(x => x.PublicationId == publicationid);
+                if (publication.UserId != userid || context.Collections.First(x => x.CollectionId == collectionid).UserId != userid)
+                    throw new Exception("unauthorized");
+                publication.CollectionId = collectionid;
+                context.SaveChanges();
+            }
+        }
+
+        public async Task NoCollection(int publicationid)
+        {
+            using (var context = new Project1DBEntities())
+            {
+                int userid = HttpContext.Current.User.Identity.GetUserId<int>();
+                var publication = context.Publications.First(x => x.PublicationId == publicationid);
+                if (publication.UserId != userid)
+                    throw new Exception("unauthorized");
+                publication.CollectionId = null;
+                context.SaveChanges();
+            }
+        }
+
+        public async Task<List<SimplePublicationViewModel>> GetCollectionPublication(int collectionid)
+        {
+            using(var context = new Project1DBEntities())
+            {
+                var data = context.Publications.Where(x => x.CollectionId == collectionid).Select(x => new SimplePublicationViewModel() { PublicationId = x.PublicationId, Image = x.HeaderPath, Name = x.Content }).ToList();
+                return data;
+            }
+        }
+
+        
     }
 }

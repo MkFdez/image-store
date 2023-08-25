@@ -16,19 +16,36 @@
         max-width: 100% !important
     }
 </style>
-<!-- Modal -->
+<!-- Modal of Delete Publication -->
 <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">title</h5>              
+                <h5 class="modal-title" id="exampleModalLongTitle">title</h5>
             </div>
             <div class="modal-body">
-                <img id="modal-image" style="width: 100%"/>
+                <img id="modal-image" style="width: 100%" />
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#delete-modal').modal('hide')">Cancel</button>
                 <button type="button" class="btn btn-danger" id="delete-button">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal of Create Collection -->
+<div class="modal fade" id="c-collection-modal" tabindex="-1" role="dialog" aria-labelledby="create-collection" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="create-collection">Create Collection</h5>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="collection-input" class="form-control" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#c-collection-modal').modal('hide')">Cancel</button>
+                <button type="button" class="btn btn-danger" id="create-button">Create</button>
             </div>
         </div>
     </div>
@@ -60,7 +77,11 @@
                             <i class="bi bi-safe"></i> <span class="ms-1 d-none d-sm-inline">My Publications</span>
                         </a>
                     </li>
-
+                    <li class="nav-item sidebar-link">
+                        <a class="nav-link align-middle px-0" onclick="updateView(4)">
+                            <i class="bi bi-safe"></i> <span class="ms-1 d-none d-sm-inline">My Collections</span>
+                        </a>
+                    </li>
                 </ul>
                 <hr>
             </div>
@@ -117,6 +138,12 @@
                     @*Publications*@
                     <div id="publications-table-container" style="display: none">
                     </div>
+                    @*Collections*@
+                    <div id="collections-table-container" style="display: none">
+                    </div>
+                    @*View Collection*@
+                    <div id="view-collection" style="display: none">
+                    </div>
 
 
 
@@ -136,11 +163,14 @@
     <script src="~/Content/Assets/demo/chart-bar-demo.js"></script>
     <script src="~/Content/Assets/demo/datatables-demo.js"></script>
     <script src="~/Content/Assets/demo/publication-datatable.js"></script>
+    <script src="~/Content/Assets/demo/collections-datatable.js"></script>
     <script src="~/MyScripts/delete_publication.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
     <script src="~/Scripts/datatables-simple-demo.js"></script>
     <script src="~/MyScripts/container_controller.js"></script>
+    <script src="~/MyScripts/create_collection.js"></script>
     <script src="~/Scripts/yearpicker.js"></script>
     <script src="~/MyScripts/toggle_sidebar.js"></script>
+    <script src="~/Content/Assets/demo/view-collection.js" ></script>
 }
 
