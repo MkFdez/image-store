@@ -1,7 +1,6 @@
 ﻿var collections = null;
 
 function loadPublicationDatatable() {
-    console.log('here')
     document.getElementById('publications-table-container').innerHTML = `<div class="row">
                         <div class="card mb-4">
                             <div class="card-header text-black">

@@ -26,5 +26,7 @@ namespace Models
 
         public bool isProperty { get; set; }
         public int Downloads { get; set; }
+        public int inCollection { get; set; }
+        public int? CollectionId { get; set; }
     }
 }

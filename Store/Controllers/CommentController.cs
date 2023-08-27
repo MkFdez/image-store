@@ -61,13 +61,13 @@ namespace Store.Controllers
             
         }
         [HttpPost]
-        public ActionResult MoreComments(int actual)
+        public ActionResult MoreComments(int actual, int publicationid)
         {
             using (var context = new Project1DBEntities())
             {
                 List<CommentModel> comments = new List<CommentModel>();
                 
-                foreach (var c in context.Comments.OrderBy(x => x.CommentId).Skip(actual).Take(10))
+                foreach (var c in context.Comments.Where(x => x.PublicationId == publicationid).OrderBy(x => x.CommentId).Skip(actual).Take(10))
                 {
                     comments.Add(new CommentModel()
                     {

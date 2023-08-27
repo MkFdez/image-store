@@ -91,5 +91,11 @@ namespace Store.Controllers
             return new HttpStatusCodeResult(HttpStatusCode.OK);
 
         }
+
+        public async Task<ActionResult> More(int collectionid, int publicationid)
+        {
+            var data = await servicePack.MoreInCollection(collectionid, publicationid);
+            return Json(JsonConvert.SerializeObject(data));
+        }
     }
 }
