@@ -106,6 +106,8 @@ namespace Services
                     ProfilePicture = temp.User.ProfilePicture.Image,
                     Price = Convert.ToDecimal(String.Format("{0:0.00}", temp.Price)),
                     Downloads = temp.Downloads,
+                    inCollection = temp.CollectionId != null ? temp.Collection.Publications.Count() - 1 : 0,
+                    CollectionId = temp.CollectionId,
                 };
 
                 var toReturn = new ExtendedPublicationVM(publication, temp.Guid, fileName);
@@ -540,6 +542,19 @@ namespace Services
             }
         }
 
+        public async Task<List<SimplePublicationViewModel>> MoreInCollection(int collectionid, int publicationid)
+        {
+            using (var context = new Project1DBEntities())
+            {
+                return context.Collections.First(x => x.CollectionId == collectionid)
+                    .Publications.Where(x => x.PublicationId != publicationid)
+                    .Select(x => new SimplePublicationViewModel()
+                    {
+                        PublicationId = x.PublicationId,
+                        Image = x.HeaderPath,
+                    }).ToList();
+            }
+        }
         
     }
 }

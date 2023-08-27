@@ -1,10 +1,10 @@
-﻿function loadComments(actual) {
+﻿function loadComments(actual, id) {
     let val = document.getElementById('count-comments').value
     console.log(val)
     console.log(document.getElementById('count-comments'))
     $.ajax({
         url: "/Comment/MoreComments",
-        data: { "actual": val },
+        data: { "actual": val, "publicationid":id },
         method: "POST",
         dataType: "Json",
         success: function (result) {

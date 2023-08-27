@@ -344,6 +344,7 @@
     <Content Include="MyScripts\download_controller.js" />
     <Content Include="MyScripts\ban.js" />
     <Content Include="MyScripts\image_uploader.js" />
+    <Content Include="MyScripts\more_in_collection.js" />
     <Content Include="MyScripts\toggle_sidebar.js" />
     <Content Include="MyScripts\price_input.js" />
     <Content Include="MyScripts\load_Comments.js" />

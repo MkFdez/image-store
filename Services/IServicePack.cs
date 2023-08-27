@@ -40,5 +40,6 @@ namespace Services
         Task MoveToCollection(int collectionid, int publicationid);
         Task NoCollection(int publicationid);
         Task<List<SimplePublicationViewModel>> GetCollectionPublication(int collectionid);
+        Task<List<SimplePublicationViewModel>> MoreInCollection(int collectionid, int publicationid);
     }
 }
