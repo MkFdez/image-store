@@ -753,10 +753,10 @@ ul.summary-list {
     z-index:10;
 }
 .carousel-control-prev-icon {
-    background-image: url("https://img.icons8.com/ios-filled/50/left-squared--v1.png")!important;
+    background-image: url("https://img.icons8.com/ios-filled/100/left-squared--v1.png")!important;
 }
 .carousel-control-next-icon {
-    background-image: url("https://img.icons8.com/ios-filled/50/right-squared--v2.png") !important;
+    background-image: url("https://img.icons8.com/ios-filled/100/right-squared--v2.png") !important;
 }
 
 
