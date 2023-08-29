@@ -25,7 +25,7 @@ namespace Store.Controllers
 
             return Json(data);
         }
-
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> Create(string name)
         {
@@ -42,7 +42,7 @@ namespace Store.Controllers
         }
 
 
-       
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> Delete(int id)
         {
@@ -56,7 +56,8 @@ namespace Store.Controllers
             }
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
-
+        [Authorize]
+        [HttpPost]
         public async Task<ActionResult> Add(int publicationid, int collectionid)
         {
             try
@@ -69,15 +70,16 @@ namespace Store.Controllers
             }
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
-
+        [Authorize]
         public async Task<ActionResult> Publications(int collectionid)
         {
 
             var data = await servicePack.GetCollectionPublication(collectionid);
          
             return Json(JsonConvert.SerializeObject(data));
-        }     
-
+        }
+        [Authorize]
+        [HttpPost]
         public async Task<ActionResult> DropPublication(int publicationid)
         {
             try
@@ -92,6 +94,7 @@ namespace Store.Controllers
 
         }
 
+        [Authorize]
         public async Task<ActionResult> More(int collectionid, int publicationid)
         {
             var data = await servicePack.MoreInCollection(collectionid, publicationid);
