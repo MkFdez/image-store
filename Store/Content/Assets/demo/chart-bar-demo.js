@@ -27,7 +27,7 @@ function loadBarChart() {
                         By Months Chart
                         <input type="text" class="form-control" name="datepicker" id="datepicker" />
                     </div>
-    <div class="card-body" id="bar-chart"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+    <div class="card-body" id="bar-chart"><canvas id="myBarChart" width="100%" height="30"></canvas></div>
                 </div>
             </div>
         </div>`
