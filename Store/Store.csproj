@@ -453,6 +453,7 @@
     <Content Include="Views\Sales\EndMonth.cshtml" />
     <Content Include="Views\Publication\Manage.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Publication\Test.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
