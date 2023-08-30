@@ -27,6 +27,12 @@ namespace Store.Controllers
         {
             ServicePack = servicePack;
         }
+        public ActionResult Test()//controller created just for testing new ui elements without messing everything out
+        {
+            return View();
+        }
+
+
         // GET: Publication            
         public async Task<ActionResult> Index(string category = "", string search = "", bool personalPage = false)
         {

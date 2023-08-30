@@ -759,5 +759,166 @@ ul.summary-list {
     background-image: url("https://img.icons8.com/ios-filled/100/right-squared--v2.png") !important;
 }
 
+.sidebar {
+    background-color: #f5f5f5; /* Add your desired color */
+    padding: 20px;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-title {
+    color: #333;
+    font-size: 18px;
+}
+
+.image-container {
+    position: relative;
+}
+
+.free-tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #4caf50; /* Add your desired color */
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.category-tags {
+    margin-bottom: 20px;
+}
+
+.tag-label {
+    display: block;
+    position: relative;
+    margin-bottom: 5px;
+}
+
+.tag {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: transparent;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    position: absolute;
+    left: -20px;
+    top: 6px;
+}
+
+.tag-label input[type="checkbox"]:checked + .tag {
+    background-color: #4caf50; /* Add your desired color */
+    border-color: #4caf50;
+}
+
+/* Hover effect for images */
+.card:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
+}
+/* ... Previous styles ... */
+
+.aspect-ratio {
+    position: relative;
+    width: 100%;
+    padding-bottom: 75%; /* Set the aspect ratio (height / width) */
+    overflow: hidden;
+}
+
+    .aspect-ratio img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Maintain the image aspect ratio and fill the container */
+    }
+/* ... Previous styles ... */
+
+.top-filter-bar {
+    background-color: rgb(33, 37, 41); /* Add your desired color */
+    padding: 15px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px
+}
+
+.filter-title {
+    font-size: 18px;
+}
+
+.filter-group {
+    display: flex;
+    gap: 20px;
+}
+
+.filter-item {
+    position: relative;
+}
+
+.filter-dropdown {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+}
+
+.dropdown-menu {
+    min-width: auto;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px!important;
+
+}
+
+.dropdown-item {
+    padding: 10px 20px;
+    color:black;
+}
+
+.multiselect-menu {
+    min-width: 200px;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+    max-height: 200px; /* Set a max height to prevent overflowing */
+}
+
+
+/* Adjust styles for number inputs and apply button as needed */
+.apply-button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+    .apply-button:hover {
+        background-color: #45a049; /* Slightly darker shade on hover */
+    }
+
+.filter-text {
+    color: white;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
 
    

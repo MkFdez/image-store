@@ -1,0 +1,67 @@
+﻿
+<div class="container mt-5">
+    <div class="row">
+        <!-- Top Filter Bar -->
+        <div class="col-md-12 top-filter-bar mb-2">
+            <div class="filter-group">
+                <div class="filter-item">
+                    <button class="filter-dropdown filter-text" data-bs-toggle="dropdown" aria-expanded="false">Categories</button>
+                    <ul class="dropdown-menu multiselect-menu">
+                        <li>
+                            <label class="form-check">
+                                <input type="checkbox" class="form-check-input category-checkbox" value="Nature"> Nature
+                            </label>
+                            <label class="form-check">
+                                <input type="checkbox" class="form-check-input category-checkbox" value="Urban"> Urban
+                            </label>
+                            <!-- Add more categories here -->
+                        </li>                       
+                    </ul>
+                </div>
+                <div class="filter-item">
+                    <button class="filter-dropdown filter-text" data-bs-toggle="dropdown" aria-expanded="false">Price Range</button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <input type="number" class="form-control mb-1" placeholder="Min" />
+                            <input type="number" class="form-control" placeholder="Max" />
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <h4 class="apply-button">Apply</h4>
+        </div>
+
+
+        <!-- Image Gallery -->
+        <div class="col-md-12">
+            <div class="row">
+                <!-- Razor loop to display images -->
+                @for (int i = 0; i < 20; i++)
+                {
+
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="image-container">
+                                @if (i % 2 == 0)
+                                {
+                                    <div class="aspect-ratio">
+                                        <img src="https://images.unsplash.com/photo-1618588507085-c79565432917?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmVhdXRpZnVsJTIwbmF0dXJlfGVufDB8fDB8fHww&w=1000&q=80" class="card-img-top" alt="Image">
+                                    </div>
+                                    <span class="free-tag">Free</span>
+                                }
+                                else
+                                {
+                                    <div class="aspect-ratio">
+                                        <img src="https://help.voyagersearch.com/pub/photo/doc-filters-field-selecter.png" class="card-img-top" alt="Image">
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>          
+        </div>
+    </div>
+</div>
+
+
