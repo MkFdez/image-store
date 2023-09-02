@@ -22,6 +22,8 @@ namespace Store.Controllers
 
     public class PublicationController : Controller
     {
+        public static readonly log4net.ILog log = log4net.LogManager.GetLogger("PublicationLogger");
+
         public IServicePack ServicePack;
         public PublicationController(IServicePack servicePack)
         {
@@ -64,8 +66,9 @@ namespace Store.Controllers
 
                     return View(publication.Publication);
                 }
-                catch
+                catch(Exception ex)
                 {
+                    log.Error("Error opening publication", ex);
                     return RedirectToAction("Index");
                 }
             }
@@ -96,8 +99,9 @@ namespace Store.Controllers
                     byte[] fileBytes = System.IO.File.ReadAllBytes(Path.Combine(Server.MapPath("~/TempData"), newName));
                     return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, newName);
                 }
-                catch
+                catch(Exception ex)
                 {
+                    log.Error($"Error downloading image with pubblicationid:{pubid} at scale:{scale}", ex);
                     return RedirectToAction("Index");
                 }
             }
@@ -122,8 +126,9 @@ namespace Store.Controllers
                     byte[] fileBytes = System.IO.File.ReadAllBytes(file);
                     return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, newName);
                 }
-                catch
+                catch(Exception ex)
                 {
+                    log.Error($"Error downloading watermarked image with pubblicationid:{id}", ex);
                     return RedirectToAction("Index");
                 }
             }
@@ -172,34 +177,42 @@ namespace Store.Controllers
                        {
                            categories = Array.ConvertAll(collection["AreChecked"].ToString().Split(','), x => int.Parse(x.ToString()));
                        }
+                    try
+                    {
+                        if (model.Picture != null && model.Picture.ContentLength > 0)
+                        {
+                            Directory.CreateDirectory(Path.Combine(Server.MapPath("~/uploads"), publication.PublicationId.ToString()));
+                            Directory.CreateDirectory(Path.Combine(Server.MapPath("~/uploads/" + publication.PublicationId.ToString()), "FreeTrial"));
+                            Directory.CreateDirectory(Path.Combine(Server.MapPath("~/uploads/" + publication.PublicationId.ToString()), "LowRes"));
+                            Directory.CreateDirectory(Path.Combine(Server.MapPath("~/ImageVault/"), publication.Guid));
+                            var fileName = Path.GetFileName(model.Picture.FileName).Replace(" ", "");
+                            var path = Path.Combine(Server.MapPath("~/uploads"), fileName);
 
-                       if (model.Picture != null && model.Picture.ContentLength > 0)
-                       {
-                           Directory.CreateDirectory(Path.Combine(Server.MapPath("~/uploads"), publication.PublicationId.ToString()));
-                           Directory.CreateDirectory(Path.Combine(Server.MapPath("~/uploads/" + publication.PublicationId.ToString()), "FreeTrial"));
-                           Directory.CreateDirectory(Path.Combine(Server.MapPath("~/uploads/" + publication.PublicationId.ToString()), "LowRes"));
-                           Directory.CreateDirectory(Path.Combine(Server.MapPath("~/ImageVault/"), publication.Guid));
-                           var fileName = Path.GetFileName(model.Picture.FileName).Replace(" ", "");
-                           var path = Path.Combine(Server.MapPath("~/uploads"), fileName);
+                            string fl = path.Substring(path.LastIndexOf("\\"));
+                            string[] split = fl.Split('\\');
+                            string newpath = split[1];
+                            string imagepath = "/uploads/" + publication.PublicationId.ToString() + "/LowRes/" + newpath;
+                            model.Picture.SaveAs(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid + "/"), fileName));
+                            publication.HeaderPath = imagepath;
+                            ImageManager<string> myDelegate = new ImageManager<string>(MkImage.setWatermarkText);
+                            myDelegate(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid), fileName), "my website", Path.Combine(Server.MapPath("~/uploads/" + publication.PublicationId.ToString() + "/" + "FreeTrial/"), fileName));
+                            ImageManager<int> myDelegate2 = new ImageManager<int>(MkImage.Resize);
+                            myDelegate2(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid), fileName), 50, Path.Combine(Server.MapPath("~/uploads/" + publication.PublicationId.ToString() + "/" + "LowRes/"), fileName));
 
-                           string fl = path.Substring(path.LastIndexOf("\\"));
-                           string[] split = fl.Split('\\');
-                           string newpath = split[1];
-                           string imagepath = "/uploads/" + publication.PublicationId.ToString() + "/LowRes/" + newpath;
-                           model.Picture.SaveAs(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid + "/"), fileName));
-                           publication.HeaderPath = imagepath;
-                           ImageManager<string> myDelegate = new ImageManager<string>(MkImage.setWatermarkText);
-                           myDelegate(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid), fileName), "my website", Path.Combine(Server.MapPath("~/uploads/" + publication.PublicationId.ToString() + "/" + "FreeTrial/"), fileName));
-                           ImageManager<int> myDelegate2 = new ImageManager<int>(MkImage.Resize);
-                           myDelegate2(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid), fileName), 50, Path.Combine(Server.MapPath("~/uploads/" + publication.PublicationId.ToString() + "/" + "LowRes/"), fileName));
+                        }
 
-                       }
-                       
                         await ServicePack.AddPublication(publication, categories);
-
+                    }catch(Exception ex)
+                    {
+                        log.Error($"Error adding storing new image {model.Picture.FileName}", ex);
+                    }
                     
                 }
                 return RedirectToAction("Index");
+            }
+            else
+            {
+                log.Info("Model State Not valid");
             }
             return View();
         }

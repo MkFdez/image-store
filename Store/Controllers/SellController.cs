@@ -20,7 +20,14 @@ namespace Store.Controllers
     public class SellController : Controller
     {
         public IServicePack ServicePack;
-      
+
+        public static readonly log4net.ILog log = log4net.LogManager.GetLogger("SellLogger");
+
+        public SellController(IServicePack servicePack)
+        {
+            ServicePack = servicePack;
+        }
+
         public IApp _app { get; set; }
         public SellController(IApp app, IServicePack servicePack)
         {
@@ -30,24 +37,26 @@ namespace Store.Controllers
         [HttpPost]
         public async Task<ActionResult> BuyImage(int pubId, string image, string name)
         {
-            var publication = await ServicePack.GetPublication(pubId);
-            long price = (long)(publication.Publication.Price * 100);
-            if(price == 0)
+            try
             {
-                return RedirectToAction("Success", new { puid = pubId });
-            }
-            image = "https://localhost:44307" + image;
-            StripeConfiguration.ApiKey = "sk_test_51Mr0ToLe6PSFHqVPPNKxsAFQFCSPhDLAVRcXklrag36qXfzNfrRyhifFhhaEII0s6CjP2qzUCaEQDq30wx69EyWQ00hL9klgeQ";
-            var domain = "https://localhost:44307/sell";
-            var options = new SessionCreateOptions
-            {
-                LineItems = new List<SessionLineItemOptions>
+                var publication = await ServicePack.GetPublication(pubId);
+                long price = (long)(publication.Publication.Price * 100);
+                if (price == 0)
+                {
+                    return RedirectToAction("Success", new { puid = pubId });
+                }
+                image = "https://localhost:44307" + image;
+                StripeConfiguration.ApiKey = "sk_test_51Mr0ToLe6PSFHqVPPNKxsAFQFCSPhDLAVRcXklrag36qXfzNfrRyhifFhhaEII0s6CjP2qzUCaEQDq30wx69EyWQ00hL9klgeQ";
+                var domain = "https://localhost:44307/sell";
+                var options = new SessionCreateOptions
+                {
+                    LineItems = new List<SessionLineItemOptions>
                 {
                   new SessionLineItemOptions
                   {
                       PriceData = new SessionLineItemPriceDataOptions
                       {
-                    
+
                           UnitAmount = price,
                           Currency = "usd",
                           ProductData = new SessionLineItemPriceDataProductDataOptions
@@ -55,23 +64,28 @@ namespace Store.Controllers
                               Name = name,
                               Images = new List<string>(){  "https://th.bing.com/th/id/OIG.wRYxTlsIMpBdRssC7263?w=270&h=270&c=6&r=0&o=5&dpr=1.3&pid=ImgGn" },
                           },
-                      },                    
+                      },
                     Quantity = 1,
-                   
-                    
+
+
                   },
                 },
 
-                Mode = "payment",
-                SuccessUrl = domain + "/success?puid=" + pubId,
-                CancelUrl = domain + "/cancel",
-            };
-            var service = new SessionService();
-            Session session = service.Create(options);
+                    Mode = "payment",
+                    SuccessUrl = domain + "/success?puid=" + pubId,
+                    CancelUrl = domain + "/cancel",
+                };
+                var service = new SessionService();
+                Session session = service.Create(options);
 
-            Response.Headers.Add("Location", session.Url);
-            //
-            return new HttpStatusCodeResult(303);
+                Response.Headers.Add("Location", session.Url);
+                //
+                return new HttpStatusCodeResult(303);
+            }catch(Exception ex)
+            {
+                log.Error("Error opening creating stripe session", ex);
+                return new HttpStatusCodeResult(400);
+            }
         }
 
         
@@ -108,7 +122,7 @@ namespace Store.Controllers
             }
             else
             {
-                Console.WriteLine(ModelState.Values);
+                log.Info("Model State Not valid");
             }
             return RedirectToAction("View", "Publication", new { id = model.PublicationId });
 

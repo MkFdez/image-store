@@ -17,6 +17,8 @@ using CacheUtilities;
 using System.Text;
 using System.Text.Json;
 using System.Collections.Generic;
+using Logger;
+using Logger.Models;
 
 namespace Store.Controllers
 {
@@ -26,17 +28,21 @@ namespace Store.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         public IServicePack ServicePack;
+        public ILogger _logger;
+        public static readonly log4net.ILog log = log4net.LogManager.GetLogger("AccountLogger");
        
-        public AccountController(IServicePack servicePack) 
+        public AccountController(IServicePack servicePack, ILogger logger) 
         {
             ServicePack = servicePack;
+            _logger = logger;
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IServicePack servicePack)
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IServicePack servicePack, ILogger logger )
         {
             UserManager = userManager;
             SignInManager = signInManager;
             ServicePack = servicePack;
+            _logger = logger;
         }
 
         public ApplicationSignInManager SignInManager
@@ -79,8 +85,10 @@ namespace Store.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
+            try { 
             if (!ModelState.IsValid)
             {
+                log.Info("Model State Not valid");
                 return View(model);
             }
             var user = await UserManager.FindByEmailAsync(model.Email);
@@ -102,38 +110,49 @@ namespace Store.Controllers
                 return View(model);
             }
             var result = await SignInManager.PasswordSignInAsync( user.UserName, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
-            {
-                case SignInStatus.Success:
-                    using (var context = new Project1DBEntities())
-                    {
-                        HttpCookie cookie = new HttpCookie("vals");
-                        var userTemp = context.Users.First(x => x.Email == model.Email);
-                        int id = userTemp.Id;
-                        
-                        cookie["picture"] = userTemp.ProfilePicture.Image != null ? userTemp.ProfilePicture.Image : @"\ProfilePictures\default.png";
-
-                        if (model.RememberMe)
+                switch (result)
+                {
+                    case SignInStatus.Success:
+                        using (var context = new Project1DBEntities())
                         {
-                            cookie.Expires = DateTime.MaxValue;
-                            cookie["exp"] = DateTime.MaxValue.ToString();
+                            try
+                            {
+                                HttpCookie cookie = new HttpCookie("vals");
+                                var userTemp = context.Users.First(x => x.Email == model.Email);
+                                int id = userTemp.Id;
+
+                                cookie["picture"] = userTemp.ProfilePicture.Image != null ? userTemp.ProfilePicture.Image : @"\ProfilePictures\default.png";
+
+                                if (model.RememberMe)
+                                {
+                                    cookie.Expires = DateTime.MaxValue;
+                                    cookie["exp"] = DateTime.MaxValue.ToString();
+                                }
+                                else
+                                {
+                                    cookie["exp"] = DateTime.MinValue.ToString();
+                                }
+                                Response.Cookies.Add(cookie);
+                            } catch (Exception ex)
+                            {
+                                log.Error("Error while creating profile picture cookie", ex);
+                            }
                         }
-                        else
-                        {
-                            cookie["exp"] = DateTime.MinValue.ToString();
-                        }               
-                        Response.Cookies.Add(cookie);
-                    }
 
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
+                        return RedirectToLocal(returnUrl);
+                    case SignInStatus.LockedOut:
+                        return View("Lockout");
+                    case SignInStatus.RequiresVerification:
+                        return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    case SignInStatus.Failure:
+                    default:
+                        ModelState.AddModelError("", "Invalid login attempt.");
+                        return View(model);
+                }
+            }catch(Exception ex)
+            {
+                log.Error("Something happened while during the log in", ex);
+                return View(model);
             }
         }
 
@@ -159,6 +178,7 @@ namespace Store.Controllers
         {
             if (!ModelState.IsValid)
             {
+                log.Info("Model State Not valid");
                 return View(model);
             }
 
@@ -166,17 +186,25 @@ namespace Store.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
-            switch (result)
+            try
             {
-                case SignInStatus.Success:
-                    return RedirectToLocal(model.ReturnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Invalid code.");
-                    return View(model);
+                var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
+
+                switch (result)
+                {
+                    case SignInStatus.Success:
+                        return RedirectToLocal(model.ReturnUrl);
+                    case SignInStatus.LockedOut:
+                        return View("Lockout");
+                    case SignInStatus.Failure:
+                    default:
+                        ModelState.AddModelError("", "Invalid code.");
+                        return View(model);
+                }
+            }catch(Exception ex)
+            {
+                log.Error("Error while verifying code", ex);
+                return View(model);
             }
         }
 
@@ -197,6 +225,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 var user = new ApplicationUser { UserName = model.Username, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -204,12 +233,17 @@ namespace Store.Controllers
                     //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     using(var context = new Project1DBEntities())
                     {
-                        
-                        context.Users.First(x => x.Email == model.Email).ProfilePicture = new ProfilePicture(){ Image = null};
-                        context.SaveChanges();
-                        HttpCookie cookie = new HttpCookie("vals");
-                        cookie["picture"] =  @"\ProfilePictures\default.png";
-                        Response.Cookies.Add(cookie);
+                        try
+                        {
+                            context.Users.First(x => x.Email == model.Email).ProfilePicture = new ProfilePicture() { Image = null };
+                            context.SaveChanges();
+                            HttpCookie cookie = new HttpCookie("vals");
+                            cookie["picture"] = @"\ProfilePictures\default.png";
+                            Response.Cookies.Add(cookie);
+                        }catch(Exception ex)
+                        {
+                            log.Error("Error while creating profile picture cookie", ex);
+                        }
                     }
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
@@ -223,6 +257,10 @@ namespace Store.Controllers
                    // return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
+            }
+            else
+            {
+                log.Info("Model State Not valid");
             }
 
             // If we got this far, something failed, redisplay form
@@ -259,6 +297,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
+                log.Info("Model State Not valid");
                 var user = await UserManager.FindByEmailAsync(model.Email);
                 if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
                 {
@@ -303,6 +342,7 @@ namespace Store.Controllers
         {
             if (!ModelState.IsValid)
             {
+                log.Info("Model State Not valid");
                 return View(model);
             }
             var user = await UserManager.FindByEmailAsync(model.Email);
@@ -392,12 +432,18 @@ namespace Store.Controllers
                 case SignInStatus.Success:
                     using (var context = new Project1DBEntities())
                     {
-                        context.Users.First(x => x.Email == loginInfo.Email).ProfilePicture = new ProfilePicture() { Image = null };
-                        context.SaveChanges();
-                        HttpCookie cookie = new HttpCookie("vals");
-                        cookie["picture"] = @"\ProfilePictures\default.png";
-                        cookie["exp"] = DateTime.MinValue.ToString();
-                        Response.Cookies.Add(cookie);
+                        try
+                        {
+                            context.Users.First(x => x.Email == loginInfo.Email).ProfilePicture = new ProfilePicture() { Image = null };
+                            context.SaveChanges();
+                            HttpCookie cookie = new HttpCookie("vals");
+                            cookie["picture"] = @"\ProfilePictures\default.png";
+                            cookie["exp"] = DateTime.MinValue.ToString();
+                            Response.Cookies.Add(cookie);
+                        }catch(Exception ex)
+                        {
+                            log.Error("Error while creating profile picture cookie", ex);
+                        }
                     }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
@@ -427,6 +473,7 @@ namespace Store.Controllers
 
             if (ModelState.IsValid)
             {
+                
                 // Get the information about the user from the external login provider
                 var info = await AuthenticationManager.GetExternalLoginInfoAsync();
                 if (info == null)
@@ -445,6 +492,10 @@ namespace Store.Controllers
                     }
                 }
                 AddErrors(result);
+            }
+            else
+            {
+                log.Info("Model State Not valid");
             }
 
             ViewBag.ReturnUrl = returnUrl;
@@ -477,30 +528,38 @@ namespace Store.Controllers
         [HttpPost]
         public async Task<ActionResult> Profile(ProfileViewModel model)
         {
-            if(model.PostedPicture != null)
+            if (ModelState.IsValid)
             {
-                string filename = Path.GetFileName(model.PostedPicture.FileName).Replace(" ", "");
-                string guid = Guid.NewGuid().ToString();
-                string folder = Path.Combine(Server.MapPath("~/ProfilePictures"), guid);
-                Directory.CreateDirectory(folder);
-                folder = Path.Combine(folder, filename);
-                model.PostedPicture.SaveAs(folder);
-                await ServicePack.UpdateProfilePicture(Path.Combine("/ProfilePictures", guid, filename));
-                var expire = HttpContext.Request.Cookies["vals"]["exp"];             
-                HttpCookie cookie = new HttpCookie("vals");   
-                cookie["picture"] = Path.Combine("/ProfilePictures", guid, filename);
-                cookie.Expires = DateTime.Parse(expire);
-                Response.Cookies.Add(cookie);
+                if (model.PostedPicture != null)
+                {
+                    string filename = Path.GetFileName(model.PostedPicture.FileName).Replace(" ", "");
+                    string guid = Guid.NewGuid().ToString();
+                    string folder = Path.Combine(Server.MapPath("~/ProfilePictures"), guid);
+                    Directory.CreateDirectory(folder);
+                    folder = Path.Combine(folder, filename);
+                    model.PostedPicture.SaveAs(folder);
+                    await ServicePack.UpdateProfilePicture(Path.Combine("/ProfilePictures", guid, filename));
+                    var expire = HttpContext.Request.Cookies["vals"]["exp"];
+                    HttpCookie cookie = new HttpCookie("vals");
+                    cookie["picture"] = Path.Combine("/ProfilePictures", guid, filename);
+                    cookie.Expires = DateTime.Parse(expire);
+                    Response.Cookies.Add(cookie);
+                }
+                ServicePack.UpdateSocialMedia(new SocialMedia()
+                {
+                    Instagram = model.Instagram,
+                    Facebook = model.Facebook,
+                    Website = model.Website,
+                    Twitter = model.Twitter,
+                    Pinterest = model.Pinterest,
+                });
+                return RedirectToAction("Index", "Publication");
             }
-            ServicePack.UpdateSocialMedia(new SocialMedia()
+            else
             {
-                Instagram = model.Instagram,
-                Facebook = model.Facebook,
-                Website = model.Website,
-                Twitter = model.Twitter,
-                Pinterest = model.Pinterest,
-            });
-            return RedirectToAction("Index", "Publication");
+                log.Info("Model State Not valid");
+                return RedirectToAction("Profile", "Account");
+            }
         }
         
         protected override void Dispose(bool disposing)
@@ -605,8 +664,15 @@ namespace Store.Controllers
 
         public async Task<ActionResult> CreatorImages(string username, int count)
         {
-            var data = await ServicePack.GetCreatorPubliactions(username, count);
-            return Json(JsonSerializer.Serialize<List<SimplePublicationViewModel>>(data));
+            try
+            {
+                var data = await ServicePack.GetCreatorPubliactions(username, count);
+                return Json(JsonSerializer.Serialize<List<SimplePublicationViewModel>>(data));
+            }catch(Exception ex)
+            {
+                log.Error($"Error accessing to {username} images with count: {count}", ex);
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+            }
         }
     }
 }
