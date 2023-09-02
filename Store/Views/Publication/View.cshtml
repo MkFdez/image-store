@@ -109,7 +109,7 @@
             <div class="row">
                 <p>
                     <strong>Categories:</strong> @foreach (var cat in Model.Categories)
-                    {<span>@cat, </span>}
+                    {<span class="badge bg-primary  ml-2">@cat</span>}
                 </p>
 
             </div>
@@ -296,7 +296,7 @@
                 }
             }
         </div>
-        <a onclick="loadComments(@ViewBag.Comments, @Model.id)"> ver mas</a>
+        <a class="btn btn-primary" onclick="loadComments(@ViewBag.Comments, @Model.id)">See More</a>
         @section Scripts{
             <script src="~/Scripts/jquery-3.4.1.js"></script>
             <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
