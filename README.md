@@ -14,7 +14,7 @@
 1. Clone the repository:
    ```sh
    git clone https://github.com/MkFdez/image-store.git
-2. Open the Store.sln with Visual Studio(recommended 2019 od higher)
+2. Open the Store.sln with Visual Studio(recommended 2019 or higher)
 
 3. Generate the Database from ADO.NET Entity Data Model:
 
