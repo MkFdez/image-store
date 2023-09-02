@@ -13,6 +13,7 @@ namespace Store.Controllers
 {
     public class CollectionController : Controller
     {
+        public static readonly log4net.ILog log = log4net.LogManager.GetLogger("CollectionLogger");
         IServicePack servicePack;
         public CollectionController(IServicePack service)
         {
@@ -33,8 +34,9 @@ namespace Store.Controllers
             {
                 await servicePack.CreateCollection(name);
             }
-            catch
+            catch(Exception ex)
             {
+                log.Error($"Error creating collection with name {name}", ex);
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
             }
                             
@@ -50,8 +52,9 @@ namespace Store.Controllers
             {
                 await servicePack.DeleteCollection(id);
             }
-            catch
+            catch(Exception ex)
             {
+                log.Error($"error while deleting collection with collection id:{id}", ex);
                 return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
             }
             return new HttpStatusCodeResult(HttpStatusCode.OK);
@@ -64,8 +67,9 @@ namespace Store.Controllers
             {
                 await servicePack.MoveToCollection(collectionid, publicationid);
             }
-            catch
+            catch(Exception ex)
             {
+                log.Error($"Error adding the publicationid: {publicationid} to collectionid: {collectionid}", ex);
                 return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
             }
             return new HttpStatusCodeResult(HttpStatusCode.OK);
@@ -86,8 +90,9 @@ namespace Store.Controllers
             {
                 await servicePack.NoCollection(publicationid);
             }
-            catch
+            catch(Exception ex)
             {
+                log.Error($"Error removing publicationid:{publicationid} from its collection", ex);
                 return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
             }
             return new HttpStatusCodeResult(HttpStatusCode.OK);
