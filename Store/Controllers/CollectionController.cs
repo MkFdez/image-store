@@ -99,7 +99,6 @@ namespace Store.Controllers
 
         }
 
-        [Authorize]
         public async Task<ActionResult> More(int collectionid, int publicationid)
         {
             var data = await servicePack.MoreInCollection(collectionid, publicationid);

@@ -20,14 +20,10 @@ namespace Store.Controllers
     public class SellController : Controller
     {
         public IServicePack ServicePack;
-
         public static readonly log4net.ILog log = log4net.LogManager.GetLogger("SellLogger");
 
-        public SellController(IServicePack servicePack)
-        {
-            ServicePack = servicePack;
-        }
-
+       
+        // GET: Sell
         public IApp _app { get; set; }
         public SellController(IApp app, IServicePack servicePack)
         {

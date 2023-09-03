@@ -50,13 +50,10 @@ namespace Store
             builder.RegisterType<EmailSender>().As<IEmailSender>().As<EmailSender>();
             builder.RegisterType<NewUserApp>().As<IApp>().As<NewUserApp>();
             builder.RegisterType<BuyApp>().As<IApp>().As<BuyApp>();
-
-            builder.RegisterType<ServicePack>().As<IServicePack>();
+            builder.RegisterType<ServicePack>().As<IServicePack>().As<ServicePack>();
             builder.RegisterType<FileLogger>().As<ILogger>();
-            builder.Register(ctx => new SellController(ctx.Resolve<BuyApp>()));
+            builder.Register(ctx => new SellController(ctx.Resolve<BuyApp>(), ctx.Resolve<ServicePack>()));
             
-
-
             //builder.Register(ctx => new AccountController(ctx.Resolve<NewUserApp>()));
             //Set the dependency resolver to be Autofac.
             var container = builder.Build();
