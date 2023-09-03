@@ -157,10 +157,6 @@ namespace Store.Controllers
                    
                     decimal price = decimal.Parse(model.Price);
                     int userId = User.Identity.GetUserId<int>(); ;
-                    
-                        
-                        var random = new Random();
-                        userId = random.Next(10, 18);
                         Publication publication = new Publication
                         {
                             UserId = userId,

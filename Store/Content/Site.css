@@ -813,7 +813,7 @@ ul.summary-list {
 }
 
 /* Hover effect for images */
-.card:hover {
+.card-styled:hover {
     transform: scale(1.05);
     transition: transform 0.3s ease-in-out;
 }
