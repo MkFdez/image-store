@@ -22,15 +22,13 @@ namespace Store.Controllers
         public IServicePack ServicePack;
         public static readonly log4net.ILog log = log4net.LogManager.GetLogger("SellLogger");
 
-        public SellController(IServicePack servicePack)
-        {
-            ServicePack = servicePack;
-        }
+       
         // GET: Sell
         public IApp _app { get; set; }
-        public SellController(IApp app)
+        public SellController(IApp app, IServicePack servicePack)
         {
             _app = app;
+            ServicePack = servicePack;
         }
         [HttpPost]
         public async Task<ActionResult> BuyImage(int pubId, string image, string name)
