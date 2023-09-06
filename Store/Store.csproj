@@ -338,6 +338,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="MyScripts\add_comment.js" />
+    <Content Include="MyScripts\button-loading.js" />
     <Content Include="MyScripts\container_controller.js" />
     <Content Include="MyScripts\create_collection.js" />
     <Content Include="MyScripts\delete_publication.js" />
@@ -457,6 +458,8 @@
     <Content Include="Views\Publication\Manage.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Publication\Test.cshtml" />
+    <Content Include="Views\Account\_LoginForm.cshtml" />
+    <Content Include="Views\Account\_RegisterForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -6,8 +6,12 @@
 
 <h2 style="margin-top:40px">Create</h2>
 
-
-@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Ajax.BeginForm(null, null, new AjaxOptions
+{
+    OnBegin = "onLoad('create-button')",
+    OnFailure = "onLoadFail('create-button', 'Create')",
+    OnSuccess = "formSuccess(data, 'create-button', 'Create')"
+}, new { enctype = "multipart/form-data", role = "form" }))
 {
     @Html.AntiForgeryToken()
 
@@ -84,9 +88,9 @@
                 </div>
             </div>*@
 
-        
-                <button  class="btn btn-primary" style="margin-top: 20px; padding: 5px 20px 5px 20px; width:100%; position: sticky; bottom:0; left:0; font-size:18px; border-radius:0px; height: 70px">Create</button>
-           
+
+        <button class="btn btn-primary" id="create-button" style="margin-top: 20px; padding: 5px 20px 5px 20px; width:100%; position: sticky; bottom:0; left:0; font-size:18px; border-radius:0px; height: 70px">Create</button>
+
     </div>
 }
 
@@ -96,4 +100,6 @@
     @Scripts.Render("~/bundles/jqueryval")
     <script src="~/MyScripts/image_uploader.js"></script>
     <script src="~/MyScripts/price_input.js"></script>
+    <script src="~/MyScripts/button-loading.js"></script>
+
 }
