@@ -156,7 +156,7 @@ namespace Store.Controllers
                 {
                    
                     decimal price = decimal.Parse(model.Price);
-                    int userId = User.Identity.GetUserId<int>(); ;
+                    int userId = User.Identity.GetUserId<int>(); 
                         Publication publication = new Publication
                         {
                             UserId = userId,
@@ -208,13 +208,13 @@ namespace Store.Controllers
                     }
                     
                 }
-                return RedirectToAction("Index");
+                return Json(new { redirect = Url.Action("Index") });
             }
             else
             {
                 log.Info("Model State Not valid");
             }
-            return View();
+            return Json(new { error = new { } });
         }
 
         // GET: Publication/Edit/5

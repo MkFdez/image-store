@@ -4,39 +4,9 @@
     ViewBag.Title = "Log in";
 }
 
-    <div class="form-container mt-5">
-        <p class="title">Login</p>
-        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-        {
-            @Html.AntiForgeryToken()
-            <div class="input-group">
-                <label for="email">Email</label>
-                @Html.TextBoxFor(m => m.Email, new { id = "email", @class = "form-input" })
-                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-            </div>
-            <div class="input-group">
-                <label for="password">Password</label>
-                @Html.PasswordFor(m => m.Password, new { id="password", @class= "form-input" })
-                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })               
-                <div class="forgot">                    
-                    @Html.ActionLink("Forgot your password?", "ForgotPassword")
-                </div>
-            </div>
-            <button class="sign">Sign in</button>
-        }
-        <div class="social-message">
-            <div class="line"></div>
-            <p class="message">Login with social accounts</p>
-            <div class="line"></div>
-        </div>
-        <div class="social-icons">
-            @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
-        </div>
-        <p class="signup">
-            Don't have an account?
-            @Html.ActionLink("Register", "Register")
-        </p>
-    </div>
+<div class="form-container mt-5" id="formContainer">
+    @Html.Partial("_LoginForm", Model)
+</div>
 
         @*<section id="loginForm">
             @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
@@ -91,4 +61,5 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/MyScripts/button-loading.js"></script>
 }

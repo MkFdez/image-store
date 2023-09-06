@@ -381,7 +381,7 @@ namespace Services
                         downloads = x.Downloads, 
                         actions = new { title = x.Content, image = x.HeaderPath, id = x.PublicationId }, 
                         collection = new {collection = x.Collection.Name, publicationid = x.PublicationId } });
-                var collections = context.Collections.Select(x => new { collectionid = x.CollectionId, collection = x.Name }).ToList();
+                var collections = context.Collections.Where(x => x.UserId == userid).Select(x => new { collectionid = x.CollectionId, collection = x.Name }).ToList();
                 var count = context.Publications.Where(x => x.UserId == userid && x.StatusId == 0).Count();
                 DTResponse response = new DTResponse();
                 response.data = JsonConvert.SerializeObject(data);

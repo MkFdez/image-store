@@ -85,11 +85,11 @@ namespace Store.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
-            try { 
-            if (!ModelState.IsValid)
-            {
-                log.Info("Model State Not valid");
-                return View(model);
+            try {
+                if (!ModelState.IsValid)
+                {
+                    log.Info("Model State Not valid");
+                    return Json(new { errors = new[] { new { type = "", message = "" } } } );
             }
             var user = await UserManager.FindByEmailAsync(model.Email);
             if (user != null)
@@ -98,7 +98,8 @@ namespace Store.Controllers
                 {
                     string callbackUrl = await SendEmailConfirmationTokenAsync(user.Id, "Confirm your account-Resend", model.Email);
                     ViewBag.errorMessage = "You must have a confirmed email to log on.";
-                    return View("Error");
+                    ModelState.AddModelError("Email", "You must have a confirmed email to log on");
+                    return PartialView("_LoginForm",model);
                 }
             }
 
@@ -106,10 +107,11 @@ namespace Store.Controllers
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             if (user == null) 
             {
-                ModelState.AddModelError("", "Invalid login attempt.");
-                return View(model);
-            }
-            var result = await SignInManager.PasswordSignInAsync( user.UserName, model.Password, model.RememberMe, shouldLockout: false);
+                ModelState.AddModelError("Email", "Email does not exist");
+                return Json(new { errors = new[] { new { type = "email", message = "Email does not exist" } } } );
+
+                }
+                var result = await SignInManager.PasswordSignInAsync( user.UserName, model.Password, model.RememberMe, shouldLockout: false);
                 switch (result)
                 {
                     case SignInStatus.Success:
@@ -138,21 +140,27 @@ namespace Store.Controllers
                                 log.Error("Error while creating profile picture cookie", ex);
                             }
                         }
-
-                        return RedirectToLocal(returnUrl);
+                        if(returnUrl == null)
+                        {
+                            returnUrl = Url.Action("Index", "Home");
+                        }
+                        return Json(new { redirect = returnUrl });
                     case SignInStatus.LockedOut:
-                        return View("Lockout");
+                        return Json(new { redirect = Url.Action("Lockout") });
                     case SignInStatus.RequiresVerification:
-                        return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                        return Json(new { redirect = Url.Action("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe }) }); 
                     case SignInStatus.Failure:
+                        ModelState.AddModelError("Password", "Password does not match");
+                        return Json(new { errors = new[] { new { type = "password", message = "Password does not match" } } });
                     default:
                         ModelState.AddModelError("", "Invalid login attempt.");
-                        return View(model);
+                        return Json(new { errors = new[] { new { type = "general", message = "Invalid login attempt" } } });
                 }
             }catch(Exception ex)
             {
                 log.Error("Something happened while during the log in", ex);
-                return View(model);
+                return Json(new { errors = new[] { new { type = "general", message = "Invalid login attempt" } } });
+                ;
             }
         }
 
@@ -193,7 +201,7 @@ namespace Store.Controllers
                 switch (result)
                 {
                     case SignInStatus.Success:
-                        return RedirectToLocal(model.ReturnUrl);
+                        return Json(new { redirect = model.ReturnUrl });
                     case SignInStatus.LockedOut:
                         return View("Lockout");
                     case SignInStatus.Failure:
@@ -223,11 +231,13 @@ namespace Store.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            object[] err_arr = new object[0];
             if (ModelState.IsValid)
             {
 
                 var user = new ApplicationUser { UserName = model.Username, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
+                
                 if (result.Succeeded)
                 {
                     //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
@@ -253,18 +263,40 @@ namespace Store.Controllers
                     ViewBag.Message = "Check your email and confirm your account, you must be confirmed "
                          + "before you can log in.";
 
-                    return View("Info");
+                    return Json(new { redirect = Url.Action("Info") });
                    // return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
+                int errorCount = result.Errors.Count();
+                err_arr = new object[errorCount];
+                int count = 0;
+                foreach(string err in result.Errors)
+                {
+                    string type;
+                    string message;
+                    var temp = err.Split();
+                    if (temp[0] != "Passwords")
+                    {
+                         type = temp[0].ToLower();
+
+                        message = String.Join(" ", temp.Skip(1));
+                    }
+                    else
+                    {
+                        type = "password";
+                        message = String.Join(" ", temp).Replace(".","<br />") ;
+                    }
+                    err_arr[count] = new { type = type, message = message };
+                    count++;
+                }
             }
             else
             {
                 log.Info("Model State Not valid");
             }
-
+            
             // If we got this far, something failed, redisplay form
-            return View(model);
+            return Json(new { errors =  err_arr });
         }
 
         //
@@ -553,7 +585,7 @@ namespace Store.Controllers
                     Twitter = model.Twitter,
                     Pinterest = model.Pinterest,
                 });
-                return RedirectToAction("Index", "Publication");
+                return Json(new { toast = "success" });
             }
             else
             {

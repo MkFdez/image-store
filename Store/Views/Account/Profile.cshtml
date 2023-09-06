@@ -27,11 +27,28 @@
         margin-right: .5rem !important;
     }
 </style>
+<div class="toast-container position-absolute bottom-0 end-0 p-3">
+    <div role="alert" aria-live="assertive" aria-atomic="true" class="toast position-relative bottom-0 end-0" data-bs-autohide="false" id="success-toast">
+        <div class="toast-header">
+            <svg class="bd-placeholder-img rounded me-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#4caf50"></rect></svg>
+            <strong class="me-auto">Success</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Profile information changed successfully
+        </div>
+    </div>
+</div>
 
 @*-------------------------------------------------------------------------------------------------------------------*@
 <div class="container">
     <div class="main-body">
-        @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        @using (Ajax.BeginForm(null, null, new AjaxOptions
+        {
+            OnBegin = "onLoad('save-button')",
+            OnFailure = "onLoadFail('save-button', 'Create')",
+            OnSuccess = "formSuccess(data, 'save-button', 'Save Changes')"
+        }, new { enctype = "multipart/form-data", role = "form" }))
         {
             @Html.AntiForgeryToken()
             <div class="row">
@@ -49,7 +66,7 @@
                                name = "MyFile",
                                id = "MyFile",
                                style = "position:absolute!important; margin-bottom:10px; margin-right:10px; display:none"
-                           })                               
+                           })
                                 <script>
                                     var loadFile = function (event) {
 
@@ -63,7 +80,7 @@
                                     @Html.ActionLink("Seller Dashboard", "Dashboard", "Sales", null, new { @class = "btn btn-outline-primary" })
 
                                 </div>
-                            </div>                                                      
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -133,7 +150,7 @@
                             <div class="row">
                                 <div class="col-sm-3"></div>
                                 <div class="col-sm-9 text-secondary">
-                                    <input type="submit" class="btn btn-primary px-4" value="Save Changes">
+                                    <button type="submit" class="btn btn-primary px-4" id="save-button">Save Changes</button>
                                 </div>
                             </div>
                         </div>
@@ -142,7 +159,7 @@
                         <div class="col-sm-12">
                             <div class="card">
                                 <div class="card-body">
-                                   <h3>FILL WITH SOMETHING</h3>
+                                    <h3>FILL WITH SOMETHING</h3>
                                 </div>
                             </div>
                         </div>
@@ -152,3 +169,7 @@
         }
     </div>
 </div>
+@section Scripts{
+    <script src="~/MyScripts/button-loading.js"></script>
+
+}
