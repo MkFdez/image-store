@@ -48,6 +48,7 @@
     <Compile Include="CollectionViewModel.cs" />
     <Compile Include="CommentModel.cs" />
     <Compile Include="DataTableModels.cs" />
+    <Compile Include="DownloadModel.cs" />
     <Compile Include="ExtendedPublicationVM.cs" />
     <Compile Include="ForBarChartModel.cs" />
     <Compile Include="ForChartModel.cs" />

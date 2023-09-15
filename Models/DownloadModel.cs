@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public class PublicationToDownloadModel
+    public class DownloadModel
     {
-        public string  Guid { get; set; }
-        public string  Path { get; set; }
-
-
+        public byte[] File { get; set; }
+        public string FileName { get; set; }
     }
 }

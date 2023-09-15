@@ -23,11 +23,12 @@ namespace Store.Controllers
     public class PublicationController : Controller
     {
         public static readonly log4net.ILog log = log4net.LogManager.GetLogger("PublicationLogger");
-
+        public IStorageService storageService;
         public IServicePack ServicePack;
-        public PublicationController(IServicePack servicePack)
+        public PublicationController(IServicePack servicePack, IStorageService _storageService)
         {
             ServicePack = servicePack;
+            storageService = _storageService;
         }
         public ActionResult Test()//controller created just for testing new ui elements without messing everything out
         {
@@ -89,15 +90,8 @@ namespace Store.Controllers
                         return RedirectToAction("View", "Publication", new { id = id });
                     }
                     var p = await ServicePack.GetPublicationToDownload(id);
-                    string fileName = p.Path.Substring(p.Path.LastIndexOf("/") + 1);
-                    string pGuid = p.Guid;
-                    int intScale = int.Parse(scale);
-                    string guid = Guid.NewGuid().ToString();
-                    string newName = guid + fileName.Substring(fileName.LastIndexOf("."));
-                    ImageManager<int> myDelegate = new ImageManager<int>(MkImage.Resize);
-                    myDelegate(Path.Combine(Server.MapPath("~/ImageVault/" + pGuid + "/"), fileName), intScale, Path.Combine(Server.MapPath("~/TempData"), newName));
-                    byte[] fileBytes = System.IO.File.ReadAllBytes(Path.Combine(Server.MapPath("~/TempData"), newName));
-                    return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, newName);
+                    var directory = storageService.GenerateDownloadDirectory(p, MkImage.Resize, scale);
+                    return File(directory.File, System.Net.Mime.MediaTypeNames.Application.Octet, directory.FileName);
                 }
                 catch(Exception ex)
                 {
@@ -117,14 +111,8 @@ namespace Store.Controllers
                 {
                     int puid = int.Parse(id);
                     string path = await ServicePack.GetImagePath(puid);
-                    string fileName = path.Substring(path.LastIndexOf(@"/") + 1);
-                    path = path.Substring(0, path.LastIndexOf("/LowRes/"));
-                    string file = Path.Combine(Directory.GetFiles(Server.MapPath("~" + path + "/FreeTrial/"), fileName));
-                    string guid = Guid.NewGuid().ToString();
-                    string newName = guid + fileName.Substring(fileName.LastIndexOf("."));
-
-                    byte[] fileBytes = System.IO.File.ReadAllBytes(file);
-                    return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, newName);
+                    var directory = storageService.GetDownloadFreeDirectory(path);
+                    return File(directory.File, System.Net.Mime.MediaTypeNames.Application.Octet, directory.FileName);
                 }
                 catch(Exception ex)
                 {
@@ -181,24 +169,8 @@ namespace Store.Controllers
                     {
                         if (model.Picture != null && model.Picture.ContentLength > 0)
                         {
-                            Directory.CreateDirectory(Path.Combine(Server.MapPath("~/uploads"), publication.PublicationId.ToString()));
-                            Directory.CreateDirectory(Path.Combine(Server.MapPath("~/uploads/" + publication.PublicationId.ToString()), "FreeTrial"));
-                            Directory.CreateDirectory(Path.Combine(Server.MapPath("~/uploads/" + publication.PublicationId.ToString()), "LowRes"));
-                            Directory.CreateDirectory(Path.Combine(Server.MapPath("~/ImageVault/"), publication.Guid));
-                            var fileName = Path.GetFileName(model.Picture.FileName).Replace(" ", "");
-                            var path = Path.Combine(Server.MapPath("~/uploads"), fileName);
-
-                            string fl = path.Substring(path.LastIndexOf("\\"));
-                            string[] split = fl.Split('\\');
-                            string newpath = split[1];
-                            string imagepath = "/uploads/" + publication.PublicationId.ToString() + "/LowRes/" + newpath;
-                            model.Picture.SaveAs(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid + "/"), fileName));
-                            publication.HeaderPath = imagepath;
-                            ImageManager<string> myDelegate = new ImageManager<string>(MkImage.setWatermarkText);
-                            myDelegate(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid), fileName), "my website", Path.Combine(Server.MapPath("~/uploads/" + publication.PublicationId.ToString() + "/" + "FreeTrial/"), fileName));
-                            ImageManager<int> myDelegate2 = new ImageManager<int>(MkImage.Resize);
-                            myDelegate2(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid), fileName), 50, Path.Combine(Server.MapPath("~/uploads/" + publication.PublicationId.ToString() + "/" + "LowRes/"), fileName));
-
+                            
+                            publication.HeaderPath = storageService.NewImageDirectory(model.Picture, publication.PublicationId, publication.Guid, MkImage.Resize, MkImage.setWatermarkText);
                         }
 
                         await ServicePack.AddPublication(publication, categories);

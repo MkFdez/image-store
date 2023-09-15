@@ -86,8 +86,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IServicePack.cs" />
+    <Compile Include="IStorageService.cs" />
     <Compile Include="ServicePack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StorageService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataAccess\DataAccess.csproj">
