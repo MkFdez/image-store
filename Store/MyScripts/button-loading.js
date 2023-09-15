@@ -1,5 +1,5 @@
 ﻿function onLoad(id) {
-    document.getElementById(id).innerHTML = "<div style='display:flex; justify-content:center'><div class='loader'></div></div>"
+    document.getElementById(id).innerHTML = `<div style='display:flex; justify-content:center'><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div></div>`
 }
 function onLoadFail(id, text) {
     document.getElementById(id).innerHTML = text

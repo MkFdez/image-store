@@ -94,7 +94,7 @@
             @Model.Content
         </h2>
     </div>
-    <div class="col-sm-8">
+    <div class="col-sm-10 justify-content-center" style="display:flex!important">
         
             @if (Model.headerPath != null)
             {
@@ -102,35 +102,14 @@
             }
        
     </div>
-    <div class="col-sm-4">
+    <div class="col-lg-2 justify-content-center" >
 
         <div class="row">
 
-            <div class="row">
-                <p>
-                    <strong>Categories:</strong> @foreach (var cat in Model.Categories)
-                    {<span class="badge bg-primary  ml-2">@cat</span>}
-                </p>
-
-            </div>
-            <p>
-                @Model.Downloads
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-download" viewBox="0 0 16 16">
-                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
-                    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-                </svg>
-            </p>
+        
             <div class="row">
 
-
-                <div class="col mb-5">
-                    <div style="display:flex; flex-wrap: wrap; gap: 5px; align-items:center">
-                        Posted By:
-
-                        <a href="/Account/Index?username=@Model.User"><img class="d-flex rounded-circle g-mt-3 g-mr-15" src="@(Model.ProfilePicture == null ? "/ProfilePictures/default.png" : Model.ProfilePicture)" alt="Image Description" style="width:30px; height: 30px; margin-right:0px!important"></a>
-                        <h5 class="h5 g-color-gray-dark-v1 mb-0">   @Model.User &#8195 <span style="color:darkslategrey">@Model.DaysSinceCreated days ago</span></h5>
-                    </div>
-                </div>
+                
 
 
             </div>
@@ -138,109 +117,155 @@
             @if (!HttpContext.Current.User.Identity.IsAuthenticated)
             {
 
-                <div class="row">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="width: 40%; min-width: 80px; border-radius: 0px !important; margin-left:11.25px">
+                
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal" style="width: 100%; height: 40px;">
                         Download
                     </button>
-                </div>
-                <div class="row">
-                    <a class="btn btn-primary" onclick="downloadImageTry('@Model.id')" id="downloadLink" style="margin-top: 25px; width: 40%; min-width: 80px; border-radius: 0px !important ; margin-left:11.25px">
+                
+                
+                    <a class="btn btn-success" onclick="downloadImageTry('@Model.id')" id="downloadLink" style="margin-top: 25px; width: 100%; height:40px;">
                         Download Free
                     </a>
-                </div>
+                
             }
             else
             {
                 if (Model.isBuyed)
                 {
-                    <div class="row">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal3" style="width: 40%; min-width: 80px; border-radius: 0px !important; margin-left:11.25px">
+                    
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal3" style="width: 100%; height: 40px;">
                             Download
                         </button>
-                    </div>
+                    
                 }
                 else
                 {
-                    using (Html.BeginForm("BuyImage", "Sell", new { pubid = Model.id, image = Model.headerPath, name = Model.Content }, FormMethod.Post))
+
+                    using (Ajax.BeginForm("BuyImage", "Sell",
+                        new { pubid = Model.id, image = Model.headerPath, name = Model.Content },
+                        new AjaxOptions
+                        {
+                            OnBegin = "onGo()",                           
+                            OnSuccess = "onLoadSuccess(data)"
+                        }, new { @class = "form-horizontal p-0", role = "form" }))
                     {
                         @Html.AntiForgeryToken()
-                        <div class="row">
-                            <button type="submit" class="btn btn-primary"  style="width: 40%; min-width: 80px; border-radius: 0px !important; margin-left:11.25px">
-                                Buy
+                        
+                            <button type="submit" class="btn btn-success" style="width: 100%; height: 40px;">
+                                Get
                             </button>
-                        </div>
-                        }
-                    }
-                    @*@Html.ActionLink("DownloadFreeTry", "Publication", routeValues: new { path = Model.headerPath }, htmlAttributes: new { @class = "btn btn-primary" }) for later*@
-                    <div class="row">
-                        <a class="btn btn btn-primary" onclick="downloadImageTry('@Model.id')" id="downloadLink" style="margin-top: 25px; width: 40%; min-width: 80px; border-radius: 0px !important; margin-left: 11.25px ">
-                            Download Free
-                        </a>
-                    </div>
-                    if (HttpContext.Current.User.IsInRole("Admin") || HttpContext.Current.User.IsInRole("SuperAdmin"))
-                    {
-                        <div class="row" style="margin-top:20px">
-                            <div class="col">
-                                @if (Model.Status == "Accepted")
-                                {
-                                    <button type="button" class="btn-danger" onclick="banPublication(@Model.id)">
-                                        Ban Publication
-                                    </button>
-                                }
-                                else
-                                {
-                                    <button type="button" class="btn-danger" onclick="unbanPublication(@Model.id)">
-                                        Accept Publication
-                                    </button>
-                                }
-                            </div>
-                            <div class="col">
-                                <p id="status">@Model.Status</p>
-                            </div>
-                        </div>
+                        
                     }
                 }
-                @*@Html.ActionLink("Download", "Download", new { path = Model.headerPath }, new { @class = "btn btn-primary btn-lg", @style = "max-width:200px; margin-top:30px" })*@
-            </div>
+                @*@Html.ActionLink("DownloadFreeTry", "Publication", routeValues: new { path = Model.headerPath }, htmlAttributes: new { @class = "btn btn-primary" }) for later*@
+                
+                    <a class="btn btn btn-success" onclick="downloadImageTry('@Model.id')" id="downloadLink" style="margin-top: 25px; width: 100%; height: 40px">
+                        Download Free
+                    </a>
+                
+                if (HttpContext.Current.User.IsInRole("Admin") || HttpContext.Current.User.IsInRole("SuperAdmin"))
+                {
+                    <div class="row" style="margin-top:20px">
+                        <div class="col">
+                            @if (Model.Status == "Accepted")
+                            {
+                                <button type="button" class="btn-danger" onclick="banPublication(@Model.id)">
+                                    Ban Publication
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn-danger" onclick="unbanPublication(@Model.id)">
+                                    Accept Publication
+                                </button>
+                            }
+                        </div>
+                        <div class="col">
+                            <p id="status">@Model.Status</p>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
     </div>
 </div>
+<div class="d-flex justify-content-between mt-3 p-3">
+    <div style="display:flex; flex-wrap: wrap; gap: 5px; align-items:center">
 
-@if (Model.inCollection > 0)
-{
+        <img class="d-flex rounded-circle g-mt-3 g-mr-15" src="@(Model.ProfilePicture == null ? "/ProfilePictures/default.png" : Model.ProfilePicture)" alt="Image Description" style="width:30px; height: 30px; margin-right:0px!important">
+        <h5 class="h5 g-color-gray-dark-v1 mb-0">   @Model.User </h5>
+        <a href="/Account/Index?username=@Model.User" class="btn btn-outline-success " >
+            Visit Profile
+        </a>
 
 
-<h3 class="mt-5">In the same collection</h3>
-<hr />
-
-<div id="collectionCarrousel" class="carousel slide mt-1" data-bs-ride="carousel">
-    <div class="carousel-indicators">
-        <button type="button" data-bs-target="#collectionCarrousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-        @for (int x = 1; x <= (int)Math.Floor((double)Model.inCollection / 3); x++)
-        {
-            <button type="button" data-bs-target="#collectionCarrousel" data-bs-slide-to="@x" aria-label="Slide @(x + 1) "></button>
-        }
     </div>
-    <div class="carousel-inner">
+    <div class="card d-flex justify-content-between flex-row p-1 gap-2">
+        <div class="card d-flex justify-content-between flex-row p-1 gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-download" viewBox="0 0 16 16">
+                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+
+            </svg>
+            @Model.Downloads
+        </div>
+        <div class="card d-flex justify-content-between flex-row p-1 gap-1">
+            <i class="bi bi-chat"></i>
+            @Model.CommentTotal
+        </div>
+       
+        <div class="card d-flex justify-content-between flex-row p-1 gap-1">
+            <i class=" bi bi-star"></i>
+            @Model.CommentTotal
+        </div>
+    </div>
+
+</div>
+@if (Model.Categories.Count() > 0)
+{
+<div class="flex-lg-row justify-content-between mt-3 p-3" >
+    <h5>Categories</h5>
+    @foreach (var cat in Model.Categories)
+    {<span class="badge bg-success p-2" style="margin-right: 2px">@cat</span>}
+</div>
+}
+
+    @if (Model.inCollection > 0)
+    {
+
+
+        <h3 class="mt-5">In the same collection</h3>
+        <hr />
+
+        <div id="collectionCarrousel" class="carousel slide mt-1" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#collectionCarrousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                @for (int x = 1; x <= (int)Math.Floor((double)Model.inCollection / 3); x++)
+                {
+                    <button type="button" data-bs-target="#collectionCarrousel" data-bs-slide-to="@x" aria-label="Slide @(x + 1) "></button>
+                }
+            </div>
+            <div class="carousel-inner">
                 @for (int i = 1; i <= (int)Math.Ceiling((double)Model.inCollection / 3); i++)
                 {
-                   
-                   <div class="carousel-item @(i == 1 ?  "active" : "")">
-                       <div class="row">
-                           @for (int j = i*3-3; j < i*3; j++)
-                           {
-                               <div class="col">
-                                   @if (j < Model.inCollection)
-                                   {
-                                   <a id="@j-container" >
-                                       <img id="@j-image" src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif?20151024034921" class="d-block w-100"  alt="..." style="height:200px; object-fit:cover">
-                                   </a>
-                                   }
-                               </div>
-                           }
-                       </div>
-                   </div>
+
+                    <div class="carousel-item @(i == 1 ?  "active" : "")">
+                        <div class="row">
+                            @for (int j = i * 3 - 3; j < i * 3; j++)
+                            {
+                                <div class="col">
+                                    @if (j < Model.inCollection)
+                                    {
+                                        <a id="@j-container">
+                                            <img id="@j-image" src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif?20151024034921" class="d-block w-100" alt="..." style="height:200px; object-fit:cover">
+                                        </a>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
                 }
-                
+
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#collectionCarrousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon border-5" aria-hidden="true" style="border-color:black"></span>
@@ -251,41 +276,41 @@
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
-        }
-        <h3 style="margin-top:30px">Add your opinion</h3>
-        <div class="mb-3" style="display:block">
-            <form id="commentForm">
-                <input type="hidden" id="modelId" value=@Model.id />
-                <textarea class="form-control" id="CommentTextArea" rows="3" style="padding-left:5px; max-height:100px"></textarea>
-                <input type="submit" class="btn btn btn-primary" style="margin-top: 7px; width: 40%; min-width:80px; border-radius: 0px !important" value="Comment" />
-            </form>
-        </div>
-        <hr class="mb-3" />
-        <h3>Comments</h3>
-        <div class="row" id="commentContainer">
-            @{
-                foreach (var item in Model.Comments)
-                {
+    }
+    <h3 style="margin-top:30px">Add your opinion</h3>
+    <div class="mb-3" style="display:block">
+        <form id="commentForm">
+            <input type="hidden" id="modelId" value=@Model.id />
+            <textarea class="form-control" id="CommentTextArea" rows="3" style="padding-left:5px; max-height:100px"></textarea>
+            <input type="submit" class="btn btn btn-primary" style="margin-top: 7px;" value="Comment" />
+        </form>
+    </div>
+    <hr class="mb-3" />
+    <h3>Comments</h3>
+    <div class="row" id="commentContainer">
+        @{
+            foreach (var item in Model.Comments)
+            {
 
-                    <div class="col-md-8">
-                        <div class="media c-mb-30 media-comment">
-                            <div class="media-body u-shadow-v18 g-bg-secondary g-pa-30">
-                                <div class="g-mb-15">
-                                    <div style="display:flex; flex-wrap: wrap; gap: 10px; align-items:center">
-                                        <img class="d-flex g-width-50 g-height-50 rounded-circle g-mt-3 g-mr-15" src="@(item.ProfilePicture == null ? "/ProfilePictures/default.png" : item.ProfilePicture)" alt="Image Description">
-                                        <h5 class="h5 g-color-gray-dark-v1 mb-0">   @item.UserName </h5>
-                                    </div>
-                                    <span class="g-color-gray-dark-v4 g-font-size-12">@item.DaysSinceCreated days ago</span>
+                <div class="col-md-8">
+                    <div class="media c-mb-30 media-comment">
+                        <div class="media-body u-shadow-v18 g-bg-secondary g-pa-30">
+                            <div class="g-mb-15">
+                                <div style="display:flex; flex-wrap: wrap; gap: 10px; align-items:center">
+                                    <img class="d-flex g-width-50 g-height-50 rounded-circle g-mt-3 g-mr-15" src="@(item.ProfilePicture == null ? "/ProfilePictures/default.png" : item.ProfilePicture)" alt="Image Description">
+                                    <h5 class="h5 g-color-gray-dark-v1 mb-0">   @item.UserName </h5>
                                 </div>
-
-                                <p>
-                                    @item.Content
-                                </p>
+                                <span class="g-color-gray-dark-v4 g-font-size-12">@item.DaysSinceCreated days ago</span>
                             </div>
+
+                            <p>
+                                @item.Content
+                            </p>
                         </div>
                     </div>
+                </div>
 
-                    @*<div style="" class="comment">
+                @*<div style="" class="comment">
                         <div style="display:block">
                             <p> Commented by: @item.UserName</p>
                         </div>
@@ -293,27 +318,29 @@
                             <p>@item.Content</p>
                         </div>
                     </div>*@
-                }
             }
-        </div>
-        <a class="btn btn-primary" onclick="loadComments(@ViewBag.Comments, @Model.id)">See More</a>
-        @section Scripts{
-            <script src="~/Scripts/jquery-3.4.1.js"></script>
-            <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
-            <script src="~/MyScripts/add_comment.js"></script>
-            <script src="~/MyScripts/download_controller.js"></script>
-            @*<script src="~/Scripts/bootstrap.bundle.min.js"></script>*@
-            <script src="~/MyScripts/ban.js"></script>
-            <script src="~/MyScripts/view_page.js"></script>
-            <script src="~/MyScripts/load_Comments.js"></script>
-            <script src="~/MyScripts/more_in_collection.js"></script>
         }
-        <style>
-            .comment {
-                display: block;
-                margin-left: 20px;
-                margin-top: 20px;
-                border: solid 2px black;
-                margin-right: 20px;
-            }
-        </style>
+    </div>
+    <a class="btn btn-primary mt-2" onclick="loadComments(@ViewBag.Comments, @Model.id)">See More</a>
+    @section Scripts{
+        <script src="~/Scripts/jquery-3.4.1.js"></script>
+        <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+        <script src="~/MyScripts/add_comment.js"></script>
+        <script src="~/MyScripts/download_controller.js"></script>
+        @*<script src="~/Scripts/bootstrap.bundle.min.js"></script>*@
+        <script src="~/MyScripts/ban.js"></script>
+        <script src="~/MyScripts/view_page.js"></script>
+        <script src="~/MyScripts/load_Comments.js"></script>
+        <script src="~/MyScripts/more_in_collection.js"></script>
+        <script src="~/Scripts/bootstrap-waitingfor.js"></script>
+        <script src="~/MyScripts/checkout.js"></script>
+    }
+    <style>
+        .comment {
+            display: block;
+            margin-left: 20px;
+            margin-top: 20px;
+            border: solid 2px black;
+            margin-right: 20px;
+        }
+    </style>
