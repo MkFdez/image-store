@@ -100,6 +100,7 @@ namespace Services
                     headerPath = temp.HeaderPath,
                     Content = temp.Content,
                     Comments = comments.Take(10).ToList(),
+                    CommentTotal = comments.Count(),
                     Categories = temp.Categories.Select(x => x.CategoryName).ToList(),
                     Status = temp.Status.Description,
                     isBuyed = isBuyed,

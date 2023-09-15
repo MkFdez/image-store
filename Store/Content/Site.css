@@ -1082,4 +1082,20 @@ input[type=number] {
 }
 
 
+.bg-primary {
+    background-color: #0B132B !important;
+}
+.bg-secondary {
+    background-color: #1C2541 !important;
+}
+.bg-terciary {
+    background-color: #3A506B !important;
+}
+.bg-past-terciary {
+    background-color: #5BC0BE !important;
+}
+.bg-past-past-terciary {
+    background-color: #FFFFFF !important;
+}
+
    

@@ -17,6 +17,7 @@ namespace Models
         public string Content { get; set; }
         public string headerPath { get; set; }
         public List<CommentModel> Comments { get; set; }
+        public int CommentTotal { get; set; }
 
         public List<string> Categories { get; set; }
 

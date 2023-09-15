@@ -76,7 +76,7 @@ namespace Store.Controllers
 
                 Response.Headers.Add("Location", session.Url);
                 //
-                return new HttpStatusCodeResult(303);
+                return Json(new { url = session.Url });
             }catch(Exception ex)
             {
                 log.Error("Error opening creating stripe session", ex);
@@ -151,7 +151,7 @@ namespace Store.Controllers
                 _app.Model = info;
                 _app.Run();
                 context.SaveChanges();
-                return View();
+                return RedirectToAction("View", "Publication", new { id = puid });
             }
         }
         public ActionResult Cancel()

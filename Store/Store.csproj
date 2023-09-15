@@ -339,6 +339,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="MyScripts\add_comment.js" />
     <Content Include="MyScripts\button-loading.js" />
+    <Content Include="MyScripts\checkout.js" />
     <Content Include="MyScripts\container_controller.js" />
     <Content Include="MyScripts\create_collection.js" />
     <Content Include="MyScripts\delete_publication.js" />
@@ -360,6 +361,7 @@
     <Content Include="MyStyles\style.css" />
     <Content Include="MyStyles\userDetailsStyle.css" />
     <Content Include="ProfilePictures\default.png" />
+    <Content Include="Scripts\bootstrap-waitingfor.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
