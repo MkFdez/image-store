@@ -51,6 +51,7 @@ namespace Store
             builder.RegisterType<NewUserApp>().As<IApp>().As<NewUserApp>();
             builder.RegisterType<BuyApp>().As<IApp>().As<BuyApp>();
             builder.RegisterType<ServicePack>().As<IServicePack>().As<ServicePack>();
+            builder.RegisterType<StorageService>().As<IStorageService>();
             builder.RegisterType<FileLogger>().As<ILogger>();
             builder.Register(ctx => new SellController(ctx.Resolve<BuyApp>(), ctx.Resolve<ServicePack>()));
             
