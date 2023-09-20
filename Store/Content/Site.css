@@ -1097,5 +1097,37 @@ input[type=number] {
 .bg-past-past-terciary {
     background-color: #FFFFFF !important;
 }
+.star-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.star-container {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+}
+
+    .star-container svg {
+        position: relative;
+        top: 0;
+        left: 0;
+        height: 24px;
+        width: 24px;
+        transition: all 0.3s;
+        fill: #666;
+    }
+
+        .star-container svg:hover {
+            transform: scale(1.1);
+        }
+
+    .star-container input:checked ~ svg {
+        fill: #ffeb49;
+    }
 
    

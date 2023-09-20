@@ -133,6 +133,14 @@
           <Property Name="Downloads" Type="int" Nullable="false" />
           <Property Name="CollectionId" Type="int" />
         </EntityType>
+        <EntityType Name="Publication_Likes">
+          <Key>
+            <PropertyRef Name="PublicationId" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="PublicationId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="SalesHistory">
           <Key>
             <PropertyRef Name="SaleId" />
@@ -335,6 +343,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Publication_Likes_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="Publication_Likes" Type="Self.Publication_Likes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Publication_Likes">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Publication_Likes_Publication">
+          <End Role="Publication" Type="Self.Publication" Multiplicity="1" />
+          <End Role="Publication_Likes" Type="Self.Publication_Likes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Publication">
+              <PropertyRef Name="PublicationId" />
+            </Principal>
+            <Dependent Role="Publication_Likes">
+              <PropertyRef Name="PublicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Publication_Status">
           <End Role="Status" Type="Self.Status" Multiplicity="1" />
           <End Role="Publication" Type="Self.Publication" Multiplicity="*" />
@@ -428,6 +460,7 @@
           <EntitySet Name="MonthlySales" EntityType="Self.MonthlySales" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProfilePicture" EntityType="Self.ProfilePicture" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Publication" EntityType="Self.Publication" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Publication_Likes" EntityType="Self.Publication_Likes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SalesHistory" EntityType="Self.SalesHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SocialMedia" EntityType="Self.SocialMedia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Status" EntityType="Self.Status" Schema="dbo" store:Type="Tables" />
@@ -483,6 +516,14 @@
           <AssociationSet Name="FK_Publication_Collections" Association="Self.FK_Publication_Collections">
             <End Role="Collections" EntitySet="Collections" />
             <End Role="Publication" EntitySet="Publication" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Publication_Likes_AspNetUsers" Association="Self.FK_Publication_Likes_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Publication_Likes" EntitySet="Publication_Likes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Publication_Likes_Publication" Association="Self.FK_Publication_Likes_Publication">
+            <End Role="Publication" EntitySet="Publication" />
+            <End Role="Publication_Likes" EntitySet="Publication_Likes" />
           </AssociationSet>
           <AssociationSet Name="FK_Publication_Status" Association="Self.FK_Publication_Status">
             <End Role="Status" EntitySet="Status" />
@@ -561,6 +602,7 @@
           <NavigationProperty Name="DailySales" Relationship="Project1DBModel.FK_DailySales_AspNetUsers" FromRole="User" ToRole="DailySale" />
           <NavigationProperty Name="MonthlySales" Relationship="Project1DBModel.FK__MonthlySa__UserI__0880433F" FromRole="User" ToRole="MonthlySale" />
           <NavigationProperty Name="SocialMedia" Relationship="Project1DBModel.FK_SocialMedia_AspNetUsers" FromRole="User" ToRole="SocialMedia" />
+          <NavigationProperty Name="LikedPublications" Relationship="Project1DBModel.Publication_Likes" FromRole="User" ToRole="Publication" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -612,6 +654,7 @@
           <NavigationProperty Name="Categories" Relationship="Self.Category_x_Publication" FromRole="Publication" ToRole="Category" />
           <Property Name="CollectionId" Type="Int32" />
           <NavigationProperty Name="Collection" Relationship="Project1DBModel.FK_Publication_Collections" FromRole="Publication" ToRole="Collection" />
+          <NavigationProperty Name="UserLikes" Relationship="Project1DBModel.Publication_Likes" FromRole="Publication" ToRole="User" />
         </EntityType>
         <EntityType Name="SalesHistory">
           <Key>
@@ -879,6 +922,10 @@
             <End Role="Collection" EntitySet="Collections" />
             <End Role="Publication" EntitySet="Publications" />
           </AssociationSet>
+          <AssociationSet Name="Publication_Likes" Association="Project1DBModel.Publication_Likes">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Publication" EntitySet="Publications" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -970,6 +1017,10 @@
               <PropertyRef Name="CollectionId" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <Association Name="Publication_Likes">
+          <End Type="Project1DBModel.User" Role="User" Multiplicity="*" />
+          <End Type="Project1DBModel.Publication" Role="Publication" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -1180,6 +1231,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <AssociationSetMapping Name="Publication_Likes" TypeName="Project1DBModel.Publication_Likes" StoreEntitySet="Publication_Likes">
+            <EndProperty Name="Publication">
+              <ScalarProperty Name="PublicationId" ColumnName="PublicationId" />
+            </EndProperty>
+            <EndProperty Name="User">
+              <ScalarProperty Name="Id" ColumnName="UserId" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

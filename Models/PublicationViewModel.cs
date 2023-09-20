@@ -26,8 +26,10 @@ namespace Models
         public bool isBuyed { get; set; }
 
         public bool isProperty { get; set; }
+        public bool isLiked { get; set; }
         public int Downloads { get; set; }
         public int inCollection { get; set; }
         public int? CollectionId { get; set; }
+        public int LikeCount { get; set; }
     }
 }

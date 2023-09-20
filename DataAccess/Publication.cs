@@ -20,6 +20,7 @@ namespace DataAccess
             this.Comments1 = new HashSet<Comment>();
             this.SalesHistories = new HashSet<SalesHistory>();
             this.Categories = new HashSet<Category>();
+            this.UserLikes = new HashSet<User>();
         }
     
         public int PublicationId { get; set; }
@@ -44,5 +45,7 @@ namespace DataAccess
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Category> Categories { get; set; }
         public virtual Collection Collection { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<User> UserLikes { get; set; }
     }
 }
