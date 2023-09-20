@@ -35,6 +35,7 @@
         <AssociationConnector Association="Project1DBModel.FK_SocialMedia_AspNetUsers" />
         <EntityTypeShape EntityType="Project1DBModel.Collection" Width="1.5" PointX="8.375" PointY="9.875" />
         <AssociationConnector Association="Project1DBModel.FK_Publication_Collections" />
+        <AssociationConnector Association="Project1DBModel.Publication_Likes" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

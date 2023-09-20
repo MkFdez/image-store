@@ -41,5 +41,6 @@ namespace Services
         Task NoCollection(int publicationid);
         Task<List<SimplePublicationViewModel>> GetCollectionPublication(int collectionid);
         Task<List<SimplePublicationViewModel>> MoreInCollection(int collectionid, int publicationid);
+        Task Like(bool like, int pubId);
     }
 }

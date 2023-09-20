@@ -132,6 +132,21 @@ namespace Store.Controllers
             return View();
         }
 
+        [HttpPost]
+        [Authorize]
+        public async Task<ActionResult> Like(int publicationid, bool like)
+        {
+            try
+            {
+                await ServicePack.Like(like, publicationid);
+            }catch(Exception e)
+            {
+                log.Error($"Error {e} with like action in publication {publicationid}");
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+            }
+            return new HttpStatusCodeResult(200);
+        }
+
         // POST: Publication/Create
         [Authorize]
         [HttpPost]
