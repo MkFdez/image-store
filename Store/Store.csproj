@@ -345,6 +345,7 @@
     <Content Include="MyScripts\delete_publication.js" />
     <Content Include="MyScripts\footer.js" />
     <Content Include="MyScripts\images_loader.js" />
+    <Content Include="MyScripts\infinity.js" />
     <Content Include="MyScripts\in_db.js" />
     <Content Include="MyScripts\download_controller.js" />
     <Content Include="MyScripts\ban.js" />

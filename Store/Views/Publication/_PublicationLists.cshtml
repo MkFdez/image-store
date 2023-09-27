@@ -72,7 +72,7 @@
                 if (i == (int)TempData["ActualPage"])
                 {
 
-                    @Ajax.ActionLink(i.ToString(), "ChangePage", "Publication", new { actualPage = i }, new AjaxOptions
+                    @Ajax.ActionLink(i.ToString(), "ChangePage", "Publication", new { actualPage = i, ob = ViewBag.OrderBy, search = ViewBag.Search, personalPage = ViewBag.MyGallery, categories= ViewBag.Categories }, new AjaxOptions
                {
                    InsertionMode = InsertionMode.Replace,
                    HttpMethod = "GET",
@@ -84,7 +84,7 @@
                 else
                 {
 
-                    @Ajax.ActionLink(i.ToString(), "ChangePage", "Publication", new { actualPage = i }, new AjaxOptions
+                    @Ajax.ActionLink(i.ToString(), "ChangePage", "Publication", new { actualPage = i, ob = ViewBag.OrderBy, search = ViewBag.Search, personalPage = ViewBag.MyGallery, categories = ViewBag.Categories }, new AjaxOptions
                {
                    InsertionMode = InsertionMode.Replace,
                    HttpMethod = "GET",

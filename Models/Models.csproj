@@ -53,6 +53,7 @@
     <Compile Include="ForBarChartModel.cs" />
     <Compile Include="ForChartModel.cs" />
     <Compile Include="ManagePublicationsModel.cs" />
+    <Compile Include="OrderByModel.cs" />
     <Compile Include="ProfileViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublicationCreateViewModel.cs" />

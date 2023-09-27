@@ -858,6 +858,12 @@ ul.summary-list {
 .filter-item {
     position: relative;
 }
+.filter-item > select{
+    color : white;
+}
+.filter-item > select > option{
+    color: black!important
+}
 
 .filter-dropdown {
     background: none;

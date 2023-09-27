@@ -1,4 +1,5 @@
 ﻿@model Models.PublicationsListViewModel
+@using Models
 
 @{
     ViewBag.Title = "Index";
@@ -41,6 +42,11 @@
                                 <input name="MaxPrice" type="number" class="form-control" placeholder="Max" />
                             </li>
                         </ul>
+                    </div>
+                    <div class="filter-item">
+                        @Html.DropDownList("order",
+                    Enum.GetValues(typeof(OrderByModel)).Cast<OrderByModel>().Select(x => new SelectListItem() { Value = x.ToString(), Text = x.GetDisplayName() }),
+                    new { @class = "filter-dropdown filter-text" })
                     </div>
                 </div>
                 <input type="submit" class="apply-button" value="Apply" />

@@ -47,7 +47,8 @@ namespace Store.Controllers
                 ViewBag.Search = search;
                 ViewBag.MyGallery = personalPage.ToString();
                 ViewBag.Title = "Publications";
-                ViewBag.Category = category; 
+                ViewBag.Category = category;
+                ViewBag.OrderBy = OrderByModel.DateDesc;
             }
             return View();
         }
@@ -235,9 +236,11 @@ namespace Store.Controllers
 
         
         
-        public async Task<ActionResult> ChangePage(int actualPage = 1, FormCollection c = null, string search = "", bool personalPage = false, string category = "")
+        public async Task<ActionResult> ChangePage(int actualPage = 1, FormCollection c = null, string search = "", bool personalPage = false, string category = "", OrderByModel ob = OrderByModel.DateDesc, List<int> categories = null)
         {
             List<PublicationViewModel> model = new List<PublicationViewModel>();
+            var dfh = c["order"];
+            List<int> a = categories != null ? categories : new List<int>();
             using (var context = new Project1DBEntities())
             {
                 var userId = HttpContext.User.Identity.GetUserId<int>();
@@ -245,9 +248,10 @@ namespace Store.Controllers
                 System.Linq.Expressions.Expression<Func<Publication, bool>> predicate2;
                 System.Linq.Expressions.Expression<Func<Publication, bool>> predicate3;
                 System.Linq.Expressions.Expression<Func<Publication, bool>> predicate;
+                System.Linq.Expressions.Expression<Func<Publication, dynamic>> order;
                 if (personalPage) { predicate = x => true; } else { predicate = x => x.StatusId == 0; } 
                 if (search != "") { predicate2 = x => x.Content.Contains(search); } else { predicate2 = x => true; }
-                var a = c["AreChecked"] != null ? Array.ConvertAll(c["AreChecked"].ToString().Split(','), x => int.Parse(x.ToString())).ToList() : new List<int>() { };
+                a = c["AreChecked"] != null ? Array.ConvertAll(c["AreChecked"].ToString().Split(','), x => int.Parse(x.ToString())).ToList() : a;
                 predicate2 = predicate.And(predicate2);
                 if (category == "")
                 {
@@ -319,13 +323,23 @@ namespace Store.Controllers
 
                     }
                 }
-                model = await ServicePack.GetSomePublications(actualPage, predicate1);
+                OrderByModel orderby = ob;
+                if(c["order"]!= null)
+                {
+                    orderby = (OrderByModel)Enum.Parse(typeof(OrderByModel), c["order"]);
+                }
+                
+
+                ViewBag.OrderBy = orderby;
+                
+                model = await ServicePack.GetSomePublications(actualPage, predicate1, orderby);
                 TempData["Count"] = await ServicePack.PublicationCount(predicate1);
             }
             
 
             var realList = new PublicationsListViewModel(model);
             ViewBag.Search = search;
+            ViewBag.Categories = a;
             ViewBag.MyGallery = personalPage;
             TempData["ActualPage"] = actualPage ;
             return PartialView("~/Views/Publication/_PublicationLists.cshtml", realList);
