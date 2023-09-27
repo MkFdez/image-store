@@ -22,7 +22,7 @@ namespace Services
         Task<ExtendedPublicationVM> GetPublication(int id);
         Task<PublicationToDownloadModel> GetPublicationToDownload(int pubId);
         Task<List<ForChartModel>> GetSalesHistory(int month, int year);
-        Task<List<PublicationViewModel>> GetSomePublications(int actualPage, Expression<Func<Publication, bool>> predicate);
+        Task<List<PublicationViewModel>> GetSomePublications(int actualPage, Expression<Func<Publication, bool>> predicate, OrderByModel order);
         Task<DTResponse> GetTransactions(Pagination pagination);
         Task<DTResponse> GetPublicationsForDatatable(Pagination pagination);
         Task<bool> HasPublication(int pubId);

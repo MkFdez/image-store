@@ -33,13 +33,13 @@
 </style>
 @Html.Hidden("username", Model.UserName)
 @*-------------------------------------------------------------------------------------------------------------------*@
-<div class="container" >
+<div class="container">
     <div class="main-body">
         @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
             <div class="row">
-                <div class="col-lg-4"> 
+                <div class="col-lg-4">
                     <div class="card" style="position: sticky!important; top: 64.38px; right:0px ">
                         <div class="card-body">
                             <div class="d-flex flex-column align-items-center text-center">
@@ -86,10 +86,10 @@
                                             <div class="col-sm-9 text-secondary">
                                                 <p>@Model.Facebook</p>
                                             </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -99,7 +99,9 @@
                         <div class="card-body" id="image-container">
 
                         </div>
-                        <h4 id="final_image"></h4>
+                        <div id="final_image">
+                            <img src="~/uploads/loading.gif" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -108,5 +110,7 @@
 </div>
 
 @section Scripts{
+
+    <script src="~/MyScripts/infinity.js"></script>
     <script src="~/MyScripts/images_loader.js"></script>
-    }
+}

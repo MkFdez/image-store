@@ -19,6 +19,7 @@ namespace Services
 {
     public class ServicePack : IServicePack
     {
+  
         public async Task AddComment(Comment comment)
         {
             using (var context = new Project1DBEntities())
@@ -91,6 +92,8 @@ namespace Services
                         isBuyed = true;
                     }
                 }
+              
+
                 string path = HttpContext.Current.Server.MapPath("~" + temp.HeaderPath);
                 string fileName = path.Substring(path.LastIndexOf(@"\") + 1);
                 var publication = new PublicationViewModel()
@@ -322,24 +325,16 @@ namespace Services
 
         }
 
-        public async Task<List<PublicationViewModel>> GetSomePublications(int actualPage, Expression<Func<Publication, bool>> predicate)
+        public async Task<List<PublicationViewModel>> GetSomePublications(int actualPage, Expression<Func<Publication, bool>> predicate, OrderByModel order)
         {
             using (var context = new Project1DBEntities())
             {
+                
                 List<PublicationViewModel> result = new List<PublicationViewModel>();
-                var publications = context.Publications.Where(predicate).Select(x =>
-                new
-                {
-                    x.PublicationId,
-                    x.User.UserName,
-                    Comments = x.Comments1.Select(c => new { c.User.UserName, c.DateOfCreated, c.Content }),
-                    x.Content,
-                    x.Categories,
-                    x.HeaderPath,
-                    x.DateOfCreated,
-                    Status = x.Status.Description,
-                    x.Price,
-                }).OrderBy(x => x.PublicationId).Skip((actualPage - 1) * 9).Take(9);
+
+                var publications = context.Publications.Where(predicate)
+                    .AsQueryable<Publication>().Sort(order)
+                    .Skip((actualPage - 1) * 9).Take(9).ToList();
                 foreach (var x in publications)
                 {
                     result.Add(new PublicationViewModel
@@ -347,9 +342,9 @@ namespace Services
                         id = x.PublicationId,
                         headerPath = x.HeaderPath,
                         Content = x.Content,
-                        User = x.UserName,
+                        User = x.User.UserName,
                         DaysSinceCreated = (DateTime.Now - x.DateOfCreated).Days,
-                        Status = x.Status,
+                        Status = x.Status.Description,
                         Price = Convert.ToDecimal(String.Format("{0:0.00}", x.Price)),
                     });
                 }
