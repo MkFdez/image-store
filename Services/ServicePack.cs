@@ -357,7 +357,7 @@ namespace Services
             using (var context = new Project1DBEntities())
             {
                 int userid = HttpContext.Current.User.Identity.GetUserId<int>();
-                var data = context.SalesHistories.Where(x => x.UserId == userid).OrderByDescending(x => x.Date).Skip(pagination.data.start).Take(pagination.data.length).Select(x => new { publication = x.Publication.Content, date = x.Date, amount = x.Amount });
+                var data = context.SalesHistories.Where(x => x.Publication.UserId == userid).OrderByDescending(x => x.Date).Skip(pagination.data.start).Take(pagination.data.length).Select(x => new { publication = x.Publication.Content, date = x.Date, amount = x.Amount });
                 int count = context.SalesHistories.Where(x => x.Publication.UserId == userid).Count();
                 DTResponse response = new DTResponse();
                 response.data = JsonConvert.SerializeObject(data);
