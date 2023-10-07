@@ -36,6 +36,16 @@
         <EntityTypeShape EntityType="Project1DBModel.Collection" Width="1.5" PointX="8.375" PointY="9.875" />
         <AssociationConnector Association="Project1DBModel.FK_Publication_Collections" />
         <AssociationConnector Association="Project1DBModel.Publication_Likes" />
+        <EntityTypeShape EntityType="Project1DBModel.AttachedFile" Width="1.5" PointX="6" PointY="30.125" />
+        <EntityTypeShape EntityType="Project1DBModel.Chat" Width="1.5" PointX="6" PointY="26.5" />
+        <EntityTypeShape EntityType="Project1DBModel.Message" Width="1.5" PointX="8.25" PointY="17.625" />
+        <EntityTypeShape EntityType="Project1DBModel.Notification" Width="1.5" PointX="6" PointY="24.25" />
+        <AssociationConnector Association="Project1DBModel.FK_Chat_AspNetUsers" />
+        <AssociationConnector Association="Project1DBModel.FK_Chat_AspNetUsers1" />
+        <AssociationConnector Association="Project1DBModel.FK_Messages_AspNetUsers" />
+        <AssociationConnector Association="Project1DBModel.FK_Messages_AttachedFile" />
+        <AssociationConnector Association="Project1DBModel.FK_Messages_Chat" />
+        <AssociationConnector Association="Project1DBModel.User_Notification" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
