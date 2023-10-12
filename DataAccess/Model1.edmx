@@ -61,8 +61,7 @@
           <Key>
             <PropertyRef Name="FileId" />
           </Key>
-          <Property Name="FileId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="MessageId" Type="int" Nullable="false" />
+          <Property Name="FileId" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="FilePath" Type="nvarchar" MaxLength="100" Nullable="false" />
         </EntityType>
         <EntityType Name="Category">
@@ -124,7 +123,7 @@
           <Property Name="ChatId" Type="int" Nullable="false" />
           <Property Name="Date" Type="datetime" Nullable="false" />
           <Property Name="Content" Type="nvarchar" MaxLength="1000" Nullable="false" />
-          <Property Name="FileId" Type="int" />
+          <Property Name="FileId" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="MonthlySales">
           <Key>
@@ -213,6 +212,13 @@
           <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Token">
+          <Key>
+            <PropertyRef Name="Token" />
+          </Key>
+          <Property Name="Token" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="User_Notification">
           <Key>
@@ -596,6 +602,7 @@
           <EntitySet Name="SocialMedia" EntityType="Self.SocialMedia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Status" EntityType="Self.Status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Token" EntityType="Self.Token" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User_Notification" EntityType="Self.User_Notification" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__MonthlySa__UserI__0880433F" Association="Self.FK__MonthlySa__UserI__0880433F">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -1119,6 +1126,7 @@
             <End Role="User" EntitySet="Users" />
             <End Role="Notification" EntitySet="Notifications" />
           </AssociationSet>
+          <EntitySet Name="Tokens" EntityType="Project1DBModel.Token" />
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -1219,8 +1227,7 @@
           <Key>
             <PropertyRef Name="FileId" />
           </Key>
-          <Property Name="FileId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MessageId" Type="Int32" Nullable="false" />
+          <Property Name="FileId" Type="String" Nullable="false" annotation:StoreGeneratedPattern="None" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="FilePath" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Messages" Relationship="Project1DBModel.FK_Messages_AttachedFile" FromRole="AttachedFile" ToRole="Message" />
         </EntityType>
@@ -1244,7 +1251,7 @@
           <Property Name="ChatId" Type="Int32" Nullable="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Content" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="FileId" Type="Int32" />
+          <Property Name="FileId" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="AspNetUser" Relationship="Project1DBModel.FK_Messages_AspNetUsers" FromRole="Message" ToRole="User" />
           <NavigationProperty Name="AttachedFile" Relationship="Project1DBModel.FK_Messages_AttachedFile" FromRole="Message" ToRole="AttachedFile" />
           <NavigationProperty Name="Chat" Relationship="Project1DBModel.FK_Messages_Chat" FromRole="Message" ToRole="Chat" />
@@ -1321,6 +1328,13 @@
           <End Type="Project1DBModel.User" Role="User" Multiplicity="*" />
           <End Type="Project1DBModel.Notification" Role="Notification" Multiplicity="*" />
         </Association>
+        <EntityType Name="Token">
+          <Key>
+            <PropertyRef Name="Token1" />
+          </Key>
+          <Property Name="Token1" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1543,7 +1557,6 @@
             <EntityTypeMapping TypeName="Project1DBModel.AttachedFile">
               <MappingFragment StoreEntitySet="AttachedFile">
                 <ScalarProperty Name="FilePath" ColumnName="FilePath" />
-                <ScalarProperty Name="MessageId" ColumnName="MessageId" />
                 <ScalarProperty Name="FileId" ColumnName="FileId" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1585,6 +1598,14 @@
               <ScalarProperty Name="Id" ColumnName="UserId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="Tokens">
+            <EntityTypeMapping TypeName="Project1DBModel.Token">
+              <MappingFragment StoreEntitySet="Token">
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Token1" ColumnName="Token" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

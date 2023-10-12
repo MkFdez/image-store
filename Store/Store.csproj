@@ -281,6 +281,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\ChatController.cs" />
     <Compile Include="Controllers\CollectionController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -464,6 +465,7 @@
     <Content Include="Views\Publication\Test.cshtml" />
     <Content Include="Views\Account\_LoginForm.cshtml" />
     <Content Include="Views\Account\_RegisterForm.cshtml" />
+    <Content Include="Views\Chat\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -494,6 +496,10 @@
     <ProjectReference Include="..\CacheUtilities\CacheUtilities.csproj">
       <Project>{4c676d9c-05ea-455d-b8df-e716209fb04c}</Project>
       <Name>CacheUtilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chat_Authentication\Chat_Authentication.csproj">
+      <Project>{86787c90-4482-44a5-803e-5497efb0a8de}</Project>
+      <Name>Chat_Authentication</Name>
     </ProjectReference>
     <ProjectReference Include="..\DataAccess\DataAccess.csproj">
       <Project>{7987d4cc-6818-40e3-9e60-940715d6608b}</Project>

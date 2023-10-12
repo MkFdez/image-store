@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="BuyImageModel.cs" />
     <Compile Include="CardModel.cs" />
+    <Compile Include="ChatModel.cs" />
     <Compile Include="CollectionViewModel.cs" />
     <Compile Include="CommentModel.cs" />
     <Compile Include="DataTableModels.cs" />
