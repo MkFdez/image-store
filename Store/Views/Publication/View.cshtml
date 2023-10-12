@@ -194,7 +194,10 @@
 
         <img class="d-flex rounded-circle g-mt-3 g-mr-15" src="@(Model.ProfilePicture == null ? "/ProfilePictures/default.png" : Model.ProfilePicture)" alt="Image Description" style="width:30px; height: 30px; margin-right:0px!important">
         <h5 class="h5 g-color-gray-dark-v1 mb-0">   @Model.User </h5>
-        <a href="/Account/Index?username=@Model.User" class="btn btn-outline-success " >
+        @*<a href="/Account/Index?username=@Model.User" class="btn btn-outline-success ">
+            Visit Profile
+        </a>*@
+        <a href="/chat/Index?receiver=@Model.User" class="btn btn-outline-success ">
             Visit Profile
         </a>
 

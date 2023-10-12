@@ -12,17 +12,9 @@ namespace DataAccess
     using System;
     using System.Collections.Generic;
     
-    public partial class Message
+    public partial class Token
     {
-        public int MessageId { get; set; }
-        public int SenderId { get; set; }
-        public int ChatId { get; set; }
-        public System.DateTime Date { get; set; }
-        public string Content { get; set; }
-        public string FileId { get; set; }
-    
-        public virtual User AspNetUser { get; set; }
-        public virtual AttachedFile AttachedFile { get; set; }
-        public virtual Chat Chat { get; set; }
+        public string Token1 { get; set; }
+        public string Username { get; set; }
     }
 }

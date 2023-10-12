@@ -20,8 +20,7 @@ namespace DataAccess
             this.Messages = new HashSet<Message>();
         }
     
-        public int FileId { get; set; }
-        public int MessageId { get; set; }
+        public string FileId { get; set; }
         public string FilePath { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

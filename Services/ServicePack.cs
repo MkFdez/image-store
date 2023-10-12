@@ -574,5 +574,17 @@ namespace Services
                 context.SaveChanges();
             }
         }
+
+        public async Task<string> AddToken()
+        {
+            using(var context = new Project1DBEntities())
+            {
+                string username = HttpContext.Current?.User?.Identity?.Name;
+                string token = Guid.NewGuid().ToString();
+                context.Tokens.Add(new Token() { Token1= token, Username = username });
+                context.SaveChanges();
+                return token;
+            }
+        }
     }
 }
