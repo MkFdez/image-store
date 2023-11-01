@@ -9,6 +9,7 @@
 <input type="hidden" value=@ViewBag.Search id="Hidden" />
 <input type="hidden" value="@ViewBag.MyGallery" id="Hidden2" />
 <input type="hidden" value="@ViewBag.Category" id="Hidden3" />
+<input type="hidden" value="@ViewBag.OnlyForMe" id="Hidden4" />
 
 
 
@@ -16,7 +17,7 @@
 <div class="container mt-5">
     <div class="row">
         <!-- Top Filter Bar -->
-        @using (Ajax.BeginForm("ChangePage", "Publication", new { search = ViewBag.Search, personalPage = bool.Parse(ViewBag.MyGallery) }, new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "PublicationsList" }))
+        @using (Ajax.BeginForm("ChangePage", "Publication", new { search = ViewBag.Search, personalPage = bool.Parse(ViewBag.MyGallery), onlyForMe = ViewBag.OnlyForMe }, new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "PublicationsList" }))
         {
             <div class="col-md-12 top-filter-bar mb-2">
                 <div class="filter-group">

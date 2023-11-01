@@ -91,7 +91,7 @@ namespace ChatServicesII
         }
         public async Task ReportUser(string reporter, string reported, int reason, string message)
         {
-            await sql.SaveData("dbo.spBlock_User", new { Reporter = reporter, Reported = reported, ReportId = reason, Reason = message });
+            await sql.SaveData("dbo.spReport_User", new { Reporter = reporter, Reported = reported, ReportId = reason, Reason = message });
         }
         public async Task<List<Report_Reasons>> GetReportReason()
         {

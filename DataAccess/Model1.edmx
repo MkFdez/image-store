@@ -174,6 +174,7 @@
           <Property Name="Downloads" Type="int" Nullable="false" />
           <Property Name="CollectionId" Type="int" />
           <Property Name="StarCount" Type="int" Nullable="false" />
+          <Property Name="OnlyFor" Type="int" />
         </EntityType>
         <EntityType Name="Publication_Likes">
           <Key>
@@ -939,6 +940,7 @@
           <NavigationProperty Name="Collection" Relationship="Project1DBModel.FK_Publication_Collections" FromRole="Publication" ToRole="Collection" />
           <NavigationProperty Name="UserLikes" Relationship="Project1DBModel.Publication_Likes" FromRole="Publication" ToRole="User" />
           <Property Name="StarCount" Type="Int32" Nullable="false" />
+          <Property Name="OnlyFor" Type="Int32" />
         </EntityType>
         <EntityType Name="SalesHistory">
           <Key>
@@ -1608,6 +1610,7 @@
           <EntitySetMapping Name="Publications">
             <EntityTypeMapping TypeName="Project1DBModel.Publication">
               <MappingFragment StoreEntitySet="Publication">
+                <ScalarProperty Name="OnlyFor" ColumnName="OnlyFor" />
                 <ScalarProperty Name="StarCount" ColumnName="StarCount" />
                 <ScalarProperty Name="CollectionId" ColumnName="CollectionId" />
                 <ScalarProperty Name="PublicationId" ColumnName="PublicationId" />

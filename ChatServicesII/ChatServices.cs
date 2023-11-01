@@ -115,5 +115,25 @@ namespace ChatServicesII
         {
             throw new NotImplementedException();
         }
+
+        public Task BlockUser(string blocker, string blocked)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UnblockUser(string blocker, string blocked)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ReportUser(string reporter, string reported, int reason, string message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Report_Reasons>> GetReportReason()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

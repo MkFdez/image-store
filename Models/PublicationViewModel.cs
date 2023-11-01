@@ -31,5 +31,6 @@ namespace Models
         public int inCollection { get; set; }
         public int? CollectionId { get; set; }
         public int LikeCount { get; set; }
+        public int? OnlyFor { get; set; }
     }
 }

@@ -37,7 +37,7 @@ namespace Store.Controllers
 
 
         // GET: Publication            
-        public async Task<ActionResult> Index(string category = "", string search = "", bool personalPage = false)
+        public async Task<ActionResult> Index(string category = "", string search = "", bool personalPage = false, bool onlyForMe = false)
         {
             using (var context = new Project1DBEntities())
             {
@@ -49,6 +49,7 @@ namespace Store.Controllers
                 ViewBag.Title = "Publications";
                 ViewBag.Category = category;
                 ViewBag.OrderBy = OrderByModel.DateDesc;
+                ViewBag.OnlyForMe = onlyForMe;
             }
             return View();
         }
@@ -61,7 +62,11 @@ namespace Store.Controllers
                 try
                 {
                     var publication = await ServicePack.GetPublication(id);
-
+                    if(publication.Publication.OnlyFor != null && publication.Publication.OnlyFor != HttpContext.User.Identity.GetUserId<int>())
+                    {
+                        log.Warn($"User {HttpContext.User.Identity.GetUserId<int>()} tried to open publication {id}");
+                        return RedirectToAction("Index");
+                    }
                     ViewBag.Comments = 10;
                     ViewBag.imgWidth = MkImage.GetWidth(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid + "/"), publication.Filename));
                     ViewBag.imgHeight = MkImage.GetHeight(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid + "/"), publication.Filename));
@@ -124,13 +129,12 @@ namespace Store.Controllers
         }
         // GET: Publication/Create
         [Authorize]
-        public async Task<ActionResult> Create()
+        public async Task<ActionResult> Create(string onlyFor = null)
         {
           
             Dictionary<int, string> categories = await ServicePack.GetCategories();               
-            ViewBag.Categories = categories;
-          
-            return View();
+            ViewBag.Categories = categories; 
+            return View(new PublicationCreateViewModel() { OnlyFor = onlyFor});
         }
 
         [HttpPost]
@@ -160,27 +164,27 @@ namespace Store.Controllers
                 {
                    
                     decimal price = decimal.Parse(model.Price);
-                    int userId = User.Identity.GetUserId<int>(); 
-                        Publication publication = new Publication
-                        {
-                            UserId = userId,
-                            Content = model.Content,
-                            HeaderPath = "temp",
-                            DateOfCreated = DateTime.Now,
-                            Guid = Guid.NewGuid().ToString(),
-                            Price = price,
-                            Previous_Price = price,
-                            For_Sale = false
+                    int userId = User.Identity.GetUserId<int>();
+                    Publication publication = new Publication
+                    {
+                        UserId = userId,
+                        Content = model.Content,
+                        HeaderPath = "temp",
+                        DateOfCreated = DateTime.Now,
+                        Guid = Guid.NewGuid().ToString(),
+                        Price = price,
+                        Previous_Price = price,
+                        For_Sale = false,
+                        OnlyFor = context.Users.FirstOrDefault(x => x.UserName == model.OnlyFor).Id
 
-
-                        };
+                    };
                        
-                        int[] categories = new int[0];
+                    int[] categories = new int[0];
                         
-                       if (collection["AreChecked"] != null)
-                       {
-                           categories = Array.ConvertAll(collection["AreChecked"].ToString().Split(','), x => int.Parse(x.ToString()));
-                       }
+                    if (collection["AreChecked"] != null)
+                    {
+                        categories = Array.ConvertAll(collection["AreChecked"].ToString().Split(','), x => int.Parse(x.ToString()));
+                    }
                     try
                     {
                         if (model.Picture != null && model.Picture.ContentLength > 0)
@@ -236,7 +240,7 @@ namespace Store.Controllers
 
         
         
-        public async Task<ActionResult> ChangePage(int actualPage = 1, FormCollection c = null, string search = "", bool personalPage = false, string category = "", OrderByModel ob = OrderByModel.DateDesc, List<int> categories = null)
+        public async Task<ActionResult> ChangePage(int actualPage = 1, FormCollection c = null, string search = "", bool personalPage = false, string category = "", OrderByModel ob = OrderByModel.DateDesc, List<int> categories = null, bool onlyForMe = false)
         {
             List<PublicationViewModel> model = new List<PublicationViewModel>();
             var dfh = c["order"];
@@ -324,11 +328,18 @@ namespace Store.Controllers
                     }
                 }
                 OrderByModel orderby = ob;
+
                 if(c["order"]!= null)
                 {
                     orderby = (OrderByModel)Enum.Parse(typeof(OrderByModel), c["order"]);
                 }
-                
+                System.Linq.Expressions.Expression<Func<Publication, bool>> _onlyForMe = x => x.OnlyFor == HttpContext.User.Identity.GetUserId<int>();
+
+                if (!onlyForMe)
+                {
+                    _onlyForMe=  x => x.OnlyFor == null;
+                }
+                predicate1 = predicate1.And(_onlyForMe);
 
                 ViewBag.OrderBy = orderby;
                 
@@ -341,6 +352,7 @@ namespace Store.Controllers
             ViewBag.Search = search;
             ViewBag.Categories = a;
             ViewBag.MyGallery = personalPage;
+            ViewBag.OnlyForMe = onlyForMe;
             TempData["ActualPage"] = actualPage ;
             return PartialView("~/Views/Publication/_PublicationLists.cshtml", realList);
         }

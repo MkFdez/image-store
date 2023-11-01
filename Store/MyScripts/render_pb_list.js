@@ -10,12 +10,13 @@
 let search = document.getElementById("Hidden") != null ? document.getElementById("Hidden").value : "";
 let mG = document.getElementById("Hidden2") != null ? document.getElementById("Hidden2").value : false;
 let cat =  document.getElementById("Hidden3") != null ? document.getElementById("Hidden3").value : "";
+let oFm = document.getElementById("Hidden4") != null ? document.getElementById("Hidden4").value : false;
 mG = mG == "True" ? true : false;
 if (search != "") {
     $.ajax({
         dataType: "html",
         url: "/Publication/ChangePage",
-        data: { "search": search, "personalPage": mG },
+        data: { "search": search, "personalPage": mG, onlyForMe = oFm },
         type: "POST",
         success: function (result) { document.getElementById("PublicationsList").innerHTML = result; },
 
@@ -25,7 +26,7 @@ if (search != "") {
     $.ajax({
         dataType: "html",
         url: "/Publication/ChangePage",
-        data: { "category": cat, "personalPage": mG },
+        data: { "category": cat, "personalPage": mG, onlyForMe = oFm },
         type: "POST",
         success: function (result) {
             document.getElementById("PublicationsList").innerHTML = result;

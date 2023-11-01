@@ -36,6 +36,7 @@ namespace DataAccess
         public int Downloads { get; set; }
         public Nullable<int> CollectionId { get; set; }
         public int StarCount { get; set; }
+        public Nullable<int> OnlyFor { get; set; }
     
         public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
