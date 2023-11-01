@@ -18,6 +18,8 @@
     <div class="form-horizontal">
 
         <hr />
+
+        @Html.HiddenFor(x => x.OnlyFor)
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group" style="width:min-content;min-width:40%; margin-right:auto; margin-left:auto">
             @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2" })

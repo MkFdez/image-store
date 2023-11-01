@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccessLibrary;
+using Microsoft.AspNet.Identity;
 
 namespace ChatServicesII
 {
@@ -79,6 +80,22 @@ namespace ChatServicesII
         {
             var model = await sql.LoadData<GetUsernameModel>("dbo.spGet_UsernameByToken", new {Token = token });  
             return model.First().Username;
+        }
+        public async Task BlockUser(string blocker, string blocked)
+        {
+            await sql.SaveData("dbo.spBlock_User", new { Blocker = blocker, Blocked = blocked });
+        }
+        public async Task UnblockUser(string blocker, string blocked)
+        {
+            await sql.SaveData("dbo.spUnblock_User", new { Blocker = blocker, Blocked = blocked });
+        }
+        public async Task ReportUser(string reporter, string reported, int reason, string message)
+        {
+            await sql.SaveData("dbo.spReport_User", new { Reporter = reporter, Reported = reported, ReportId = reason, Reason = message });
+        }
+        public async Task<List<Report_Reasons>> GetReportReason()
+        {
+            return await sql.LoadData<Report_Reasons>("dbo.spGet_ReportReasons", new {}); ;
         }
     }
 }

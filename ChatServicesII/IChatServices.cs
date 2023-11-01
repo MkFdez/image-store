@@ -14,5 +14,9 @@ namespace ChatServicesII
         Task<List<MessageCustomModel>> GetMessages(int chat);
         Task<List<ChatViewModel>> GetAllChats(string user);
         Task<string> GetUsername(string token);
+        Task BlockUser(string blocker, string blocked);
+        Task UnblockUser(string blocker, string blocked);
+        Task ReportUser(string reporter, string reported, int reason, string message);
+        Task<List<Report_Reasons>> GetReportReason();
     }
 }
