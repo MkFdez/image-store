@@ -41,6 +41,14 @@ namespace DataAccess
         public virtual DbSet<DailySale> DailySales { get; set; }
         public virtual DbSet<MonthlySale> MonthlySales { get; set; }
         public virtual DbSet<SocialMedia> SocialMedias { get; set; }
+        public virtual DbSet<Collection> Collections { get; set; }
+        public virtual DbSet<AttachedFile> AttachedFiles { get; set; }
+        public virtual DbSet<Chat> Chats { get; set; }
+        public virtual DbSet<Message> Messages { get; set; }
+        public virtual DbSet<Notification> Notifications { get; set; }
+        public virtual DbSet<Token> Tokens { get; set; }
+        public virtual DbSet<Report_Reasons> Report_Reasons { get; set; }
+        public virtual DbSet<Report> Reports { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

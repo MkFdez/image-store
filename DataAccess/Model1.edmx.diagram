@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="45afeab3b7cb480893e30f961ce941cd" Name="Diagram1" ZoomLevel="72">
+      <Diagram DiagramId="45afeab3b7cb480893e30f961ce941cd" Name="Diagram1" ZoomLevel="94">
         <EntityTypeShape EntityType="Project1DBModel.Role" Width="1.5" PointX="0.75" PointY="6.875" IsExpanded="true" />
         <EntityTypeShape EntityType="Project1DBModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="5.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Project1DBModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="8.125" IsExpanded="true" />
@@ -33,6 +33,20 @@
         <AssociationConnector Association="Project1DBModel.FK__MonthlySa__UserI__0880433F" />
         <EntityTypeShape EntityType="Project1DBModel.SocialMedia" Width="1.5" PointX="5.25" PointY="16.75" />
         <AssociationConnector Association="Project1DBModel.FK_SocialMedia_AspNetUsers" />
+        <EntityTypeShape EntityType="Project1DBModel.Collection" Width="1.5" PointX="8.375" PointY="9.875" />
+        <AssociationConnector Association="Project1DBModel.FK_Publication_Collections" />
+        <AssociationConnector Association="Project1DBModel.Publication_Likes" />
+        <EntityTypeShape EntityType="Project1DBModel.AttachedFile" Width="1.5" PointX="6" PointY="30.125" />
+        <EntityTypeShape EntityType="Project1DBModel.Chat" Width="1.5" PointX="6" PointY="26.5" />
+        <EntityTypeShape EntityType="Project1DBModel.Message" Width="1.5" PointX="8.25" PointY="17.625" />
+        <EntityTypeShape EntityType="Project1DBModel.Notification" Width="1.5" PointX="6" PointY="24.25" />
+        <AssociationConnector Association="Project1DBModel.FK_Chat_AspNetUsers" />
+        <AssociationConnector Association="Project1DBModel.FK_Chat_AspNetUsers1" />
+        <AssociationConnector Association="Project1DBModel.FK_Messages_AspNetUsers" />
+        <AssociationConnector Association="Project1DBModel.FK_Messages_AttachedFile" />
+        <AssociationConnector Association="Project1DBModel.FK_Messages_Chat" />
+        <AssociationConnector Association="Project1DBModel.User_Notification" />
+        <EntityTypeShape EntityType="Project1DBModel.Token" Width="1.5" PointX="10.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -22,7 +22,7 @@ namespace Services
         Task<ExtendedPublicationVM> GetPublication(int id);
         Task<PublicationToDownloadModel> GetPublicationToDownload(int pubId);
         Task<List<ForChartModel>> GetSalesHistory(int month, int year);
-        Task<List<PublicationViewModel>> GetSomePublications(int actualPage, Expression<Func<Publication, bool>> predicate);
+        Task<List<PublicationViewModel>> GetSomePublications(int actualPage, Expression<Func<Publication, bool>> predicate, OrderByModel order);
         Task<DTResponse> GetTransactions(Pagination pagination);
         Task<DTResponse> GetPublicationsForDatatable(Pagination pagination);
         Task<bool> HasPublication(int pubId);
@@ -34,5 +34,14 @@ namespace Services
         Task<List<SimplePublicationViewModel>> GetCreatorPubliactions(string username, int count);
         Task<ProfileViewModel> GetCreator(string username);
         bool DeletePublication(int pubId);
+        Task CreateCollection(string name);
+        Task<DTResponse> GetCollections(Pagination pagination);
+        Task DeleteCollection(int collectionId);
+        Task MoveToCollection(int collectionid, int publicationid);
+        Task NoCollection(int publicationid);
+        Task<List<SimplePublicationViewModel>> GetCollectionPublication(int collectionid);
+        Task<List<SimplePublicationViewModel>> MoreInCollection(int collectionid, int publicationid);
+        Task Like(bool like, int pubId);
+        Task<string> AddToken();
     }
 }

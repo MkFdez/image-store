@@ -16,6 +16,8 @@ namespace Store.Controllers
     
     public class CommentController : Controller
     {
+        public static readonly log4net.ILog log = log4net.LogManager.GetLogger("CommentLogger");
+
         // GET: Comment
         public ActionResult Index()
         {
@@ -33,10 +35,6 @@ namespace Store.Controllers
         [HttpPost]
         public ActionResult Create(string content, int publicationId)
         {
-            if (!System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "Account");
-            }
           
             using (var context = new Project1DBEntities())
             {
@@ -49,8 +47,15 @@ namespace Store.Controllers
                     DateOfCreated = DateTime.Now,
                     PublicationId = publicationId,
                 };
-                context.Comments.Add(comment);
-                context.SaveChanges();
+                try
+                {
+                    context.Comments.Add(comment);
+                    context.SaveChanges();
+                }
+                catch(Exception ex)
+                {
+                    log.Error("Error adding new comment", ex);
+                }
                 return Json(JsonSerializer.Serialize<CommentModel>(new CommentModel()
                 {
                     UserName = System.Web.HttpContext.Current.User.Identity.Name,
@@ -61,13 +66,13 @@ namespace Store.Controllers
             
         }
         [HttpPost]
-        public ActionResult MoreComments(int actual)
+        public ActionResult MoreComments(int actual, int publicationid)
         {
             using (var context = new Project1DBEntities())
             {
                 List<CommentModel> comments = new List<CommentModel>();
                 
-                foreach (var c in context.Comments.OrderBy(x => x.CommentId).Skip(actual).Take(10))
+                foreach (var c in context.Comments.Where(x => x.PublicationId == publicationid).OrderBy(x => x.CommentId).Skip(actual).Take(10))
                 {
                     comments.Add(new CommentModel()
                     {

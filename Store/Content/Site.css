@@ -741,3 +741,399 @@ ul.summary-list {
     .table-button:hover {
         transform: scale(1.1);
     }
+
+.delete-button {
+
+    position: absolute !important;
+    left:auto;
+    right:auto;
+    top: 2% !important;
+    left : 2% !important;
+    text-align: center !important;
+    z-index:10;
+}
+.carousel-control-prev-icon {
+    background-image: url("https://img.icons8.com/ios-filled/100/left-squared--v1.png")!important;
+}
+.carousel-control-next-icon {
+    background-image: url("https://img.icons8.com/ios-filled/100/right-squared--v2.png") !important;
+}
+
+.sidebar {
+    background-color: #f5f5f5; /* Add your desired color */
+    padding: 20px;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-title {
+    color: #333;
+    font-size: 18px;
+}
+
+.image-container {
+    position: relative;
+}
+
+.free-tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #4caf50; /* Add your desired color */
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.category-tags {
+    margin-bottom: 20px;
+}
+
+.tag-label {
+    display: block;
+    position: relative;
+    margin-bottom: 5px;
+}
+
+.tag {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: transparent;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    position: absolute;
+    left: -20px;
+    top: 6px;
+}
+
+.tag-label input[type="checkbox"]:checked + .tag {
+    background-color: #4caf50; /* Add your desired color */
+    border-color: #4caf50;
+}
+
+/* Hover effect for images */
+.card-styled:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
+}
+/* ... Previous styles ... */
+
+.aspect-ratio {
+    position: relative;
+    width: 100%;
+    padding-bottom: 75%; /* Set the aspect ratio (height / width) */
+    overflow: hidden;
+}
+
+    .aspect-ratio img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Maintain the image aspect ratio and fill the container */
+    }
+/* ... Previous styles ... */
+
+.top-filter-bar {
+    background-color: rgb(33, 37, 41); /* Add your desired color */
+    padding: 15px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px
+}
+
+.filter-title {
+    font-size: 18px;
+}
+
+.filter-group {
+    display: flex;
+    gap: 20px;
+}
+
+.filter-item {
+    position: relative;
+}
+.filter-item > select{
+    color : white;
+}
+.filter-item > select > option{
+    color: black!important
+}
+
+.filter-dropdown {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+}
+
+.dropdown-menu {
+    min-width: auto;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px!important;
+
+}
+
+.dropdown-item {
+    padding: 10px 20px;
+    color:black;
+}
+
+.multiselect-menu {
+    min-width: 200px;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+    max-height: 200px; /* Set a max height to prevent overflowing */
+}
+
+
+/* Adjust styles for number inputs and apply button as needed */
+.apply-button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+    .apply-button:hover {
+        background-color: #45a049; /* Slightly darker shade on hover */
+    }
+
+.filter-text {
+    color: white;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+.form-container {
+    margin-right:auto;
+    margin-left:auto;
+    width:300px;
+    border-radius: 0.75rem;
+    background-color: rgba(17, 24, 39, 1);
+    padding: 2rem;
+    color: rgba(243, 244, 246, 1);
+}
+
+.title {
+    text-align: center;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 700;
+}
+
+.form {
+    margin-top: 1.5rem;
+}
+
+.input-group {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+    .input-group label {
+        display: block;
+        color: rgba(156, 163, 175, 1);
+        margin-bottom: 4px;
+    }
+
+.form-input {
+    width: 100%;
+    border-radius: 0.375rem!important;
+    border: 1px solid rgba(55, 65, 81, 1);
+    outline: 0;
+    background-color: rgba(17, 24, 39, 1)!important;
+    padding: 0.75rem 1rem;
+    color: rgba(243, 244, 246, 1)!important;
+}
+
+    .form-input:focus {
+        border-color: #198754;
+    }
+    .form-input:-webkit-autofill,
+    .form-input:-webkit-autofill:hover,
+    .form-input:-webkit-autofill:focus,
+    .form-input:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 30px rgba(17, 24, 39, 1) inset !important;
+    }
+    .form-input:-webkit-autofill {
+        -webkit-text-fill-color: rgba(243, 244, 246, 1) !important;
+    }
+.forgot {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: rgba(156, 163, 175,1);
+    margin: 8px 0 14px 0;
+}
+
+    .forgot a, .signup a {
+        color: rgba(243, 244, 246, 1);
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+        .forgot a:hover, .signup a:hover {
+            text-decoration: underline rgba(167, 139, 250, 1);
+        }
+
+.sign {
+    display: block;
+    width: 100%;
+    background-color: #198754;
+    padding: 0.75rem;
+    text-align: center;
+    color: rgba(17, 24, 39, 1);
+    border: none;
+    border-radius: 0.375rem;
+    font-weight: 600;
+}
+
+.social-message {
+    display: flex;
+    align-items: center;
+    padding-top: 1rem;
+}
+
+.line {
+    height: 1px;
+    flex: 1 1 0%;
+    background-color: rgba(55, 65, 81, 1);
+}
+
+.social-message .message {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: rgba(156, 163, 175, 1);
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+}
+
+    .social-icons .icon {
+        border-radius: 0.125rem;
+        padding: 0.75rem;
+        border: none;
+        background-color: transparent;
+        margin-left: 8px;
+    }
+
+        .social-icons .icon svg {
+            height: 1.25rem;
+            width: 1.25rem;
+            fill: #fff;
+        }
+
+.signup {
+    text-align: center;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: rgba(156, 163, 175, 1);
+}
+.loader {
+    border: 4px solid rgba(0, 0, 0, .1);
+    border-left-color: transparent;
+    border-radius: 50%;
+}
+
+.loader {
+    border: 4px solid rgba(0, 0, 0, .1);
+    border-left-color: transparent;
+    width: 36px;
+    height: 36px;
+}
+
+.loader {
+    border: 4px solid rgba(0, 0, 0, .1);
+    border-left-color: transparent;
+    width: 36px;
+    height: 36px;
+    animation: spin89345 1s linear infinite;
+}
+
+@keyframes spin89345 {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+.bg-primary {
+    background-color: #0B132B !important;
+}
+.bg-secondary {
+    background-color: #1C2541 !important;
+}
+.bg-terciary {
+    background-color: #3A506B !important;
+}
+.bg-past-terciary {
+    background-color: #5BC0BE !important;
+}
+.bg-past-past-terciary {
+    background-color: #FFFFFF !important;
+}
+.star-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.star-container {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+}
+
+    .star-container svg {
+        position: relative;
+        top: 0;
+        left: 0;
+        height: 24px;
+        width: 24px;
+        transition: all 0.3s;
+        fill: #666;
+    }
+
+        .star-container svg:hover {
+            transform: scale(1.1);
+        }
+
+    .star-container input:checked ~ svg {
+        fill: #ffeb49;
+    }
+
+   

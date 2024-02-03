@@ -14,7 +14,7 @@
 1. Clone the repository:
    ```sh
    git clone https://github.com/MkFdez/image-store.git
-2. Open the Store.sln with Visual Studio(recommended 2019 od higher)
+2. Open the Store.sln with Visual Studio(recommended 2019 or higher)
 
 3. Generate the Database from ADO.NET Entity Data Model:
 
@@ -33,7 +33,7 @@
 - SQL Server for the database
 
 ## Authentication 🔒
--User authentication and authorization are handled through Microsoft Identity, providing a secure and reliable experience for sign-up, login, and account management.
+User authentication and authorization are handled through Microsoft Identity, providing a secure and reliable experience for sign-up, login, and account management.
 
 ## Payments 💳
 Securely process payments with ease using the Stripe integration. Users can conveniently make purchases using their preferred payment methods.

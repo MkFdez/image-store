@@ -1,118 +1,84 @@
 ﻿@model Models.PublicationsListViewModel
+@using Models
 
 @{
     ViewBag.Title = "Index";
     //Layout = "~/Views/Shared/_LayoutCustom.cshtml";
 }
-<style>
-    .auto-grid {
-        --auto-grid-min-size: 16rem;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(var(--auto-grid-min-size), 1fr));
-        grid-gap: 1rem;
-    }
 
-    .filter-bar {
-        display: flex;
-        flex-wrap: wrap;
-        column-gap: 15px;
-        background-color: #212529;
-        padding: 15px;
-        margin-bottom: 10px;
-    }
-
-    .price-filter {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        padding: 5px;
-        flex-direction: row
-    }
-
-    .filter-bar > a, label {
-        color: white;
-    }
-
-    .white-text {
-        color: white;
-    }
-
-    .filter-type {
-        color: white
-    }
-
-    .no-hover:hover {
-    }
-
-    .filter-type :hover {
-        color: lightgray !important
-    }
-</style>
 <input type="hidden" value=@ViewBag.Search id="Hidden" />
 <input type="hidden" value="@ViewBag.MyGallery" id="Hidden2" />
 <input type="hidden" value="@ViewBag.Category" id="Hidden3" />
-<div class="container-fluid">
-    <div class="row" style="margin-top:50px">
-        <div class="row" style="margin-left:0px">
-            @using (Ajax.BeginForm("ChangePage", "Publication", new { search = ViewBag.Search, personalPage = bool.Parse(ViewBag.MyGallery) }, new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "PublicationsList" }))
-            {
-                <div class="filter-bar">
-                    <div>
-                        <label class="white-text text-decoration-none no-hover" style="margin-top:auto; margin-bottom:auto">
-                            Filters:
-                        </label>
+<input type="hidden" value="@ViewBag.OnlyForMe" id="Hidden4" />
+
+
+
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Top Filter Bar -->
+        @using (Ajax.BeginForm("ChangePage", "Publication", new { search = ViewBag.Search, personalPage = bool.Parse(ViewBag.MyGallery), onlyForMe = ViewBag.OnlyForMe }, new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "PublicationsList" }))
+        {
+            <div class="col-md-12 top-filter-bar mb-2">
+                <div class="filter-group">
+
+                    <div class="filter-item">
+                        <button class="filter-dropdown filter-text" data-bs-toggle="dropdown" aria-expanded="false">Categories</button>
+                        <ul class="dropdown-menu multiselect-menu">
+                            <li>
+                                @foreach (var i in ViewBag.Categories)
+                                {
+                                    <label class="form-check">
+                                        <input name="AreChecked" type="checkbox" class="form-check-input category-checkbox" id="@i.Key" value="@i.Key"> @i.Value
+                                    </label>
+                                }
+                            </li>
+                        </ul>
                     </div>
-
-                    <div class="w3-dropdown-hover" style="background-color:transparent!important; ">
-                        <label href="#" class="filter-type text-decoration-none">Categories</label>
-                        <div class="w3-dropdown-content w3-bar-block w3-border" style="padding-left:5px!important">
-                            @foreach (var i in ViewBag.Categories)
-                            {
-                                <div>
-                                    <input name="AreChecked" type="checkbox" id="@i.Key" value="@i.Key" />
-                                    <label for="@i.Key" style="color:black !important">@i.Value</label>
-                                </div>
-                            }
-
-
-                        </div>
-
+                    <div class="filter-item">
+                        <button class="filter-dropdown filter-text" data-bs-toggle="dropdown" aria-expanded="false">Price Range</button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <input name="MinPrice" type="number" class="form-control mb-1" placeholder="Min" />
+                                <input name="MaxPrice" type="number" class="form-control" placeholder="Max" />
+                            </li>
+                        </ul>
                     </div>
-
-                    <div class="w3-dropdown-hover w3-right" style="background-color:transparent!important; ">
-                        <label href="#" class="filter-type text-decoration-none">Price</label>
-                        <div class="w3-dropdown-content w3-bar-block w3-border">
-
-                            <div class="price-filter">
-                                <input name="MinPrice" type="number" id="min" placeholder="Min" />
-                                <label style="color:black !important">-</label>
-                                <input name="MaxPrice" type="number" id="max" placeholder="Max" />
-                            </div>
-
-
-
-                        </div>
-
+                    <div class="filter-item">
+                        @Html.DropDownList("order",
+                    Enum.GetValues(typeof(OrderByModel)).Cast<OrderByModel>().Select(x => new SelectListItem() { Value = x.ToString(), Text = x.GetDisplayName() }),
+                    new { @class = "filter-dropdown filter-text" })
                     </div>
-                    <input type="submit" class="btn-primary" value="Apply Filters">
-
                 </div>
-            }
-        </div>
-        <div class="row" style="margin-right:20px">
-            <div style="display:block" id="PublicationsList">
+                <input type="submit" class="apply-button" value="Apply" />
 
+            </div>
+        }
+
+        <!-- Image Gallery -->
+        <div class="col-md-12">
+            <div class="row" id="PublicationsList">
 
 
             </div>
         </div>
     </div>
-
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
 @section Scripts{
 
     <script src="~/Scripts/jquery-3.4.1.js"></script>
-    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
     <script src="~/MyScripts/effects.js"></script>
     <script src="~/MyScripts/render_pb_list.js"></script>
 }

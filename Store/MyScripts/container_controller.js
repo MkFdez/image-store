@@ -1,6 +1,6 @@
 ﻿function updateView(index) {
     
-    let containers = ['daily-chart-container', 'monthly-chart-container', 'recent-sales-table-container', 'publications-table-container']
+    let containers = ['daily-chart-container', 'monthly-chart-container', 'recent-sales-table-container', 'publications-table-container', 'collections-table-container', 'view-collection']
     console.log(document.getElementById(containers[index]).innerHTML.trim() == "")
    
     for (let container of containers) {
@@ -36,6 +36,12 @@
                 loadPublicationDatatable()
 
             }
+            break;
+        case 4:
+            if (document.getElementById(containers[index]).innerHTML.trim() == "") {
+                loadCollectionsDatatable()
+
+            }      
             break;
     }
 }

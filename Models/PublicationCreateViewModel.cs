@@ -19,5 +19,6 @@ namespace Models
 
         [Required]      
         public string Price { get; set; }
+        public string OnlyFor { get; set; }
     }
 }

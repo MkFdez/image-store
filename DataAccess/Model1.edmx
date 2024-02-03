@@ -57,6 +57,21 @@
           <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
           <Property Name="Picture" Type="int" />
         </EntityType>
+        <EntityType Name="AttachedFile">
+          <Key>
+            <PropertyRef Name="FileId" />
+          </Key>
+          <Property Name="FileId" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="FilePath" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Block">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="BlockedId" />
+          </Key>
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="BlockedId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Category">
           <Key>
             <PropertyRef Name="CategoryId" />
@@ -71,6 +86,22 @@
           </Key>
           <Property Name="PublicationId" Type="int" Nullable="false" />
           <Property Name="CategoryId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Chat">
+          <Key>
+            <PropertyRef Name="ChatId" />
+          </Key>
+          <Property Name="ChatId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserIdOne" Type="int" Nullable="false" />
+          <Property Name="UserIdTwo" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Collections">
+          <Key>
+            <PropertyRef Name="CollectionId" />
+          </Key>
+          <Property Name="CollectionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Comment">
           <Key>
@@ -91,6 +122,17 @@
           <Property Name="TotalAmount" Type="money" Nullable="false" />
           <Property Name="Date" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="Messages">
+          <Key>
+            <PropertyRef Name="MessageId" />
+          </Key>
+          <Property Name="MessageId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SenderId" Type="int" Nullable="false" />
+          <Property Name="ChatId" Type="int" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Content" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="FileId" Type="nvarchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="MonthlySales">
           <Key>
             <PropertyRef Name="Id" />
@@ -100,6 +142,13 @@
           <Property Name="Month" Type="int" Nullable="false" />
           <Property Name="Year" Type="int" Nullable="false" />
           <Property Name="Amount" Type="money" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Notification">
+          <Key>
+            <PropertyRef Name="NotificationId" />
+          </Key>
+          <Property Name="NotificationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Message" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="ProfilePicture">
           <Key>
@@ -123,6 +172,34 @@
           <Property Name="Previous_Price" Type="money" />
           <Property Name="For_Sale" Type="bit" />
           <Property Name="Downloads" Type="int" Nullable="false" />
+          <Property Name="CollectionId" Type="int" />
+          <Property Name="StarCount" Type="int" Nullable="false" />
+          <Property Name="OnlyFor" Type="int" />
+        </EntityType>
+        <EntityType Name="Publication_Likes">
+          <Key>
+            <PropertyRef Name="PublicationId" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="PublicationId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Report_Reasons">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Reason" Type="nvarchar" MaxLength="150" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Reports">
+          <Key>
+            <PropertyRef Name="ReportId" />
+          </Key>
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="ReportedId" Type="int" Nullable="false" />
+          <Property Name="Reason" Type="int" Nullable="false" />
+          <Property Name="Message" Type="nvarchar" MaxLength="150" />
+          <Property Name="ReportId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="SalesHistory">
           <Key>
@@ -162,6 +239,21 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
+        <EntityType Name="Token">
+          <Key>
+            <PropertyRef Name="Token" />
+          </Key>
+          <Property Name="Token" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="User_Notification">
+          <Key>
+            <PropertyRef Name="NotificationId" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="NotificationId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+        </EntityType>
         <Association Name="FK__MonthlySa__UserI__0880433F">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
           <End Role="MonthlySales" Type="Self.MonthlySales" Multiplicity="*" />
@@ -186,6 +278,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Block_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="Block" Type="Self.Block" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Block">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Block_AspNetUsers1">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="Block" Type="Self.Block" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Block">
+              <PropertyRef Name="BlockedId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Category_x_Publication_Category">
           <End Role="Category" Type="Self.Category" Multiplicity="1" />
           <End Role="Category_x_Publication" Type="Self.Category_x_Publication" Multiplicity="*" />
@@ -207,6 +323,30 @@
             </Principal>
             <Dependent Role="Category_x_Publication">
               <PropertyRef Name="PublicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Chat_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="Chat" Type="Self.Chat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Chat">
+              <PropertyRef Name="UserIdOne" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Chat_AspNetUsers1">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="Chat" Type="Self.Chat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Chat">
+              <PropertyRef Name="UserIdTwo" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -302,6 +442,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Messages_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="Messages" Type="Self.Messages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Messages">
+              <PropertyRef Name="SenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Messages_AttachedFile">
+          <End Role="AttachedFile" Type="Self.AttachedFile" Multiplicity="0..1" />
+          <End Role="Messages" Type="Self.Messages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AttachedFile">
+              <PropertyRef Name="FileId" />
+            </Principal>
+            <Dependent Role="Messages">
+              <PropertyRef Name="FileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Messages_Chat">
+          <End Role="Chat" Type="Self.Chat" Multiplicity="1" />
+          <End Role="Messages" Type="Self.Messages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Chat">
+              <PropertyRef Name="ChatId" />
+            </Principal>
+            <Dependent Role="Messages">
+              <PropertyRef Name="ChatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Publication_AspNetUsers1">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
           <End Role="Publication" Type="Self.Publication" Multiplicity="*" />
@@ -314,6 +490,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Publication_Collections">
+          <End Role="Collections" Type="Self.Collections" Multiplicity="0..1" />
+          <End Role="Publication" Type="Self.Publication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Collections">
+              <PropertyRef Name="CollectionId" />
+            </Principal>
+            <Dependent Role="Publication">
+              <PropertyRef Name="CollectionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Publication_Likes_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="Publication_Likes" Type="Self.Publication_Likes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Publication_Likes">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Publication_Likes_Publication">
+          <End Role="Publication" Type="Self.Publication" Multiplicity="1" />
+          <End Role="Publication_Likes" Type="Self.Publication_Likes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Publication">
+              <PropertyRef Name="PublicationId" />
+            </Principal>
+            <Dependent Role="Publication_Likes">
+              <PropertyRef Name="PublicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Publication_Status">
           <End Role="Status" Type="Self.Status" Multiplicity="1" />
           <End Role="Publication" Type="Self.Publication" Multiplicity="*" />
@@ -323,6 +535,42 @@
             </Principal>
             <Dependent Role="Publication">
               <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reports_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="Reports" Type="Self.Reports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Reports">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reports_AspNetUsers1">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="Reports" Type="Self.Reports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Reports">
+              <PropertyRef Name="ReportedId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reports_Report_Reasons">
+          <End Role="Report_Reasons" Type="Self.Report_Reasons" Multiplicity="1" />
+          <End Role="Reports" Type="Self.Reports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report_Reasons">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Reports">
+              <PropertyRef Name="Reason" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -359,6 +607,30 @@
             </Principal>
             <Dependent Role="SocialMedia">
               <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Notification_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="User_Notification" Type="Self.User_Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User_Notification">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Notification_Notification">
+          <End Role="Notification" Type="Self.Notification" Multiplicity="1" />
+          <End Role="User_Notification" Type="Self.User_Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Notification">
+              <PropertyRef Name="NotificationId" />
+            </Principal>
+            <Dependent Role="User_Notification">
+              <PropertyRef Name="NotificationId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -399,17 +671,28 @@
           <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AttachedFile" EntityType="Self.AttachedFile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Block" EntityType="Self.Block" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category_x_Publication" EntityType="Self.Category_x_Publication" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Chat" EntityType="Self.Chat" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Collections" EntityType="Self.Collections" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Comment" EntityType="Self.Comment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DailySales" EntityType="Self.DailySales" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Messages" EntityType="Self.Messages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MonthlySales" EntityType="Self.MonthlySales" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Notification" EntityType="Self.Notification" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProfilePicture" EntityType="Self.ProfilePicture" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Publication" EntityType="Self.Publication" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Publication_Likes" EntityType="Self.Publication_Likes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Report_Reasons" EntityType="Self.Report_Reasons" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Reports" EntityType="Self.Reports" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SalesHistory" EntityType="Self.SalesHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SocialMedia" EntityType="Self.SocialMedia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Status" EntityType="Self.Status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Token" EntityType="Self.Token" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User_Notification" EntityType="Self.User_Notification" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__MonthlySa__UserI__0880433F" Association="Self.FK__MonthlySa__UserI__0880433F">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="MonthlySales" EntitySet="MonthlySales" />
@@ -418,6 +701,14 @@
             <End Role="ProfilePicture" EntitySet="ProfilePicture" />
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
           </AssociationSet>
+          <AssociationSet Name="FK_Block_AspNetUsers" Association="Self.FK_Block_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Block" EntitySet="Block" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Block_AspNetUsers1" Association="Self.FK_Block_AspNetUsers1">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Block" EntitySet="Block" />
+          </AssociationSet>
           <AssociationSet Name="FK_Category_x_Publication_Category" Association="Self.FK_Category_x_Publication_Category">
             <End Role="Category" EntitySet="Category" />
             <End Role="Category_x_Publication" EntitySet="Category_x_Publication" />
@@ -425,6 +716,14 @@
           <AssociationSet Name="FK_Category_x_Publication_Publication" Association="Self.FK_Category_x_Publication_Publication">
             <End Role="Publication" EntitySet="Publication" />
             <End Role="Category_x_Publication" EntitySet="Category_x_Publication" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Chat_AspNetUsers" Association="Self.FK_Chat_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Chat" EntitySet="Chat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Chat_AspNetUsers1" Association="Self.FK_Chat_AspNetUsers1">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Chat" EntitySet="Chat" />
           </AssociationSet>
           <AssociationSet Name="FK_Comment_AspNetUsers" Association="Self.FK_Comment_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -454,13 +753,49 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
           </AssociationSet>
+          <AssociationSet Name="FK_Messages_AspNetUsers" Association="Self.FK_Messages_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Messages" EntitySet="Messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Messages_AttachedFile" Association="Self.FK_Messages_AttachedFile">
+            <End Role="AttachedFile" EntitySet="AttachedFile" />
+            <End Role="Messages" EntitySet="Messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Messages_Chat" Association="Self.FK_Messages_Chat">
+            <End Role="Chat" EntitySet="Chat" />
+            <End Role="Messages" EntitySet="Messages" />
+          </AssociationSet>
           <AssociationSet Name="FK_Publication_AspNetUsers1" Association="Self.FK_Publication_AspNetUsers1">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="Publication" EntitySet="Publication" />
           </AssociationSet>
+          <AssociationSet Name="FK_Publication_Collections" Association="Self.FK_Publication_Collections">
+            <End Role="Collections" EntitySet="Collections" />
+            <End Role="Publication" EntitySet="Publication" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Publication_Likes_AspNetUsers" Association="Self.FK_Publication_Likes_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Publication_Likes" EntitySet="Publication_Likes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Publication_Likes_Publication" Association="Self.FK_Publication_Likes_Publication">
+            <End Role="Publication" EntitySet="Publication" />
+            <End Role="Publication_Likes" EntitySet="Publication_Likes" />
+          </AssociationSet>
           <AssociationSet Name="FK_Publication_Status" Association="Self.FK_Publication_Status">
             <End Role="Status" EntitySet="Status" />
             <End Role="Publication" EntitySet="Publication" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reports_AspNetUsers" Association="Self.FK_Reports_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Reports" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reports_AspNetUsers1" Association="Self.FK_Reports_AspNetUsers1">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Reports" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reports_Report_Reasons" Association="Self.FK_Reports_Report_Reasons">
+            <End Role="Report_Reasons" EntitySet="Report_Reasons" />
+            <End Role="Reports" EntitySet="Reports" />
           </AssociationSet>
           <AssociationSet Name="FK_SalesHistory_AspNetUsers" Association="Self.FK_SalesHistory_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -473,6 +808,14 @@
           <AssociationSet Name="FK_SocialMedia_AspNetUsers" Association="Self.FK_SocialMedia_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="SocialMedia" EntitySet="SocialMedia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Notification_AspNetUsers" Association="Self.FK_User_Notification_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="User_Notification" EntitySet="User_Notification" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Notification_Notification" Association="Self.FK_User_Notification_Notification">
+            <End Role="Notification" EntitySet="Notification" />
+            <End Role="User_Notification" EntitySet="User_Notification" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -535,6 +878,15 @@
           <NavigationProperty Name="DailySales" Relationship="Project1DBModel.FK_DailySales_AspNetUsers" FromRole="User" ToRole="DailySale" />
           <NavigationProperty Name="MonthlySales" Relationship="Project1DBModel.FK__MonthlySa__UserI__0880433F" FromRole="User" ToRole="MonthlySale" />
           <NavigationProperty Name="SocialMedia" Relationship="Project1DBModel.FK_SocialMedia_AspNetUsers" FromRole="User" ToRole="SocialMedia" />
+          <NavigationProperty Name="LikedPublications" Relationship="Project1DBModel.Publication_Likes" FromRole="User" ToRole="Publication" />
+          <NavigationProperty Name="Chats" Relationship="Project1DBModel.FK_Chat_AspNetUsers" FromRole="User" ToRole="Chat" />
+          <NavigationProperty Name="Chats1" Relationship="Project1DBModel.FK_Chat_AspNetUsers1" FromRole="User" ToRole="Chat" />
+          <NavigationProperty Name="Messages" Relationship="Project1DBModel.FK_Messages_AspNetUsers" FromRole="User" ToRole="Message" />
+          <NavigationProperty Name="Notifications" Relationship="Project1DBModel.User_Notification" FromRole="User" ToRole="Notification" />
+          <NavigationProperty Name="Reports" Relationship="Project1DBModel.FK_Reports_AspNetUsers" FromRole="User" ToRole="Report" />
+          <NavigationProperty Name="Reports1" Relationship="Project1DBModel.FK_Reports_AspNetUsers1" FromRole="User" ToRole="Report" />
+          <NavigationProperty Name="AspNetUsers1" Relationship="Project1DBModel.Block" FromRole="User" ToRole="User1" />
+          <NavigationProperty Name="AspNetUsers" Relationship="Project1DBModel.Block" FromRole="User1" ToRole="User" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -584,6 +936,11 @@
           <NavigationProperty Name="Status" Relationship="Self.FK_Publication_Status" FromRole="Publication" ToRole="Status" />
           <NavigationProperty Name="SalesHistories" Relationship="Self.FK_SalesHistory_Publication" FromRole="Publication" ToRole="SalesHistory" />
           <NavigationProperty Name="Categories" Relationship="Self.Category_x_Publication" FromRole="Publication" ToRole="Category" />
+          <Property Name="CollectionId" Type="Int32" />
+          <NavigationProperty Name="Collection" Relationship="Project1DBModel.FK_Publication_Collections" FromRole="Publication" ToRole="Collection" />
+          <NavigationProperty Name="UserLikes" Relationship="Project1DBModel.Publication_Likes" FromRole="Publication" ToRole="User" />
+          <Property Name="StarCount" Type="Int32" Nullable="false" />
+          <Property Name="OnlyFor" Type="Int32" />
         </EntityType>
         <EntityType Name="SalesHistory">
           <Key>
@@ -846,6 +1203,62 @@
             <End Role="User" EntitySet="Users" />
             <End Role="SocialMedia" EntitySet="SocialMedias" />
           </AssociationSet>
+          <EntitySet Name="Collections" EntityType="Project1DBModel.Collection" />
+          <AssociationSet Name="FK_Publication_Collections" Association="Project1DBModel.FK_Publication_Collections">
+            <End Role="Collection" EntitySet="Collections" />
+            <End Role="Publication" EntitySet="Publications" />
+          </AssociationSet>
+          <AssociationSet Name="Publication_Likes" Association="Project1DBModel.Publication_Likes">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Publication" EntitySet="Publications" />
+          </AssociationSet>
+          <EntitySet Name="AttachedFiles" EntityType="Project1DBModel.AttachedFile" />
+          <EntitySet Name="Chats" EntityType="Project1DBModel.Chat" />
+          <EntitySet Name="Messages" EntityType="Project1DBModel.Message" />
+          <EntitySet Name="Notifications" EntityType="Project1DBModel.Notification" />
+          <AssociationSet Name="FK_Chat_AspNetUsers" Association="Project1DBModel.FK_Chat_AspNetUsers">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Chat" EntitySet="Chats" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Chat_AspNetUsers1" Association="Project1DBModel.FK_Chat_AspNetUsers1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Chat" EntitySet="Chats" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Messages_AspNetUsers" Association="Project1DBModel.FK_Messages_AspNetUsers">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Message" EntitySet="Messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Messages_AttachedFile" Association="Project1DBModel.FK_Messages_AttachedFile">
+            <End Role="AttachedFile" EntitySet="AttachedFiles" />
+            <End Role="Message" EntitySet="Messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Messages_Chat" Association="Project1DBModel.FK_Messages_Chat">
+            <End Role="Chat" EntitySet="Chats" />
+            <End Role="Message" EntitySet="Messages" />
+          </AssociationSet>
+          <AssociationSet Name="User_Notification" Association="Project1DBModel.User_Notification">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Notification" EntitySet="Notifications" />
+          </AssociationSet>
+          <EntitySet Name="Tokens" EntityType="Project1DBModel.Token" />
+          <EntitySet Name="Report_Reasons" EntityType="Project1DBModel.Report_Reasons" />
+          <EntitySet Name="Reports" EntityType="Project1DBModel.Report" />
+          <AssociationSet Name="FK_Reports_AspNetUsers" Association="Project1DBModel.FK_Reports_AspNetUsers">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Report" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reports_AspNetUsers1" Association="Project1DBModel.FK_Reports_AspNetUsers1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Report" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reports_Report_Reasons" Association="Project1DBModel.FK_Reports_Report_Reasons">
+            <End Role="Report_Reasons" EntitySet="Report_Reasons" />
+            <End Role="Report" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="Block" Association="Project1DBModel.Block">
+            <End Role="User" EntitySet="Users" />
+            <End Role="User1" EntitySet="Users" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -916,6 +1329,204 @@
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Collection">
+          <Key>
+            <PropertyRef Name="CollectionId" />
+          </Key>
+          <Property Name="CollectionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Publications" Relationship="Project1DBModel.FK_Publication_Collections" FromRole="Collection" ToRole="Publication" />
+        </EntityType>
+        <Association Name="FK_Publication_Collections">
+          <End Type="Project1DBModel.Collection" Role="Collection" Multiplicity="0..1" />
+          <End Type="Project1DBModel.Publication" Role="Publication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Collection">
+              <PropertyRef Name="CollectionId" />
+            </Principal>
+            <Dependent Role="Publication">
+              <PropertyRef Name="CollectionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Publication_Likes">
+          <End Type="Project1DBModel.User" Role="User" Multiplicity="*" />
+          <End Type="Project1DBModel.Publication" Role="Publication" Multiplicity="*" />
+        </Association>
+        <EntityType Name="AttachedFile">
+          <Key>
+            <PropertyRef Name="FileId" />
+          </Key>
+          <Property Name="FileId" Type="String" Nullable="false" annotation:StoreGeneratedPattern="None" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="FilePath" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Messages" Relationship="Project1DBModel.FK_Messages_AttachedFile" FromRole="AttachedFile" ToRole="Message" />
+        </EntityType>
+        <EntityType Name="Chat">
+          <Key>
+            <PropertyRef Name="ChatId" />
+          </Key>
+          <Property Name="ChatId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserIdOne" Type="Int32" Nullable="false" />
+          <Property Name="UserIdTwo" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AspNetUser" Relationship="Project1DBModel.FK_Chat_AspNetUsers" FromRole="Chat" ToRole="User" />
+          <NavigationProperty Name="AspNetUser1" Relationship="Project1DBModel.FK_Chat_AspNetUsers1" FromRole="Chat" ToRole="User" />
+          <NavigationProperty Name="Messages" Relationship="Project1DBModel.FK_Messages_Chat" FromRole="Chat" ToRole="Message" />
+        </EntityType>
+        <EntityType Name="Message">
+          <Key>
+            <PropertyRef Name="MessageId" />
+          </Key>
+          <Property Name="MessageId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SenderId" Type="Int32" Nullable="false" />
+          <Property Name="ChatId" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Content" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="FileId" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="AspNetUser" Relationship="Project1DBModel.FK_Messages_AspNetUsers" FromRole="Message" ToRole="User" />
+          <NavigationProperty Name="AttachedFile" Relationship="Project1DBModel.FK_Messages_AttachedFile" FromRole="Message" ToRole="AttachedFile" />
+          <NavigationProperty Name="Chat" Relationship="Project1DBModel.FK_Messages_Chat" FromRole="Message" ToRole="Chat" />
+        </EntityType>
+        <EntityType Name="Notification">
+          <Key>
+            <PropertyRef Name="NotificationId" />
+          </Key>
+          <Property Name="NotificationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Message" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUsers" Relationship="Project1DBModel.User_Notification" FromRole="Notification" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Chat_AspNetUsers">
+          <End Type="Project1DBModel.User" Role="User" Multiplicity="1" />
+          <End Type="Project1DBModel.Chat" Role="Chat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Chat">
+              <PropertyRef Name="UserIdOne" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Chat_AspNetUsers1">
+          <End Type="Project1DBModel.User" Role="User" Multiplicity="1" />
+          <End Type="Project1DBModel.Chat" Role="Chat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Chat">
+              <PropertyRef Name="UserIdTwo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Messages_AspNetUsers">
+          <End Type="Project1DBModel.User" Role="User" Multiplicity="1" />
+          <End Type="Project1DBModel.Message" Role="Message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Message">
+              <PropertyRef Name="SenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Messages_AttachedFile">
+          <End Type="Project1DBModel.AttachedFile" Role="AttachedFile" Multiplicity="0..1" />
+          <End Type="Project1DBModel.Message" Role="Message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AttachedFile">
+              <PropertyRef Name="FileId" />
+            </Principal>
+            <Dependent Role="Message">
+              <PropertyRef Name="FileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Messages_Chat">
+          <End Type="Project1DBModel.Chat" Role="Chat" Multiplicity="1" />
+          <End Type="Project1DBModel.Message" Role="Message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Chat">
+              <PropertyRef Name="ChatId" />
+            </Principal>
+            <Dependent Role="Message">
+              <PropertyRef Name="ChatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="User_Notification">
+          <End Type="Project1DBModel.User" Role="User" Multiplicity="*" />
+          <End Type="Project1DBModel.Notification" Role="Notification" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Token">
+          <Key>
+            <PropertyRef Name="Token1" />
+          </Key>
+          <Property Name="Token1" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Report_Reasons">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Reason" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Reports" Relationship="Project1DBModel.FK_Reports_Report_Reasons" FromRole="Report_Reasons" ToRole="Report" />
+        </EntityType>
+        <EntityType Name="Report">
+          <Key>
+            <PropertyRef Name="ReportId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="ReportedId" Type="Int32" Nullable="false" />
+          <Property Name="Reason" Type="Int32" Nullable="false" />
+          <Property Name="Message" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ReportId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="AspNetUser" Relationship="Project1DBModel.FK_Reports_AspNetUsers" FromRole="Report" ToRole="User" />
+          <NavigationProperty Name="AspNetUser1" Relationship="Project1DBModel.FK_Reports_AspNetUsers1" FromRole="Report" ToRole="User" />
+          <NavigationProperty Name="Report_Reasons" Relationship="Project1DBModel.FK_Reports_Report_Reasons" FromRole="Report" ToRole="Report_Reasons" />
+        </EntityType>
+        <Association Name="FK_Reports_AspNetUsers">
+          <End Type="Project1DBModel.User" Role="User" Multiplicity="1" />
+          <End Type="Project1DBModel.Report" Role="Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reports_AspNetUsers1">
+          <End Type="Project1DBModel.User" Role="User" Multiplicity="1" />
+          <End Type="Project1DBModel.Report" Role="Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="ReportedId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reports_Report_Reasons">
+          <End Type="Project1DBModel.Report_Reasons" Role="Report_Reasons" Multiplicity="1" />
+          <End Type="Project1DBModel.Report" Role="Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report_Reasons">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="Reason" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Block">
+          <End Type="Project1DBModel.User" Role="User" Multiplicity="*" />
+          <End Type="Project1DBModel.User" Role="User1" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -999,6 +1610,9 @@
           <EntitySetMapping Name="Publications">
             <EntityTypeMapping TypeName="Project1DBModel.Publication">
               <MappingFragment StoreEntitySet="Publication">
+                <ScalarProperty Name="OnlyFor" ColumnName="OnlyFor" />
+                <ScalarProperty Name="StarCount" ColumnName="StarCount" />
+                <ScalarProperty Name="CollectionId" ColumnName="CollectionId" />
                 <ScalarProperty Name="PublicationId" ColumnName="PublicationId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Content" ColumnName="Content" />
@@ -1116,6 +1730,103 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Collections">
+            <EntityTypeMapping TypeName="Project1DBModel.Collection">
+              <MappingFragment StoreEntitySet="Collections">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="CollectionId" ColumnName="CollectionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="Publication_Likes" TypeName="Project1DBModel.Publication_Likes" StoreEntitySet="Publication_Likes">
+            <EndProperty Name="Publication">
+              <ScalarProperty Name="PublicationId" ColumnName="PublicationId" />
+            </EndProperty>
+            <EndProperty Name="User">
+              <ScalarProperty Name="Id" ColumnName="UserId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="AttachedFiles">
+            <EntityTypeMapping TypeName="Project1DBModel.AttachedFile">
+              <MappingFragment StoreEntitySet="AttachedFile">
+                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+                <ScalarProperty Name="FileId" ColumnName="FileId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Chats">
+            <EntityTypeMapping TypeName="Project1DBModel.Chat">
+              <MappingFragment StoreEntitySet="Chat">
+                <ScalarProperty Name="UserIdTwo" ColumnName="UserIdTwo" />
+                <ScalarProperty Name="UserIdOne" ColumnName="UserIdOne" />
+                <ScalarProperty Name="ChatId" ColumnName="ChatId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Messages">
+            <EntityTypeMapping TypeName="Project1DBModel.Message">
+              <MappingFragment StoreEntitySet="Messages">
+                <ScalarProperty Name="FileId" ColumnName="FileId" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="ChatId" ColumnName="ChatId" />
+                <ScalarProperty Name="SenderId" ColumnName="SenderId" />
+                <ScalarProperty Name="MessageId" ColumnName="MessageId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Notifications">
+            <EntityTypeMapping TypeName="Project1DBModel.Notification">
+              <MappingFragment StoreEntitySet="Notification">
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="NotificationId" ColumnName="NotificationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="User_Notification" TypeName="Project1DBModel.User_Notification" StoreEntitySet="User_Notification">
+            <EndProperty Name="Notification">
+              <ScalarProperty Name="NotificationId" ColumnName="NotificationId" />
+            </EndProperty>
+            <EndProperty Name="User">
+              <ScalarProperty Name="Id" ColumnName="UserId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="Tokens">
+            <EntityTypeMapping TypeName="Project1DBModel.Token">
+              <MappingFragment StoreEntitySet="Token">
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Token1" ColumnName="Token" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Report_Reasons">
+            <EntityTypeMapping TypeName="Project1DBModel.Report_Reasons">
+              <MappingFragment StoreEntitySet="Report_Reasons">
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reports">
+            <EntityTypeMapping TypeName="Project1DBModel.Report">
+              <MappingFragment StoreEntitySet="Reports">
+                <ScalarProperty Name="ReportId" ColumnName="ReportId" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="ReportedId" ColumnName="ReportedId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="Block" TypeName="Project1DBModel.Block" StoreEntitySet="Block">
+            <EndProperty Name="User1">
+              <ScalarProperty Name="Id" ColumnName="BlockedId" />
+            </EndProperty>
+            <EndProperty Name="User">
+              <ScalarProperty Name="Id" ColumnName="UserId" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

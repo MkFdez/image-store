@@ -61,6 +61,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=2.0.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.15\lib\net45\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.3\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
@@ -278,6 +281,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\ChatController.cs" />
+    <Compile Include="Controllers\CollectionController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -301,8 +306,10 @@
     <Content Include="Content\Assets\demo\chart-area-demo.js" />
     <Content Include="Content\Assets\demo\chart-bar-demo.js" />
     <Content Include="Content\Assets\demo\chart-pie-demo.js" />
+    <Content Include="Content\Assets\demo\collections-datatable.js" />
     <Content Include="Content\Assets\demo\datatables-demo.js" />
     <Content Include="Content\Assets\demo\publication-datatable.js" />
+    <Content Include="Content\Assets\demo\view-collection.js" />
     <Content Include="Content\Assets\nature.jpg" />
     <Content Include="Content\Assets\people.jpg" />
     <Content Include="Content\Assets\principal.jpg" />
@@ -332,14 +339,20 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="MyScripts\add_comment.js" />
+    <Content Include="MyScripts\button-loading.js" />
+    <Content Include="MyScripts\checkout.js" />
     <Content Include="MyScripts\container_controller.js" />
+    <Content Include="MyScripts\create_collection.js" />
     <Content Include="MyScripts\delete_publication.js" />
     <Content Include="MyScripts\footer.js" />
     <Content Include="MyScripts\images_loader.js" />
+    <Content Include="MyScripts\infinity.js" />
     <Content Include="MyScripts\in_db.js" />
     <Content Include="MyScripts\download_controller.js" />
     <Content Include="MyScripts\ban.js" />
     <Content Include="MyScripts\image_uploader.js" />
+    <Content Include="MyScripts\like.js" />
+    <Content Include="MyScripts\more_in_collection.js" />
     <Content Include="MyScripts\toggle_sidebar.js" />
     <Content Include="MyScripts\price_input.js" />
     <Content Include="MyScripts\load_Comments.js" />
@@ -351,6 +364,7 @@
     <Content Include="MyStyles\style.css" />
     <Content Include="MyStyles\userDetailsStyle.css" />
     <Content Include="ProfilePictures\default.png" />
+    <Content Include="Scripts\bootstrap-waitingfor.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -448,12 +462,18 @@
     <Content Include="Views\Sales\EndMonth.cshtml" />
     <Content Include="Views\Publication\Manage.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Publication\Test.cshtml" />
+    <Content Include="Views\Account\_LoginForm.cshtml" />
+    <Content Include="Views\Account\_RegisterForm.cshtml" />
+    <Content Include="Views\Chat\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="ImageVault\" />
+    <Folder Include="Log\" />
     <Folder Include="TempData\" />
     <Folder Include="Views\Admin\" />
+    <Folder Include="Views\Collection\" />
     <Folder Include="Views\Comment\" />
     <Folder Include="Views\User\" />
   </ItemGroup>
@@ -477,9 +497,17 @@
       <Project>{4c676d9c-05ea-455d-b8df-e716209fb04c}</Project>
       <Name>CacheUtilities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Chat_Authentication\Chat_Authentication.csproj">
+      <Project>{86787c90-4482-44a5-803e-5497efb0a8de}</Project>
+      <Name>Chat_Authentication</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataAccess\DataAccess.csproj">
       <Project>{7987d4cc-6818-40e3-9e60-940715d6608b}</Project>
       <Name>DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logger\Logger.csproj">
+      <Project>{74f8253b-c21e-4a08-97dd-697b968a6f3a}</Project>
+      <Name>Logger</Name>
     </ProjectReference>
     <ProjectReference Include="..\Models\Models.csproj">
       <Project>{29feecb6-3935-473b-a062-6d192a799057}</Project>

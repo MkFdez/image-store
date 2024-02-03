@@ -2,42 +2,31 @@
 
 @{
     var link = "";
-    int h = 0;
-    string style ;
 }
-    @while (h < Model.Size + 2)
-    {
-        <div class="w3-row-padding">
-            @for (int f = h; f < h + 3; f++)
-            {
-            if (f < Model.Size)
-            {
-            link = Url.Action("View", "Publication", new { id = Model.List[f].id });
-
-
-            <div class="w3-third w3-container w3-margin-bottom" >
-                <a style="text-decoration:none; margin-left:auto; margin-right:auto" href=@link >
-                    
-                        @if (Model.List[f].headerPath != null)
-                        {
-                            <img src=@Model.List[f].headerPath class="w3-hover-opacity" alt="image" style="width : 100%!important" />
-                        }
-                   
-                    <div class="w3-container w3-white" >
-                        
-                        <p style="font-size:20px"><b>@string.Join("", Model.List[f].Content.Take(50).ToArray())</b></p>
-                        <p> by @Model.List[f].User</p>
-                        <p><b>@(Model.List[f].Price == 0 ? "Free" : "$"+ Model.List[f].Price.ToString())</b></p>
- 
+@foreach (var item in Model.List)
+{
+    link = Url.Action("View", "Publication", new { id = item.id });
+    <div class="col-md-4 mb-4">
+        <div class="card card-styled">
+            <a href="@link">
+                <div class="image-container">
+                    <div class="aspect-ratio">
+                        <img src="@item.headerPath" class="card-img-top" alt="Image">
                     </div>
-                </a>
-            </div>      
-        }
-        }
-
+                    @if (item.Price == 0)
+                    {
+                        <span class="free-tag">Free</span>
+                    }
+                </div>
+            </a>
         </div>
-        h += 3;
-        }
+    </div>
+}
+
+
+
+
+
 <div class="w3-center w3-padding-32">
     <div class="w3-bar">
         @{ @*Pagging Widget*@
@@ -74,41 +63,41 @@
         }
         for (int i = startNumber; i <= count; i++)
         {
-            if (i == startNumber + 5 && i != count)
+            if (i <= startNumber + 5 || i == count)
             {
-                <a>...</a>
-            }
-            else if (i <= startNumber + 5 || i == count)
-            {
+                if (i == count && i >= startNumber + 5)
+                {
+                    <a class="w3-bar-item" style="text-decoration:none">...</a>
+                }
                 if (i == (int)TempData["ActualPage"])
                 {
-                    
-                        @Ajax.ActionLink(i.ToString(), "ChangePage", "Publication", new { actualPage = i }, new AjaxOptions
-                   {
-                       InsertionMode = InsertionMode.Replace,
-                       HttpMethod = "GET",
-                       UpdateTargetId = "PublicationsList",
-                       OnBegin = "setGif",
-                   }, new {@class= "w3-bar-item w3-black w3-button", @style = "color:white; text-decoration:none" })
-                    
+
+                    @Ajax.ActionLink(i.ToString(), "ChangePage", "Publication", new { actualPage = i, ob = ViewBag.OrderBy, search = ViewBag.Search, personalPage = ViewBag.MyGallery, categories= ViewBag.Categories, onlyForMe = ViewBag.OnlyForMe}, new AjaxOptions
+               {
+                   InsertionMode = InsertionMode.Replace,
+                   HttpMethod = "GET",
+                   UpdateTargetId = "PublicationsList",
+                   OnBegin = "setGif",
+               }, new { @class = "w3-bar-item w3-black w3-button", @style = "color:white; text-decoration:none" })
+
                 }
                 else
                 {
-                        
-                    @Ajax.ActionLink(i.ToString(), "ChangePage", "Publication", new { actualPage = i }, new AjaxOptions
+
+                    @Ajax.ActionLink(i.ToString(), "ChangePage", "Publication", new { actualPage = i, ob = ViewBag.OrderBy, search = ViewBag.Search, personalPage = ViewBag.MyGallery, categories = ViewBag.Categories, onlyForMe = ViewBag.OnlyForMe }, new AjaxOptions
                {
                    InsertionMode = InsertionMode.Replace,
                    HttpMethod = "GET",
                    UpdateTargetId = "PublicationsList",
                    OnBegin = "setGif",
                }, new { @class = "w3-bar-item w3-button w3-hover-black", @style = "color:black; margin-left: 3px" })
-                       
+
                 }
             }
         }
         }
-        </div>
     </div>
-        @section Scripts{
+</div>
+@section Scripts{
 
-        }
+}

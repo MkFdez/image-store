@@ -1,15 +1,19 @@
 loadAreaChart()
 function loadAreaChart() {
     // Set new default font family and font color to mimic Bootstrap's default styling
-    
+    let cont = document.createElement("div")
+    cont.className = "justify-content-center"
+    cont.style.width = "100%"
+    cont.style.display = 'flex'
+    cont.id = "area-loading"
     let loadingContainer = document.createElement("div")
-    loadingContainer.className = "loader"
-    loadingContainer.id = "area-loading"
+    loadingContainer.className = "loader justify-content-center"
     let loading = document.createElement("div")
     loading.className = "justify-content-center jimu-primary-loading"
     loadingContainer.appendChild(loading)
+    cont.appendChild(loadingContainer)
     let container = document.getElementById("area-chart")
-    container.appendChild(loadingContainer)
+    container.appendChild(cont)
     $.ajax({
         type: "POST",
         url: "/Sales/GetDailySales",
@@ -91,7 +95,7 @@ function loadAreaChart() {
     });
 
     dpm.on('changeMonth', function (e) {
-        container.appendChild(loadingContainer)
+        container.appendChild(cont)
         var selectedDate = e.date;
         $.ajax({
             type: "POST",

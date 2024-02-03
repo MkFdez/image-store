@@ -12,6 +12,7 @@ using Dependencies;
 using ApiTest;
 using System.Web.Http;
 using Services;
+using Logger;
 
 namespace Store
 {
@@ -24,7 +25,8 @@ namespace Store
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            
+            log4net.Config.XmlConfigurator.Configure();
+
             var builder = new ContainerBuilder();
 
             // Register your MVC controllers. (MvcApplication is the name of
@@ -48,8 +50,11 @@ namespace Store
             builder.RegisterType<EmailSender>().As<IEmailSender>().As<EmailSender>();
             builder.RegisterType<NewUserApp>().As<IApp>().As<NewUserApp>();
             builder.RegisterType<BuyApp>().As<IApp>().As<BuyApp>();
-            builder.RegisterType<ServicePack>().As<IServicePack>();
-            builder.Register(ctx => new SellController(ctx.Resolve<BuyApp>()));
+            builder.RegisterType<ServicePack>().As<IServicePack>().As<ServicePack>();
+            builder.RegisterType<StorageService>().As<IStorageService>();
+            builder.RegisterType<FileLogger>().As<ILogger>();
+            builder.Register(ctx => new SellController(ctx.Resolve<BuyApp>(), ctx.Resolve<ServicePack>()));
+            
             //builder.Register(ctx => new AccountController(ctx.Resolve<NewUserApp>()));
             //Set the dependency resolver to be Autofac.
             var container = builder.Build();

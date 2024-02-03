@@ -1,0 +1,54 @@
+﻿
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="image-container">
+                <img src="https://img.freepik.com/free-photo/wide-angle-shot-single-tree-growing-clouded-sky-during-sunset-surrounded-by-grass_181624-22807.jpg?w=2000" alt="Image" class="img-fluid">
+                <div class="image-details">
+                    <div class="download-buttons">
+                        <a href="@Url.Action("Download", new { id = 1})" class="btn btn-primary">Download Image</a>
+                        <a href="@Url.Action("DownloadWithWatermark", new { id = 2})" class="btn btn-secondary">Download with Watermark</a>
+                    </div>
+                    <div class="image-info">
+                        Categories: @for (int i = 0; i < 10; i++)
+                        {
+                            <span class="badge badge-info">category-@i</span>
+                        }
+                        <div class="uploader-info">
+                            Uploaded by: <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D&w=1000&q=80" alt="Profile Picture" class="rounded-circle" style="width: 30px; height: 30px;">
+                            <span>Username</span>
+                            <span>(5 days ago)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-8">
+            <div class="comments-box">
+                <h4>Comments</h4>
+                <hr>
+                <div class="mb-3">
+                    <textarea class="form-control" rows="3" placeholder="Add a new comment"></textarea>
+                    <button class="btn btn-primary mt-2">Post Comment</button>
+                </div>
+                <ul class="list-unstyled">
+                    @for (int i = 0; i < 10; i++)
+                    {
+                        <li class="comment">
+                            <div class="media">
+                                <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D&w=1000&q=80" class="mr-3 rounded-circle comment-profile" alt="User Profile Picture">
+                                <div class="media-body comment-content">
+                                    <h6 class="mt-0">Username</h6>
+                                    This is a generic comment just for testing jadslkjadsjfkadjfasjfklsajdlasj ajdskfaghskdj  ajdkjfsf akjsjf asj asdj fksaj das
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

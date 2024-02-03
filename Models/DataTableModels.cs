@@ -44,5 +44,7 @@ namespace Models
         public int recordsTotal { get; set; }
         public int recordsFiltered { get; set; }
         public string data { get; set; }
+
+        public string collections { get; set; }
     }
 }

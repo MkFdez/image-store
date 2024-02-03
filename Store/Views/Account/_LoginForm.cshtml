@@ -1,0 +1,43 @@
+﻿@using Store.Models
+@model LoginViewModel
+<p class="title">Login</p>
+@using (Ajax.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, new AjaxOptions
+{
+    OnBegin = "onLoad('log-in-button')",
+    OnFailure = "onLoadFail('log-in-button', 'Log in')",
+    OnSuccess = "formSuccess(data, 'log-in-button', 'Log in')"
+}, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="input-group">
+        <label for="email">Email</label>
+        @Html.TextBoxFor(m => m.Email, new { id = "email", @class = "form-input" })
+        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger", id = "email-error" })
+    </div>
+
+    <div class="input-group">
+        <label for="password">Password</label>
+        @Html.PasswordFor(m => m.Password, new { id = "password", @class = "form-input" })
+        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger", id = "password-error" })
+        <div class="forgot">
+            @Html.ActionLink("Forgot your password?", "ForgotPassword")
+        </div>
+    </div>
+    <div class="checkbox">
+        @Html.CheckBoxFor(m => m.RememberMe)
+        @Html.LabelFor(m => m.RememberMe)
+    </div>
+    <button class="sign" id="log-in-button">Sign in</button>
+}
+<div class="social-message">
+    <div class="line"></div>
+    <p class="message">Login with social accounts</p>
+    <div class="line"></div>
+</div>
+<div class="social-icons">
+    @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+</div>
+<p class="signup">
+    Don't have an account?
+    @Html.ActionLink("Register", "Register")
+</p>

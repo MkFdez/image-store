@@ -17,6 +17,7 @@ namespace Models
         public string Content { get; set; }
         public string headerPath { get; set; }
         public List<CommentModel> Comments { get; set; }
+        public int CommentTotal { get; set; }
 
         public List<string> Categories { get; set; }
 
@@ -25,6 +26,11 @@ namespace Models
         public bool isBuyed { get; set; }
 
         public bool isProperty { get; set; }
+        public bool isLiked { get; set; }
         public int Downloads { get; set; }
+        public int inCollection { get; set; }
+        public int? CollectionId { get; set; }
+        public int LikeCount { get; set; }
+        public int? OnlyFor { get; set; }
     }
 }

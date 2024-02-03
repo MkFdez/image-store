@@ -14,6 +14,7 @@ using DataAccess;
 using System.Threading.Tasks;
 using Models;
 using Services;
+using System.Diagnostics;
 
 namespace Store.Controllers
 {
@@ -21,13 +22,22 @@ namespace Store.Controllers
 
     public class PublicationController : Controller
     {
+        public static readonly log4net.ILog log = log4net.LogManager.GetLogger("PublicationLogger");
+        public IStorageService storageService;
         public IServicePack ServicePack;
-        public PublicationController(IServicePack servicePack)
+        public PublicationController(IServicePack servicePack, IStorageService _storageService)
         {
             ServicePack = servicePack;
+            storageService = _storageService;
         }
+        public ActionResult Test()//controller created just for testing new ui elements without messing everything out
+        {
+            return View();
+        }
+
+
         // GET: Publication            
-        public async Task<ActionResult> Index(string category = "", string search = "", bool personalPage = false)
+        public async Task<ActionResult> Index(string category = "", string search = "", bool personalPage = false, bool onlyForMe = false)
         {
             using (var context = new Project1DBEntities())
             {
@@ -37,7 +47,9 @@ namespace Store.Controllers
                 ViewBag.Search = search;
                 ViewBag.MyGallery = personalPage.ToString();
                 ViewBag.Title = "Publications";
-                ViewBag.Category = category; 
+                ViewBag.Category = category;
+                ViewBag.OrderBy = OrderByModel.DateDesc;
+                ViewBag.OnlyForMe = onlyForMe;
             }
             return View();
         }
@@ -50,15 +62,20 @@ namespace Store.Controllers
                 try
                 {
                     var publication = await ServicePack.GetPublication(id);
-
+                    if(publication.Publication.OnlyFor != null && publication.Publication.OnlyFor != HttpContext.User.Identity.GetUserId<int>())
+                    {
+                        log.Warn($"User {HttpContext.User.Identity.GetUserId<int>()} tried to open publication {id}");
+                        return RedirectToAction("Index");
+                    }
                     ViewBag.Comments = 10;
                     ViewBag.imgWidth = MkImage.GetWidth(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid + "/"), publication.Filename));
                     ViewBag.imgHeight = MkImage.GetHeight(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid + "/"), publication.Filename));
 
                     return View(publication.Publication);
                 }
-                catch
+                catch(Exception ex)
                 {
+                    log.Error("Error opening publication", ex);
                     return RedirectToAction("Index");
                 }
             }
@@ -79,18 +96,12 @@ namespace Store.Controllers
                         return RedirectToAction("View", "Publication", new { id = id });
                     }
                     var p = await ServicePack.GetPublicationToDownload(id);
-                    string fileName = p.Path.Substring(p.Path.LastIndexOf("/") + 1);
-                    string pGuid = p.Guid;
-                    int intScale = int.Parse(scale);
-                    string guid = Guid.NewGuid().ToString();
-                    string newName = guid + fileName.Substring(fileName.LastIndexOf("."));
-                    ImageManager<int> myDelegate = new ImageManager<int>(MkImage.Resize);
-                    myDelegate(Path.Combine(Server.MapPath("~/ImageVault/" + pGuid + "/"), fileName), intScale, Path.Combine(Server.MapPath("~/TempData"), newName));
-                    byte[] fileBytes = System.IO.File.ReadAllBytes(Path.Combine(Server.MapPath("~/TempData"), newName));
-                    return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, newName);
+                    var directory = storageService.GenerateDownloadDirectory(p, MkImage.Resize, scale);
+                    return File(directory.File, System.Net.Mime.MediaTypeNames.Application.Octet, directory.FileName);
                 }
-                catch
+                catch(Exception ex)
                 {
+                    log.Error($"Error downloading image with pubblicationid:{pubid} at scale:{scale}", ex);
                     return RedirectToAction("Index");
                 }
             }
@@ -106,30 +117,39 @@ namespace Store.Controllers
                 {
                     int puid = int.Parse(id);
                     string path = await ServicePack.GetImagePath(puid);
-                    string fileName = path.Substring(path.LastIndexOf(@"/") + 1);
-                    path = path.Substring(0, path.LastIndexOf("/LowRes/"));
-                    string file = Path.Combine(Directory.GetFiles(Server.MapPath("~" + path + "/FreeTrial/"), fileName));
-                    string guid = Guid.NewGuid().ToString();
-                    string newName = guid + fileName.Substring(fileName.LastIndexOf("."));
-
-                    byte[] fileBytes = System.IO.File.ReadAllBytes(file);
-                    return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, newName);
+                    var directory = storageService.GetDownloadFreeDirectory(path);
+                    return File(directory.File, System.Net.Mime.MediaTypeNames.Application.Octet, directory.FileName);
                 }
-                catch
+                catch(Exception ex)
                 {
+                    log.Error($"Error downloading watermarked image with pubblicationid:{id}", ex);
                     return RedirectToAction("Index");
                 }
             }
         }
         // GET: Publication/Create
         [Authorize]
-        public async Task<ActionResult> Create()
+        public async Task<ActionResult> Create(string onlyFor = null)
         {
           
             Dictionary<int, string> categories = await ServicePack.GetCategories();               
-            ViewBag.Categories = categories;
-          
-            return View();
+            ViewBag.Categories = categories; 
+            return View(new PublicationCreateViewModel() { OnlyFor = onlyFor});
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<ActionResult> Like(int publicationid, bool like)
+        {
+            try
+            {
+                await ServicePack.Like(like, publicationid);
+            }catch(Exception e)
+            {
+                log.Error($"Error {e} with like action in publication {publicationid}");
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+            }
+            return new HttpStatusCodeResult(200);
         }
 
         // POST: Publication/Create
@@ -139,11 +159,12 @@ namespace Store.Controllers
         {
             if(ModelState.IsValid)
             {
-               
+
                 using (var context = new Project1DBEntities())
                 {
+                   
                     decimal price = decimal.Parse(model.Price);
-                    int userId = User.Identity.GetUserId<int>(); ;
+                    int userId = User.Identity.GetUserId<int>();
                     Publication publication = new Publication
                     {
                         UserId = userId,
@@ -153,43 +174,39 @@ namespace Store.Controllers
                         Guid = Guid.NewGuid().ToString(),
                         Price = price,
                         Previous_Price = price,
-                        For_Sale = false
-                        
-                       
+                        For_Sale = false,
+                        OnlyFor = context.Users.FirstOrDefault(x => x.UserName == model.OnlyFor).Id
+
                     };
+                       
                     int[] categories = new int[0];
+                        
                     if (collection["AreChecked"] != null)
                     {
-                        categories = Array.ConvertAll(collection["AreChecked"].ToString().Split(','), x => int.Parse(x.ToString()));                       
+                        categories = Array.ConvertAll(collection["AreChecked"].ToString().Split(','), x => int.Parse(x.ToString()));
+                    }
+                    try
+                    {
+                        if (model.Picture != null && model.Picture.ContentLength > 0)
+                        {
+                            
+                            publication.HeaderPath = storageService.NewImageDirectory(model.Picture, publication.PublicationId, publication.Guid, MkImage.Resize, MkImage.setWatermarkText);
+                        }
+
+                        await ServicePack.AddPublication(publication, categories);
+                    }catch(Exception ex)
+                    {
+                        log.Error($"Error adding storing new image {model.Picture.FileName}", ex);
                     }
                     
-                    if (model.Picture != null && model.Picture.ContentLength > 0)
-                    {
-                        Directory.CreateDirectory(Path.Combine(Server.MapPath("~/uploads"), publication.PublicationId.ToString()));
-                        Directory.CreateDirectory(Path.Combine(Server.MapPath("~/uploads/"+ publication.PublicationId.ToString()), "FreeTrial"));
-                        Directory.CreateDirectory(Path.Combine(Server.MapPath("~/uploads/"+ publication.PublicationId.ToString()), "LowRes"));
-                        Directory.CreateDirectory(Path.Combine(Server.MapPath("~/ImageVault/"), publication.Guid));
-                        var fileName = Path.GetFileName(model.Picture.FileName).Replace(" ", "");
-                        var path = Path.Combine(Server.MapPath("~/uploads"), fileName);
-                        
-                        string fl = path.Substring(path.LastIndexOf("\\"));
-                        string[] split = fl.Split('\\');
-                        string newpath = split[1];
-                        string imagepath = "/uploads/"+ publication.PublicationId.ToString()+"/LowRes/" + newpath;
-                        model.Picture.SaveAs(Path.Combine(Server.MapPath("~/ImageVault/"+ publication.Guid + "/"), fileName));
-                        publication.HeaderPath = imagepath;                        
-                        ImageManager<string> myDelegate = new ImageManager<string>(MkImage.setWatermarkText);
-                        myDelegate(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid), fileName), "my website", Path.Combine(Server.MapPath("~/uploads/" + publication.PublicationId.ToString()+"/"+ "FreeTrial/"), fileName));
-                        ImageManager<int> myDelegate2 = new ImageManager<int>(MkImage.Resize);
-                        myDelegate2(Path.Combine(Server.MapPath("~/ImageVault/" + publication.Guid), fileName), 50, Path.Combine(Server.MapPath("~/uploads/" + publication.PublicationId.ToString() + "/" + "LowRes/"), fileName));
-                    }
-                    await ServicePack.AddPublication(publication, categories);
-
                 }
-
-                return RedirectToAction("Index");
+                return Json(new { redirect = Url.Action("Index") });
             }
-            return View();
+            else
+            {
+                log.Info("Model State Not valid");
+            }
+            return Json(new { error = new { } });
         }
 
         // GET: Publication/Edit/5
@@ -223,9 +240,11 @@ namespace Store.Controllers
 
         
         
-        public async Task<ActionResult> ChangePage(int actualPage = 1, FormCollection c = null, string search = "", bool personalPage = false, string category = "")
+        public async Task<ActionResult> ChangePage(int actualPage = 1, FormCollection c = null, string search = "", bool personalPage = false, string category = "", OrderByModel ob = OrderByModel.DateDesc, List<int> categories = null, bool onlyForMe = false)
         {
             List<PublicationViewModel> model = new List<PublicationViewModel>();
+            var dfh = c["order"];
+            List<int> a = categories != null ? categories : new List<int>();
             using (var context = new Project1DBEntities())
             {
                 var userId = HttpContext.User.Identity.GetUserId<int>();
@@ -233,9 +252,10 @@ namespace Store.Controllers
                 System.Linq.Expressions.Expression<Func<Publication, bool>> predicate2;
                 System.Linq.Expressions.Expression<Func<Publication, bool>> predicate3;
                 System.Linq.Expressions.Expression<Func<Publication, bool>> predicate;
+                System.Linq.Expressions.Expression<Func<Publication, dynamic>> order;
                 if (personalPage) { predicate = x => true; } else { predicate = x => x.StatusId == 0; } 
                 if (search != "") { predicate2 = x => x.Content.Contains(search); } else { predicate2 = x => true; }
-                var a = c["AreChecked"] != null ? Array.ConvertAll(c["AreChecked"].ToString().Split(','), x => int.Parse(x.ToString())).ToList() : new List<int>() { };
+                a = c["AreChecked"] != null ? Array.ConvertAll(c["AreChecked"].ToString().Split(','), x => int.Parse(x.ToString())).ToList() : a;
                 predicate2 = predicate.And(predicate2);
                 if (category == "")
                 {
@@ -307,14 +327,32 @@ namespace Store.Controllers
 
                     }
                 }
-                model = await ServicePack.GetSomePublications(actualPage, predicate1);
+                OrderByModel orderby = ob;
+
+                if(c["order"]!= null)
+                {
+                    orderby = (OrderByModel)Enum.Parse(typeof(OrderByModel), c["order"]);
+                }
+                System.Linq.Expressions.Expression<Func<Publication, bool>> _onlyForMe = x => x.OnlyFor == HttpContext.User.Identity.GetUserId<int>();
+
+                if (!onlyForMe)
+                {
+                    _onlyForMe=  x => x.OnlyFor == null;
+                }
+                predicate1 = predicate1.And(_onlyForMe);
+
+                ViewBag.OrderBy = orderby;
+                
+                model = await ServicePack.GetSomePublications(actualPage, predicate1, orderby);
                 TempData["Count"] = await ServicePack.PublicationCount(predicate1);
             }
             
 
             var realList = new PublicationsListViewModel(model);
             ViewBag.Search = search;
+            ViewBag.Categories = a;
             ViewBag.MyGallery = personalPage;
+            ViewBag.OnlyForMe = onlyForMe;
             TempData["ActualPage"] = actualPage ;
             return PartialView("~/Views/Publication/_PublicationLists.cshtml", realList);
         }

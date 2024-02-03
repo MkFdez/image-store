@@ -5906,7 +5906,7 @@ textarea.form-control-lg {
   justify-content: center;
   width: 15%;
   padding: 0;
-  color: #fff;
+  color: black!important;
   text-align: center;
   background: none;
   border: 0;
